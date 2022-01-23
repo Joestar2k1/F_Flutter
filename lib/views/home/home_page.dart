@@ -1,5 +1,7 @@
+import 'package:fluter_19pmd/views/category/category_page.dart';
 import 'package:fluter_19pmd/views/home/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/widgets/search_icons.dart';
+import 'package:fluter_19pmd/views/notification/notification_page.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,6 +18,8 @@ class _HomePageState extends State<HomePage>
   int selectedIndex = 0;
   final screens = [
     Body(),
+    const CategoryPage(),
+    const NotificationPage(),
   ];
   final List _tabIcon = List.unmodifiable([
     {'icon': "assets/images/icons-png/home.png", 'title': "Home"},

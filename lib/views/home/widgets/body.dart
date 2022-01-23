@@ -64,7 +64,7 @@ class _BodyState extends State<Body> {
                   ),
                 ),
                 const SizedBox(height: 20),
-                ProductsHome(),
+                const ProductsHome(),
               ],
             ),
           ),
