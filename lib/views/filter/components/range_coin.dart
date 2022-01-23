@@ -1,5 +1,5 @@
+import 'package:fluter_19pmd/constant.dart';
 import 'package:flutter/material.dart';
-import 'package:moblie_project/constants.dart';
 
 class RangeCoin extends StatefulWidget {
   const RangeCoin({Key key}) : super(key: key);
@@ -34,7 +34,7 @@ class _RangeCoinState extends State<RangeCoin> {
             max: 2000,
             divisions: 100,
             activeColor: Colors.green,
-            inactiveColor: cTextColor,
+            inactiveColor: textColor,
             values: currentRangeCoin,
             onChanged: (RangeValues rangeValues) {
               setState(() {

@@ -1,7 +1,6 @@
+import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/views/filter/components/range_coin.dart';
 import 'package:flutter/material.dart';
-import 'package:moblie_project/Screens/filter/components/range_coin.dart';
-
-import 'package:moblie_project/constants.dart';
 
 class Body extends StatefulWidget {
   const Body({Key key}) : super(key: key);
@@ -43,14 +42,13 @@ class _BodyState extends State<Body> {
             child: ElevatedButton(
               onPressed: () {},
               style: ButtonStyle(
-                  backgroundColor:
-                      MaterialStateProperty.all(cPrimaryGreenColor)),
+                  backgroundColor: MaterialStateProperty.all(buttonColor)),
               child: const Text(
                 "Thực hiện",
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: cPrimaryWhiteColor,
+                  color: Colors.white,
                 ),
               ),
             ),
@@ -80,7 +78,7 @@ class _BodyState extends State<Body> {
           width: size.width,
           height: size.height * 0.06,
           decoration: const BoxDecoration(
-            color: cPrimaryWhiteColor,
+            color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),
@@ -121,7 +119,7 @@ class _BodyState extends State<Body> {
           width: size.width,
           height: size.height * 0.06,
           decoration: const BoxDecoration(
-            color: cPrimaryWhiteColor,
+            color: Colors.white,
             borderRadius: BorderRadius.all(
               Radius.circular(10),
             ),

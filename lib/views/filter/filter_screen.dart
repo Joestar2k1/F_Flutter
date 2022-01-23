@@ -1,14 +1,9 @@
+import 'package:fluter_19pmd/views/filter/components/body_filter.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class FilterScreen extends StatefulWidget {
-  const FilterScreen({Key key}) : super(key: key);
-
-  @override
-  _FilterScreenState createState() => _FilterScreenState();
-}
-
-class _FilterScreenState extends State<FilterScreen> {
+class FilterPage extends StatelessWidget {
+  const FilterPage({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -17,7 +12,7 @@ class _FilterScreenState extends State<FilterScreen> {
       },
       child: Scaffold(
         backgroundColor: const Color(0xFFf1f2f6),
-        appBar: buildAppbar(),
+        appBar: buildAppbar(context),
         body: const SingleChildScrollView(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           child: Body(),
@@ -26,7 +21,7 @@ class _FilterScreenState extends State<FilterScreen> {
     );
   }
 
-  AppBar buildAppbar() {
+  AppBar buildAppbar(context) {
     return AppBar(
       backgroundColor: Colors.white,
       flexibleSpace: Container(
