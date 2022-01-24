@@ -13,7 +13,6 @@ class ProductBloc {
   final _stateStreamController = StreamController<List<Product>>();
   StreamSink<List<Product>> get _productSink => _stateStreamController.sink;
   Stream<List<Product>> get productStream => _stateStreamController.stream;
-
   final _eventStreamController = StreamController<ProductAciton>();
   StreamSink<ProductAciton> get eventSink => _eventStreamController.sink;
   Stream<ProductAciton> get _eventStream => _eventStreamController.stream;
@@ -34,6 +33,7 @@ class ProductBloc {
       }
     });
   }
+
   Future<List<Product>> getProduct() async {
     var client = http.Client();
     List<Product> newProduct;
@@ -43,6 +43,7 @@ class ProductBloc {
     if (response.statusCode == 200) {
       var jsonString = response.body;
       newProduct = productFromJson(jsonString);
+
       return newProduct;
     }
     return null;

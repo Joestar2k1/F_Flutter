@@ -1,3 +1,5 @@
+import 'package:fluter_19pmd/views/category/export_category.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class CategoryPage extends StatefulWidget {
@@ -52,12 +54,13 @@ class _CategoryPageState extends State<CategoryPage> {
   }
 
   Widget bodyTabbar() => const TabBarView(
+        dragStartBehavior: DragStartBehavior.down,
         children: [
-          Text("1"),
-          Text("2"),
-          Text("3"),
-          Text("4"),
-          Text("5"),
+          AllPage(),
+          FruitPage(),
+          MeetPage(),
+          DrinkPage(),
+          VegetablePage(),
         ],
       );
   Widget buildTabbar() => const TabBar(

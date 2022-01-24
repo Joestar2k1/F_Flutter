@@ -1,61 +1,56 @@
 import 'package:fluter_19pmd/models/product_models.dart';
-import 'package:fluter_19pmd/services/home/product_bloc.dart';
+import 'package:fluter_19pmd/services/catetogory/cate_bloc.dart';
 import 'package:flutter/material.dart';
 
-// ignore: must_be_immutable
-class ProductsHome extends StatefulWidget {
-  const ProductsHome({
-    Key key,
-  }) : super(key: key);
+class MeetPage extends StatefulWidget {
+  const MeetPage({Key key}) : super(key: key);
 
   @override
-  State<ProductsHome> createState() => _ProductsHomeState();
+  _MeetPageState createState() => _MeetPageState();
 }
 
-class _ProductsHomeState extends State<ProductsHome> {
-  final productBloc = ProductBloc();
+class _MeetPageState extends State<MeetPage> {
+  final cateBloc = CategoryBloc();
 
   @override
   void initState() {
-    productBloc.eventSink.add(ProductAciton.Fetch);
+    cateBloc.eventSink.add(ProductAciton.fetchMeet);
     super.initState();
   }
 
   @override
   void dispose() {
-    productBloc.dispose();
+    cateBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print("widget-tree");
     return Column(
       children: [
-        StreamBuilder<List<Product>>(
-            initialData: [],
-            stream: productBloc.productStream,
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      snapshot.error,
-                      style: const TextStyle(fontSize: 20),
-                    ),
-                  ],
-                );
-              } else if (snapshot.hasData == null) {
-                return const Center(
-                  child: CircularProgressIndicator(),
-                );
-              } else {
-                return Container(
-                  height: 1400,
-                  child: GridView.builder(
-                      physics: const NeverScrollableScrollPhysics(),
+        Expanded(
+          child: StreamBuilder<List<Product>>(
+              stream: cateBloc.categoryStream,
+              initialData: [],
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text(
+                        snapshot.error,
+                        style: const TextStyle(fontSize: 20),
+                      ),
+                    ],
+                  );
+                } else if (snapshot.hasData == false) {
+                  return const Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else {
+                  return GridView.builder(
+                      physics: const BouncingScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
@@ -176,10 +171,10 @@ class _ProductsHomeState extends State<ProductsHome> {
                             ),
                           ),
                         );
-                      }),
-                );
-              }
-            }),
+                      });
+                }
+              }),
+        ),
       ],
     );
   }
