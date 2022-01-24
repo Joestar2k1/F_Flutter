@@ -11,6 +11,15 @@ class AccountPage extends StatelessWidget {
       child: Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
+          flexibleSpace: Container(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [Colors.teal, Colors.teal.shade200],
+                begin: Alignment.bottomLeft,
+                end: Alignment.bottomRight,
+              ),
+            ),
+          ),
           elevation: 0.5,
           leading: IconButton(
             onPressed: () {
@@ -19,7 +28,7 @@ class AccountPage extends StatelessWidget {
             icon: const Icon(
               Icons.arrow_back,
               size: 30,
-              color: buttonColor,
+              color: Colors.white,
             ),
           ),
           title: const Text(
@@ -27,12 +36,12 @@ class AccountPage extends StatelessWidget {
             style: TextStyle(
               fontFamily: "Pacifico",
               fontSize: 24,
-              color: Colors.black,
+              color: Colors.white,
             ),
           ),
           backgroundColor: Colors.white,
         ),
-        body: const Body(),
+        body: Body(),
       ),
     );
   }

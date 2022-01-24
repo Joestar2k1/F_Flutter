@@ -36,7 +36,9 @@ dependencies:
   get:
   flutter_svg:
   flutter_swiper: ^1.1.6
+  flutter_validate:
   http:
+  equatable:
 dev_dependencies:
   flutter_test:
     sdk: flutter
