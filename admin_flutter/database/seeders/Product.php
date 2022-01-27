@@ -1,0 +1,111 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
+class Product extends Seeder
+{
+    /**
+     * Run the database seeds.
+     *
+     * @return void
+     */
+    public function run()
+    {
+        DB::table('products')->insert([
+            [  
+                'id'=>  'ff20220118pr1',            
+                'name' => 'Dâu tằm',
+                'price' =>  3,
+                'stock' => 120,
+                'type' => 'Trái cây',
+                'unit' => 'Kg',
+                 'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+                 'image' => '1.png',
+                'status' => 1,
+            ]            ,
+            [  'id'=>  'fvg20220118pr2',
+                'name' => 'Rau salad',
+                'price' =>  1,
+                'stock' => 100,
+                'type' => 'Rau củ',
+                'unit' => 'Kg',
+                'description' => 'Đẹp da, thanh lọc cơ thể, tốt cho sức khỏe',
+                'image' => '7.png',
+                'status' => 1,
+            ],
+            [  'id'=>  'fw20220118pr3',
+                'name' => 'Nước suối',
+                'price' =>  2,
+                'stock' => 100,
+                'type' => 'Thức uống',
+                'unit' => 'Chai',
+                'description' => 'Hỗ trợ thể lực, bù lượng nước mất đi trong cơ thể',
+                'image' => '8.png',
+                'status' => 1,
+            ],
+            [ 'id'=> 'ff20220118pr4',
+                'name' => 'Kiwi',
+                'price' =>  10,
+                'stock' => 90,
+                'type' => 'Trái cây',
+                'unit' => 'Kg',
+                'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+                'image' => '3.png',
+                'status' => 1,
+            ],
+            [ 'id'=> 'ff20220118pr5',
+                'name' => 'Cam mỹ',
+                'price' =>  30,
+                'stock' => 90,
+                'type' => 'Trái cây',
+                'unit' => 'Kg',
+                'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+                'image' => '4.png',
+                'status' => 1,
+            ],          
+            [ 'id'=> 'fm20220118pr6',
+                'name' => 'Thịt bò',
+                'price' =>  5,
+                'stock' => 90,
+                'type' => 'Thịt',
+                'unit' => 'Gram',
+                'description' => 'Giàu protein, giúp cơ thể phát triển tốt',
+                'image' => '9.png',
+                'status' => 1,
+        ],
+            [ 'id'=>  'ff23112001pr7',
+                'name' => 'Nho nhật',
+                'price' =>  20,
+                'stock' => 90,
+                'type' => 'Trái cây',
+                'unit' => 'Kg',
+                'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+                'image' => '5.png',
+                'status' => 1,
+            ],
+            [ 'id'=>  'ff20220118pr8',
+                'name' => 'Dâu tây',
+                'price' =>  20,
+                'stock' => 90,
+                'type' => 'Trái cây',
+                'unit' => 'Kg',
+                'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+                'image' => '6.png',
+                'status' => 1,
+            ],
+            [ 'id'=> 'ff20220118pr9',
+            'name' => 'Táo mỹ',
+            'price' =>  5,
+            'stock' => 30,
+            'type' => 'Trái cây',
+            'unit' => 'Kg',
+            'description' => 'Hỗ trợ tăng sức khỏe, vitamin C',
+            'image' => '2.png',
+            'status' => 1,
+        ],
+    ]);
+
+    }}
