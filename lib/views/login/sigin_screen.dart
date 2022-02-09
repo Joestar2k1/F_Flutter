@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/user.dart';
 import 'package:flutter/material.dart';
 
 class SignInPage extends StatefulWidget {
@@ -13,31 +14,32 @@ class _SignInPageState extends State<SignInPage> {
   var isLoading = false;
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  void _submit() {
+  void _submit(String email, String password) {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
+    print(RepositoryUser.login(email, password));
   }
 
   @override
   Widget build(BuildContext context) {
-    // Build a Form widget using the _formKey created above.
+    Size size = MediaQuery.of(context).size;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
           body: SingleChildScrollView(
-            child: _form(),
+            child: _form(size),
           ),
         ),
       ),
     );
   }
 
-  Widget _form() => Form(
+  Widget _form(size) => Form(
         key: _formKey,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -49,10 +51,15 @@ class _SignInPageState extends State<SignInPage> {
               mainAxisAlignment: MainAxisAlignment.end,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                SizedBox(
+                  height: size.height * 0.2,
+                ),
                 const Text(
                   "Xin chào bạn",
                   style: TextStyle(
                     fontSize: 20,
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 20),
@@ -60,14 +67,16 @@ class _SignInPageState extends State<SignInPage> {
                   "Welcome to Be Healthy!",
                   style: TextStyle(
                     fontSize: 25,
+                    color: textColor,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
                 _emailLogin(),
-                const SizedBox(height: 30),
+                const SizedBox(height: 20),
                 _passwordLogin(),
-                const SizedBox(height: 40),
-                _buttonLogin(),
-                const SizedBox(height: 40),
+                const SizedBox(height: 20),
+                _buttonLogin(emailController.text, passwordController.text),
+                const SizedBox(height: 20),
                 _forgotAndSignUp(),
               ],
             ),
@@ -101,7 +110,7 @@ class _SignInPageState extends State<SignInPage> {
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         child: TextFormField(
           controller: passwordController,
-          obscureText: true,
+          obscureText: false,
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
@@ -119,7 +128,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
 
-  Widget _buttonLogin() => Center(
+  Widget _buttonLogin(String email, String password) => Center(
         child: SizedBox(
           height: 50,
           width: 200,
@@ -127,7 +136,7 @@ class _SignInPageState extends State<SignInPage> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(buttonColor),
             ),
-            onPressed: () => _submit(),
+            onPressed: () => _submit(email, password),
             child: const Text('Login', style: TextStyle(fontSize: 18)),
           ),
         ),

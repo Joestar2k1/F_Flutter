@@ -2,7 +2,7 @@ import 'package:fluter_19pmd/views/details_product/bloc/counter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionWidthCounter extends StatefulWidget {
-  DescriptionWidthCounter({Key key}) : super(key: key);
+  const DescriptionWidthCounter({Key key}) : super(key: key);
 
   @override
   State<DescriptionWidthCounter> createState() =>

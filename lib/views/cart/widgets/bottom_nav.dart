@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/constant.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -61,63 +62,63 @@ class _BottomNavBarCartState extends State<BottomNavBarCart> {
             ),
           ],
         ),
-        Row(
-          children: [
-            SizedBox(
-              width: size.width * 0.5,
-              height: size.height * 0.06,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    Colors.redAccent,
-                  ),
-                ),
-                onPressed: () {
-                  setState(() {});
-                },
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.delete),
-                    Text(
-                      "Xóa",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-            SizedBox(
-              width: size.width * 0.5,
-              height: size.height * 0.06,
-              child: ElevatedButton(
-                style: ButtonStyle(
-                  backgroundColor: MaterialStateProperty.all(
-                    const Color(0xFF66BB6A),
-                  ),
-                ),
-                onPressed: () {},
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: const [
-                    Icon(Icons.card_travel),
-                    Text(
-                      "CheckOut",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ],
-        ),
+        _button(size),
       ],
     );
   }
+
+  Widget _button(size) => Row(
+        children: [
+          SizedBox(
+            width: size.width * 0.5,
+            height: size.height * 0.06,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(buttonColor),
+              ),
+              onPressed: () {
+                setState(() {});
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.delete),
+                  Text(
+                    "Xóa",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          SizedBox(
+            width: size.width * 0.5,
+            height: size.height * 0.06,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  buttonColor,
+                ),
+              ),
+              onPressed: () {},
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.card_travel),
+                  Text(
+                    "CheckOut",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
+      );
 }

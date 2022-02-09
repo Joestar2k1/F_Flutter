@@ -1,5 +1,7 @@
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/bloc/details_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -14,10 +16,9 @@ class ProductsHome extends StatefulWidget {
 
 class _ProductsHomeState extends State<ProductsHome> {
   final productBloc = ProductBloc();
-
   @override
   void initState() {
-    productBloc.eventSink.add(ProductAciton.Fetch);
+    productBloc.eventSink.add(ProductAciton.fetch);
     super.initState();
   }
 
@@ -81,16 +82,15 @@ class _ProductsHomeState extends State<ProductsHome> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         DetailsProductScreen(
-                                    //       products: productController
-                                    //           .productList[index],
-                                    //     ),
-                                    //   ),
-                                    // );
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            DetailsProductScreen(
+                                          products: snapshot.data[index],
+                                        ),
+                                      ),
+                                    );
                                   },
                                   child: Column(
                                     children: [
@@ -117,7 +117,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  "\$${snapshot.data[index].price}",
+                                                  "${snapshot.data[index].price}đ",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Color(0xFF717171),

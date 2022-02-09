@@ -15,8 +15,8 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          const ImgWidthPrice(),
-          DescriptionWidthCounter(),
+          ImgWidthPrice(),
+          const DescriptionWidthCounter(),
           const UserReview(),
         ],
       ),

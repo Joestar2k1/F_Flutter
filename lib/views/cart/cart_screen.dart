@@ -43,7 +43,7 @@ class _CartPageState extends State<CartPage> {
             style: TextStyle(fontSize: 26),
           ),
         ),
-        body: const Body(),
+        body: Body(),
       ),
     );
   }

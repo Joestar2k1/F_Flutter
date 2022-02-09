@@ -1,5 +1,4 @@
-import 'package:fluter_19pmd/views/category/category_page.dart';
-import 'package:fluter_19pmd/views/home/home_page.dart';
+import 'package:fluter_19pmd/views/login/sigin_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -17,7 +16,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomePage(),
+      home: const SignInPage(),
     );
   }
 }
