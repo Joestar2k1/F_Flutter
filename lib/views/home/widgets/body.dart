@@ -1,13 +1,13 @@
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/user.dart';
 import 'package:fluter_19pmd/services/home/best_seller_bloc.dart';
 import 'package:fluter_19pmd/views/home/widgets/banner.dart';
 import 'package:fluter_19pmd/views/home/widgets/categories.dart';
 import 'package:fluter_19pmd/views/home/widgets/products.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  const Body({Key key}) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();

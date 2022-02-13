@@ -1,4 +1,4 @@
-import 'package:fluter_19pmd/views/profile/order/widgets/body.dart';
+import 'package:fluter_19pmd/views/profile/order/widgets/waiting_to_accept.dart';
 import 'package:flutter/material.dart';
 
 class OrderPage extends StatelessWidget {
@@ -8,7 +8,7 @@ class OrderPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: DefaultTabController(
-        length: 4,
+        length: 5,
         child: Scaffold(
           backgroundColor: Colors.white,
           appBar: AppBar(
@@ -49,9 +49,10 @@ class OrderPage extends StatelessWidget {
 
   Widget bodyTabbar() => const TabBarView(
         children: [
-          Body(),
+          Center(child: Text("Transit")),
           Center(child: Text("Transit")),
           Center(child: Text("Bike")),
+          WaitingToAccept(),
           Center(child: Text("Boat")),
         ],
       );
@@ -92,7 +93,17 @@ class OrderPage extends StatelessWidget {
           ),
           Tab(
             child: Text(
-              "Đẫ hủy",
+              "Lịch sử mua",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.normal,
+                color: Colors.white,
+              ),
+            ),
+          ),
+          Tab(
+            child: Text(
+              "Đã hủy",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.normal,

@@ -2,6 +2,9 @@ import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryProduct {
+  static var getID;
+  static var de;
+
   static Future<List<Product>> getAllProduct() async {
     var client = http.Client();
     List<Product> newProduct;
@@ -12,6 +15,22 @@ class RepositoryProduct {
       var jsonString = response.body;
       newProduct = productFromJson(jsonString);
 
+      return newProduct;
+    }
+    return null;
+  }
+
+  static Future<List<Product>> viewDetails() async {
+    var client = http.Client();
+    List<Product> newProduct;
+    var response = await client.get(
+      Uri.parse('http://10.0.2.2:8000/api/products/details-product/${getID}'),
+    );
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      newProduct = productFromJson(jsonString);
+      de = newProduct;
+      print(1);
       return newProduct;
     }
     return null;

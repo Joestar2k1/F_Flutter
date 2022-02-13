@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:fluter_19pmd/repository/user.dart';
+
 List<User> userFromJson(String str) =>
     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
 
@@ -72,4 +74,6 @@ class User {
   String toString() {
     return toJson().toString();
   }
+
+  static User user = RepositoryUser.info;
 }

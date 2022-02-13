@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:fluter_19pmd/models/product_models.dart';
-import 'package:fluter_19pmd/repository/repository_products.dart';
+import 'package:fluter_19pmd/repository/products_api.dart';
 
 enum Event {
   fetch,

@@ -1,85 +1,130 @@
 import 'package:fluter_19pmd/bloc/counter_event.dart';
 import 'package:fluter_19pmd/bloc/counter_state.dart';
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
+import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/cart/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
-class Body extends StatelessWidget {
-  Body({Key key}) : super(key: key);
+class Body extends StatefulWidget {
+  const Body({Key key}) : super(key: key);
+
+  @override
+  State<Body> createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   final _counterBloc = CounterBloc();
+  final _cartBloc = CartBloc();
+  @override
+  void initState() {
+    _cartBloc.eventSink.add(CartEvent.fetchCart);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _cartBloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        Expanded(
-            child: ListView.separated(
-          itemCount: 2,
-          itemBuilder: (BuildContext context, int index) {
-            return Container(
-              margin: const EdgeInsets.all(15.0),
-              height: 140,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    height: 50,
-                    width: 50,
-                    decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(
-                        Radius.circular(30),
-                      ),
-                    ),
-                    child: InkWell(
-                        onTap: () {},
-                        child:
-                            Image.asset("assets/images/icons-png/trash.png")),
-                  ),
-                  Container(
-                    width: 130,
-                    height: 130,
-                    color: buttonColor,
-                    child: Image.asset("assets/images/products/1.png"),
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Dâu",
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildItemInfo(text: "Giá (Kg) : \$", number: 2),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _buildItemInfo(text: "Số lượng  tồn kho :", number: 10),
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      _counter(size),
-                    ],
-                  ),
-                ],
-              ),
-            );
-          },
-          separatorBuilder: (BuildContext context, int index) {
-            return const SizedBox(
-              height: 20,
-            );
-          },
-        )),
+        StreamBuilder<List<Product>>(
+            initialData: [],
+            stream: _cartBloc.cartStream,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return _card(snapshot, context, size);
+              } else {
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              }
+            }),
         const Align(
             alignment: Alignment.bottomCenter, child: BottomNavBarCart()),
       ],
     );
   }
+
+  Widget _card(snapshot, context, size) => Expanded(
+          child: ListView.separated(
+        itemCount: snapshot.data.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Container(
+            margin: const EdgeInsets.all(15.0),
+            height: 140,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  height: 50,
+                  width: 50,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(
+                      Radius.circular(30),
+                    ),
+                  ),
+                  child: InkWell(
+                      onTap: () {},
+                      child: Image.asset("assets/images/icons-png/trash.png")),
+                ),
+                Container(
+                  width: 130,
+                  height: 130,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.teal, Colors.teal.shade200],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Image.asset(
+                      "assets/images/products/${snapshot.data[index].image}"),
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      snapshot.data[index].name,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildItemInfo(
+                        text: "Giá: ", number: snapshot.data[index].price),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _buildItemInfo(
+                        text: "Số lượng  tồn kho : ",
+                        number: snapshot.data[index].stock),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    _counter(
+                        size: size, quantity: snapshot.data[index].quantity),
+                  ],
+                ),
+              ],
+            ),
+          );
+        },
+        separatorBuilder: (BuildContext context, int index) {
+          return const SizedBox(
+            height: 20,
+          );
+        },
+      ));
 
   Widget _buildItemInfo({String text, int number}) => RichText(
         text: TextSpan(
@@ -104,7 +149,7 @@ class Body extends StatelessWidget {
         ),
       );
 
-  Widget _counter(size) => SizedBox(
+  Widget _counter({Size size, int quantity}) => SizedBox(
         width: 150,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -128,7 +173,7 @@ class Body extends StatelessWidget {
               ),
             ),
             Text(
-              123.toString(),
+              quantity.toString(),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

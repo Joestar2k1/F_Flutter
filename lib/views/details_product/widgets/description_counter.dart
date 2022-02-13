@@ -1,4 +1,5 @@
-import 'package:fluter_19pmd/views/details_product/bloc/counter_bloc.dart';
+import 'package:fluter_19pmd/bloc/counter_event.dart';
+import 'package:fluter_19pmd/bloc/counter_state.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionWidthCounter extends StatefulWidget {
@@ -10,7 +11,7 @@ class DescriptionWidthCounter extends StatefulWidget {
 }
 
 class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
-  final counterBloc = CounterDescriptionBloc();
+  final counterBloc = CounterBloc();
 
   @override
   void dispose() {
@@ -72,7 +73,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        counterBloc.eventSink.add(CounterAction.Decrement);
+                        counterBloc.eventSink.add(CounterEvent.decrement);
                       },
                       icon: const Icon(Icons.remove),
                     ),
@@ -107,7 +108,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                     ),
                     IconButton(
                       onPressed: () {
-                        counterBloc.eventSink.add(CounterAction.Increment);
+                        counterBloc.eventSink.add(CounterEvent.increment);
                       },
                       icon: const Icon(Icons.add),
                     ),

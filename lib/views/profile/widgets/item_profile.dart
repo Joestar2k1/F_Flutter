@@ -1,4 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/user.dart';
+import 'package:fluter_19pmd/views/login/sigin_screen.dart';
 import 'package:fluter_19pmd/views/profile/account/account_page.dart';
 import 'package:fluter_19pmd/views/profile/order/order_page.dart';
 import 'package:flutter/material.dart';
@@ -16,18 +18,23 @@ class ItemProfile extends StatelessWidget {
     const AccountPage(),
     const OrderPage(),
     Container(),
+    const SignInPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => pages[index],
-          ),
-        );
+        if (profiles[index]['text'] == 'Đăng xuất') {
+          RepositoryUser.logout(context);
+        } else {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => pages[index],
+            ),
+          );
+        }
       },
       child: Container(
         decoration: BoxDecoration(
