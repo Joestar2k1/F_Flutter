@@ -21,6 +21,7 @@ class Product {
   String description;
   String image;
   int status;
+  int quantity;
   dynamic createdAt;
   dynamic updatedAt;
   Product({
@@ -33,6 +34,7 @@ class Product {
     this.description,
     this.image,
     this.status,
+    this.quantity,
     this.createdAt,
     this.updatedAt,
   });
@@ -44,6 +46,7 @@ class Product {
         stock: json["stock"],
         type: json["type"],
         unit: json["unit"],
+        quantity: json["quantity"],
         description: json["description"],
         image: json["image"],
         status: json["status"],
@@ -58,6 +61,7 @@ class Product {
         "stock": stock,
         "type": type,
         "unit": unit,
+        "quantity": quantity,
         "description": description,
         "image": image,
         "status": status,

@@ -1,9 +1,9 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/user.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class HeaderWithAvatar extends StatelessWidget {
-  HeaderWithAvatar({Key key}) : super(key: key);
+  const HeaderWithAvatar({Key key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -46,8 +46,9 @@ class HeaderWithAvatar extends StatelessWidget {
         SizedBox(
           height: size.height * 0.2,
           width: size.width * 0.37,
-          child: const CircleAvatar(
-            backgroundImage: AssetImage("assets/images/avatar.png"),
+          child: CircleAvatar(
+            backgroundImage: AssetImage(
+                "assets/images/person/${RepositoryUser.info.avatar}"),
           ),
         ),
         Positioned(
@@ -114,10 +115,10 @@ class HeaderWithAvatar extends StatelessWidget {
             ),
           ],
         ),
-        child: const Center(
+        child: Center(
           child: Text(
-            "Hoài chương nè",
-            style: TextStyle(
+            RepositoryUser.info.fullName,
+            style: const TextStyle(
               color: textColor,
               fontSize: 18,
               letterSpacing: 1,

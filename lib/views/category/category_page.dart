@@ -30,19 +30,14 @@ class _CategoryPageState extends State<CategoryPage> {
                 ),
               ),
             ),
-            leading: IconButton(
-              onPressed: () => Navigator.pop(context),
-              icon: const Icon(
-                Icons.arrow_back,
-                color: Colors.white,
-              ),
-            ),
-            title: const Text(
-              "Danh mục",
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.normal,
-                color: Colors.white,
+            title: const Center(
+              child: Text(
+                "Danh mục",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.normal,
+                  color: Colors.white,
+                ),
               ),
             ),
           ),

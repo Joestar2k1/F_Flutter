@@ -39,6 +39,8 @@ dependencies:
   flutter_validate:
   http:
   equatable:
+  flutter_bloc:
+  bloc:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,27 +1,24 @@
 import 'dart:async';
 
-enum CounterAction {
-  Increment,
-  Decrement,
-}
+import 'package:fluter_19pmd/bloc/counter_event.dart';
 
-class CounterDescriptionBloc {
+class CounterBloc {
   int counter;
   final _stateStreamController = StreamController<int>();
   StreamSink<int> get counterSink => _stateStreamController.sink;
   Stream<int> get counterStream => _stateStreamController.stream;
 
-  final _eventStreamController = StreamController<CounterAction>();
-  StreamSink<CounterAction> get eventSink => _eventStreamController.sink;
-  Stream<CounterAction> get eventStream => _eventStreamController.stream;
-  CounterDescriptionBloc() {
+  final _eventStreamController = StreamController<CounterEvent>();
+  StreamSink<CounterEvent> get eventSink => _eventStreamController.sink;
+  Stream<CounterEvent> get eventStream => _eventStreamController.stream;
+  CounterBloc() {
     counter = 1;
     eventStream.listen((event) {
-      if (event == CounterAction.Decrement) {
+      if (event == CounterEvent.decrement) {
         if (counter > 1) {
           counter--;
         }
-      } else if (event == CounterAction.Increment) {
+      } else if (event == CounterEvent.increment) {
         counter++;
       }
       counterSink.add(counter);

@@ -1,5 +1,7 @@
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
@@ -14,10 +16,9 @@ class ProductsHome extends StatefulWidget {
 
 class _ProductsHomeState extends State<ProductsHome> {
   final productBloc = ProductBloc();
-
   @override
   void initState() {
-    productBloc.eventSink.add(ProductAciton.Fetch);
+    productBloc.eventSink.add(EventProduct.fetch);
     super.initState();
   }
 
@@ -30,7 +31,7 @@ class _ProductsHomeState extends State<ProductsHome> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    print("widget-tree");
+
     return Column(
       children: [
         StreamBuilder<List<Product>>(
@@ -52,7 +53,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                   child: CircularProgressIndicator(),
                 );
               } else {
-                return Container(
+                return SizedBox(
                   height: 1400,
                   child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
@@ -63,123 +64,128 @@ class _ProductsHomeState extends State<ProductsHome> {
                       ),
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: size.height * 0.37,
-                            width: size.width * 0.45,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(30),
-                                ),
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.teal,
-                                )),
-                            child: Stack(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         DetailsProductScreen(
-                                    //       products: productController
-                                    //           .productList[index],
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: size.width,
-                                        height: size.height * 0.21,
-                                        child: Hero(
-                                          tag: snapshot.data[index].id,
-                                          child: Image.asset(
-                                              "assets/images/products/${snapshot.data[index].image}"),
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data[index].name,
-                                        style: const TextStyle(
-                                          fontSize: 25,
-                                          color: Color(0xFF717171),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text:
-                                                  "\$${snapshot.data[index].price}",
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const TextSpan(
-                                              text: " \\ ",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  " ${snapshot.data[index].unit}",
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange.withOpacity(1),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(30),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: const Text(
-                                          "+",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
-                          ),
-                        );
+                        return _card(size, context, snapshot, index);
                       }),
                 );
               }
             }),
+      ],
+    );
+  }
+
+  Widget _card(Size size, BuildContext context,
+          AsyncSnapshot<List<Product>> snapshot, int index) =>
+      Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: size.height * 0.37,
+          width: size.width * 0.45,
+          decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(30),
+              ),
+              border: Border.all(
+                width: 1.5,
+                color: Colors.teal,
+              )),
+          child: Stack(
+            children: [
+              InkWell(
+                onTap: () {
+                  RepositoryProduct.getID = snapshot.data[index].id;
+
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => DetailsProductScreen(),
+                    ),
+                  );
+                },
+                child: contentCard(size, snapshot, index),
+              ),
+              Align(
+                alignment: Alignment.bottomRight,
+                child: Container(
+                  width: 40,
+                  height: 40,
+                  decoration: BoxDecoration(
+                    color: Colors.orange.withOpacity(1),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(30),
+                    ),
+                  ),
+                  child: Center(
+                    child: InkWell(
+                      onTap: () {},
+                      child: const Text(
+                        "+",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 25,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+
+  Widget contentCard(
+      Size size, AsyncSnapshot<List<Product>> snapshot, int index) {
+    return Column(
+      children: [
+        SizedBox(
+          width: size.width,
+          height: size.height * 0.21,
+          child: Hero(
+            tag: snapshot.data[index].id,
+            child: Image.asset(
+                "assets/images/products/${snapshot.data[index].image}"),
+          ),
+        ),
+        Text(
+          snapshot.data[index].name,
+          style: const TextStyle(
+            fontSize: 25,
+            color: Color(0xFF717171),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(height: 10),
+        RichText(
+          text: TextSpan(
+            children: [
+              TextSpan(
+                text: "${snapshot.data[index].price}đ",
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF717171),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const TextSpan(
+                text: " \\ ",
+                style: TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF717171),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              TextSpan(
+                text: " ${snapshot.data[index].unit}",
+                style: const TextStyle(
+                  fontSize: 18,
+                  color: Color(0xFF717171),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
       ],
     );
   }
