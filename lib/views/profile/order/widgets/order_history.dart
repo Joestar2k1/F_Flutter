@@ -3,14 +3,14 @@ import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 import 'package:flutter/material.dart';
 
-class WaitingToAccept extends StatefulWidget {
-  const WaitingToAccept({Key key}) : super(key: key);
+class OrderHistory extends StatefulWidget {
+  const OrderHistory({Key key}) : super(key: key);
 
   @override
-  State<WaitingToAccept> createState() => _WaitingToAcceptState();
+  State<OrderHistory> createState() => _OrderHistoryState();
 }
 
-class _WaitingToAcceptState extends State<WaitingToAccept> {
+class _OrderHistoryState extends State<OrderHistory> {
   // List<String> resons = [
   //   "Đổi ý, mua sản phẩm khác.",
   //   "Đổi địa chỉ giao hàng.",
@@ -21,7 +21,7 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
   @override
   void initState() {
     super.initState();
-    _invoiceSuccess.eventSink.add(InvoiceEvent.fetchWaitingToAccept);
+    _invoiceSuccess.eventSink.add(InvoiceEvent.fetchOrderHistory);
   }
 
   @override
@@ -37,35 +37,22 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
         initialData: const [],
         stream: _invoiceSuccess.invoiceStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 15,
-                          ),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return itemCart(size, index, snapshot);
-                      }),
-                ),
-              ],
-            );
-          } else {
-            return const Center(
-              child: Text(
-                "Bạn không có đơn xác nhận",
-                style: TextStyle(
-                  fontSize: 2,
-                  color: Color(0xFFF34848),
-                  fontWeight: FontWeight.bold,
-                ),
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(
+                child: ListView.separated(
+                    separatorBuilder: (context, index) => const SizedBox(
+                          height: 15,
+                        ),
+                    physics: const BouncingScrollPhysics(),
+                    itemCount: snapshot.data.length,
+                    itemBuilder: (BuildContext context, int index) {
+                      return itemCart(size, index, snapshot);
+                    }),
               ),
-            );
-          }
+            ],
+          );
         });
   }
 

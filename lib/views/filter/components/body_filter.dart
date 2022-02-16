@@ -1,3 +1,4 @@
+import 'dart:ui' as ui;
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/views/filter/components/range_coin.dart';
 import 'package:flutter/material.dart';
@@ -10,23 +11,73 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  final prType = TextEditingController();
-  final prText = TextEditingController();
-  bool isSelectedType = false;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        const SizedBox(
-          height: 50,
+        Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                "Lọc",
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  foreground: Paint()
+                    ..shader = ui.Gradient.linear(
+                      const Offset(0, 20),
+                      const Offset(150, 20),
+                      [
+                        Colors.red,
+                        Colors.yellow,
+                      ],
+                    ),
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 20.0),
+                width: size.width,
+                // height: double.infinity,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(15.0),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      height: 300,
+                      child: ListView.builder(
+                        itemCount: 1,
+                        itemBuilder: (context, index) {
+                          return Column(
+                            children: [
+                              RadioListTile<dynamic>(
+                                title: const Text(
+                                  'Trái cây',
+                                  style: TextStyle(
+                                    fontSize: 24,
+                                  ),
+                                ),
+                                value: 'Trái cây',
+                                groupValue: '',
+                                onChanged: (dynamic value) {},
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
-        builType(size),
-        const SizedBox(
-          height: 50,
-        ),
-        buildName(size),
         const SizedBox(
           height: 50,
         ),
@@ -54,98 +105,6 @@ class _BodyState extends State<Body> {
             ),
           ),
         )
-      ],
-    );
-  }
-
-  Column buildName(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Text(
-            "Nhập tên sản phẩm",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          width: size.width,
-          height: size.height * 0.06,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: TextField(
-            controller: prType,
-            decoration: const InputDecoration(
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: "Nhập",
-              hintStyle: TextStyle(
-                fontSize: 18,
-              ),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Column builType(Size size) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-          child: Text(
-            "Chọn loại sản phẩm",
-            style: TextStyle(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.symmetric(horizontal: 20),
-          padding: const EdgeInsets.symmetric(horizontal: 20),
-          width: size.width,
-          height: size.height * 0.06,
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.all(
-              Radius.circular(10),
-            ),
-          ),
-          child: TextField(
-            controller: prType,
-            decoration: InputDecoration(
-              enabledBorder: InputBorder.none,
-              focusedBorder: InputBorder.none,
-              hintText: "Chọn",
-              hintStyle: const TextStyle(
-                fontSize: 18,
-              ),
-              suffixIcon: InkWell(
-                onTap: () {
-                  setState(() {
-                    isSelectedType = !isSelectedType;
-                  });
-                },
-                child: (isSelectedType)
-                    ? const Icon(Icons.arrow_drop_down)
-                    : const Icon(Icons.arrow_right),
-              ),
-            ),
-          ),
-        ),
       ],
     );
   }

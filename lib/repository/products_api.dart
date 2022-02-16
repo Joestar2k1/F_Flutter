@@ -3,7 +3,6 @@ import 'package:http/http.dart' as http;
 
 class RepositoryProduct {
   static var getID;
-  static var de;
 
   static Future<List<Product>> getAllProduct() async {
     var client = http.Client();
@@ -29,8 +28,6 @@ class RepositoryProduct {
     if (response.statusCode == 200) {
       var jsonString = response.body;
       newProduct = productFromJson(jsonString);
-      de = newProduct;
-      print(1);
       return newProduct;
     }
     return null;

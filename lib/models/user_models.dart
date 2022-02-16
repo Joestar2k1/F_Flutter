@@ -15,7 +15,6 @@ class User {
     this.fullName,
     this.email,
     this.password,
-    this.address,
     this.phone,
     this.avatar,
     this.status,
@@ -30,7 +29,6 @@ class User {
   String fullName;
   String email;
   String password;
-  String address;
   String phone;
   String avatar;
   int status;
@@ -45,7 +43,6 @@ class User {
         fullName: json["fullName"],
         email: json["email"],
         password: json["password"],
-        address: json["address"],
         phone: json["phone"],
         avatar: json["avatar"],
         status: json["status"],
@@ -61,7 +58,6 @@ class User {
         "fullName": fullName,
         "email": email,
         "password": password,
-        "address": address,
         "phone": phone,
         "avatar": avatar,
         "status": status,
@@ -74,6 +70,4 @@ class User {
   String toString() {
     return toJson().toString();
   }
-
-  static User user = RepositoryUser.info;
 }

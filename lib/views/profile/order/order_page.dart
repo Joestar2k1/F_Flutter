@@ -1,3 +1,6 @@
+import 'package:fluter_19pmd/views/profile/order/widgets/on_delivery.dart';
+import 'package:fluter_19pmd/views/profile/order/widgets/order_history.dart';
+import 'package:fluter_19pmd/views/profile/order/widgets/picking_up_goods.dart';
 import 'package:fluter_19pmd/views/profile/order/widgets/waiting_to_accept.dart';
 import 'package:flutter/material.dart';
 
@@ -49,10 +52,10 @@ class OrderPage extends StatelessWidget {
 
   Widget bodyTabbar() => const TabBarView(
         children: [
-          Center(child: Text("Transit")),
-          Center(child: Text("Transit")),
-          Center(child: Text("Bike")),
           WaitingToAccept(),
+          PickingUpGoods(),
+          OnDelivery(),
+          OrderHistory(),
           Center(child: Text("Boat")),
         ],
       );

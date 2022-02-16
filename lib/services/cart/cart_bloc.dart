@@ -18,7 +18,7 @@ class CartBloc {
         var carts = await RepositoryCart.getCart();
         try {
           if (carts != null) {
-            await Future.delayed(const Duration(seconds: 2));
+            await Future.delayed(const Duration(seconds: 1));
             _cartSink.add(carts);
           } else {
             _cartSink.addError('get products don\'t completed');

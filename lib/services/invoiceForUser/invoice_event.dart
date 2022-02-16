@@ -1,5 +1,6 @@
 enum InvoiceEvent {
-  fetchInvoiceHistory,
+  fetchOrderHistory,
   fetchWaitingToAccept,
-  fetchConfirmed,
+  fetchPickingUpGoods,
+  fetchOnDelivery,
 }

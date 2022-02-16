@@ -3,14 +3,14 @@ import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 import 'package:flutter/material.dart';
 
-class WaitingToAccept extends StatefulWidget {
-  const WaitingToAccept({Key key}) : super(key: key);
+class OnDelivery extends StatefulWidget {
+  const OnDelivery({Key key}) : super(key: key);
 
   @override
-  State<WaitingToAccept> createState() => _WaitingToAcceptState();
+  State<OnDelivery> createState() => _OnDeliveryState();
 }
 
-class _WaitingToAcceptState extends State<WaitingToAccept> {
+class _OnDeliveryState extends State<OnDelivery> {
   // List<String> resons = [
   //   "Đổi ý, mua sản phẩm khác.",
   //   "Đổi địa chỉ giao hàng.",
@@ -21,7 +21,7 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
   @override
   void initState() {
     super.initState();
-    _invoiceSuccess.eventSink.add(InvoiceEvent.fetchWaitingToAccept);
+    _invoiceSuccess.eventSink.add(InvoiceEvent.fetchOnDelivery);
   }
 
   @override
@@ -37,7 +37,7 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
         initialData: const [],
         stream: _invoiceSuccess.invoiceStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.data.isNotEmpty) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,10 +57,10 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
           } else {
             return const Center(
               child: Text(
-                "Bạn không có đơn xác nhận",
+                "Bạn không có đơn",
                 style: TextStyle(
-                  fontSize: 2,
-                  color: Color(0xFFF34848),
+                  fontSize: 25,
+                  color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
               ),

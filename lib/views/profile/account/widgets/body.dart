@@ -1,9 +1,9 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/views/profile/account/widgets/accoount_infomation.dart';
+import 'package:fluter_19pmd/views/profile/account/widgets/account_infomation.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
-  Body({Key key}) : super(key: key);
+  const Body({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
