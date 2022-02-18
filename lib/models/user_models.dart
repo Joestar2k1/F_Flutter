@@ -1,6 +1,8 @@
-import 'dart:convert';
+// To parse this JSON data, do
+//
+//     final user = userFromJson(jsonString);
 
-import 'package:fluter_19pmd/repository/user.dart';
+import 'dart:convert';
 
 List<User> userFromJson(String str) =>
     List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
@@ -22,6 +24,7 @@ class User {
     this.rememberToken,
     this.createdAt,
     this.updatedAt,
+    this.address,
   });
 
   String id;
@@ -36,6 +39,7 @@ class User {
   dynamic rememberToken;
   dynamic createdAt;
   dynamic updatedAt;
+  List<Address> address;
 
   factory User.fromJson(Map<String, dynamic> json) => User(
         id: json["id"],
@@ -50,6 +54,8 @@ class User {
         rememberToken: json["remember_token"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        address:
+            List<Address>.from(json["address"].map((x) => Address.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -65,7 +71,29 @@ class User {
         "remember_token": rememberToken,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "address": List<dynamic>.from(address.map((x) => x.toJson())),
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
+}
+
+class Address {
+  Address({
+    this.name,
+  });
+
+  String name;
+
+  factory Address.fromJson(Map<String, dynamic> json) => Address(
+        name: json["name"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "name": name,
+      };
+
   @override
   String toString() {
     return toJson().toString();

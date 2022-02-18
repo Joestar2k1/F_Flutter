@@ -6,7 +6,7 @@ class ProfileInfoAccountBloc {
   bool openAccount = false;
   bool openAddress = false;
   final _stateStreamController = StreamController<bool>();
-  StreamSink<bool> get _editProfileSink => _stateStreamController.sink;
+  StreamSink<bool> get editProfileSink => _stateStreamController.sink;
   Stream<bool> get editProfileStream => _stateStreamController.stream;
 
   final _eventStreamController = StreamController<AccountEvent>();
@@ -18,13 +18,11 @@ class ProfileInfoAccountBloc {
       switch (event) {
         case AccountEvent.editAccount:
           openAccount = !openAccount;
-          openAddress = false;
-          _editProfileSink.add(openAccount);
+          editProfileSink.add(openAccount);
           break;
         case AccountEvent.addOrEditAddress:
-          openAccount = false;
           openAddress = true;
-          _editProfileSink.add(openAddress);
+          editProfileSink.add(openAddress);
           break;
         default:
       }

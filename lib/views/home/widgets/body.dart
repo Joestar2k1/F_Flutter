@@ -1,8 +1,9 @@
 import 'package:fluter_19pmd/models/product_models.dart';
-import 'package:fluter_19pmd/repository/user.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
+import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/best_seller_bloc.dart';
 import 'package:fluter_19pmd/views/home/widgets/banner.dart';
-import 'package:fluter_19pmd/views/home/widgets/categories.dart';
 import 'package:fluter_19pmd/views/home/widgets/products.dart';
 import 'package:flutter/material.dart';
 
@@ -16,9 +17,10 @@ class Body extends StatefulWidget {
 class _BodyState extends State<Body> {
   var textSearch = TextEditingController();
   final _bestSeller = BestSellerBloc();
-
+  final _cartBloc = CartBloc();
   @override
   void initState() {
+    _cartBloc.eventSink.add(CartEvent.fetchCart);
     _bestSeller.eventSink.add(Event.fetch);
     super.initState();
   }
@@ -27,7 +29,7 @@ class _BodyState extends State<Body> {
   void dispose() {
     super.dispose();
     _bestSeller.dispose();
-    textSearch.dispose();
+    _cartBloc.dispose();
   }
 
   @override
@@ -102,7 +104,7 @@ class _BodyState extends State<Body> {
               scrollDirection: Axis.horizontal,
               itemCount: snapshot.data.length,
               itemBuilder: (context, index) => Card(
-                color: Colors.grey.shade100,
+                color: Colors.white,
                 shadowColor: Colors.teal,
                 elevation: 10,
                 shape: RoundedRectangleBorder(

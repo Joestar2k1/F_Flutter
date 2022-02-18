@@ -1,4 +1,4 @@
-import 'package:fluter_19pmd/views/login/sigin_screen.dart';
+import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {

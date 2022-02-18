@@ -14,7 +14,7 @@ class _VegetablePageState extends State<VegetablePage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchVegetable);
+    cateBloc.eventSink.add(CategoryEvent.fetchVegetable);
     super.initState();
   }
 

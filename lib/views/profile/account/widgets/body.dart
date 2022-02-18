@@ -1,5 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/views/profile/account/widgets/account_infomation.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/views/profile/account/widgets/account_information.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatelessWidget {
@@ -11,15 +12,15 @@ class Body extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          AccountInfomation(),
+          const AccountInformation(),
           const SizedBox(height: 30),
-          buildCardAddress(),
+          buildCardAddress(context),
         ],
       ),
     );
   }
 
-  Widget buildCardAddress() => Card(
+  Widget buildCardAddress(context) => Card(
         shadowColor: Colors.teal,
         elevation: 10,
         margin: const EdgeInsets.all(15.0),
@@ -33,7 +34,7 @@ class Body extends StatelessWidget {
             children: [
               buildHeaderAddress(),
               const SizedBox(height: 30),
-              buildListAddress(),
+              buildListAddress(context),
             ],
           ),
         ),
@@ -72,24 +73,27 @@ class Body extends StatelessWidget {
         ],
       );
 
-  Widget buildListAddress() => Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: const [
-          Text(
-            "+ 46 Phạm Thị Ngư, Tp.Phan Thiết",
-            style: TextStyle(
-              fontSize: 20,
-              color: textColor,
-            ),
-          ),
-          SizedBox(height: 15),
-          Text(
-            "+ 12 Hồ Thành Biên, Quận 8, Tp.Hồ Chí Minh",
-            style: TextStyle(
-              fontSize: 20,
-              color: textColor,
-            ),
-          ),
-        ],
+  Widget buildListAddress(context) => SizedBox(
+        height: RepositoryUser.getHeightAddress(),
+        child: ListView.separated(
+          separatorBuilder: (context, index) {
+            return const SizedBox(height: 20);
+          },
+          itemCount: RepositoryUser.info.address.length,
+          itemBuilder: (context, index) {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '+${RepositoryUser.info.address[index].name}',
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: textColor,
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       );
 }

@@ -4,7 +4,6 @@ import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
-import 'package:fluter_19pmd/views/cart/widgets/bottom_nav.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
@@ -41,13 +40,23 @@ class _BodyState extends State<Body> {
               if (snapshot.hasData) {
                 return _card(snapshot, context, size);
               } else {
-                return const Center(
-                  child: CircularProgressIndicator(),
+                return Column(
+                  children: [
+                    SizedBox(
+                      height: size.height * 0.3,
+                    ),
+                    const Center(
+                      child: Text(
+                        "Bạn chưa có sản phẩm trong giỏ hàng",
+                        style: TextStyle(
+                          fontSize: 20,
+                        ),
+                      ),
+                    ),
+                  ],
                 );
               }
             }),
-        const Align(
-            alignment: Alignment.bottomCenter, child: BottomNavBarCart()),
       ],
     );
   }

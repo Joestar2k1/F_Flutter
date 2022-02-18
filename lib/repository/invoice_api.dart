@@ -1,6 +1,6 @@
 import 'package:fluter_19pmd/models/invoice_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
-import 'package:fluter_19pmd/repository/user.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryInvoice {

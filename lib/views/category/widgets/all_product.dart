@@ -14,7 +14,7 @@ class _AllPageState extends State<AllPage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchAll);
+    cateBloc.eventSink.add(CategoryEvent.fetchAll);
     super.initState();
   }
 
