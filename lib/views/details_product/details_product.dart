@@ -1,4 +1,3 @@
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/body.dart';
 
 import 'package:flutter/material.dart';

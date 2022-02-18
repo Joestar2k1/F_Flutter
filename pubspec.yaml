@@ -66,7 +66,6 @@ flutter:
   assets:
     - assets/images/
     - assets/images/person/
-    - assets/images/filter/
     - assets/images/icons-png/
     - assets/images/silder/
     - assets/images/products/

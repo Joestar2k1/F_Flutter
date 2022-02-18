@@ -1,5 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/repository/user.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 
@@ -20,18 +20,7 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
     _formKey.currentState.save();
-
-    if (RepositoryUser.login(context, email, password) != null) {
-      await Future.delayed(const Duration(seconds: 2));
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
-    } else {
-      await Future.delayed(const Duration(seconds: 2));
-      throw Exception("Không ổn mật khẩu hoặc email sai");
-    }
+    RepositoryUser.login(context, email, password);
   }
 
   @override

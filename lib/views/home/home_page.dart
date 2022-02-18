@@ -61,11 +61,12 @@ class _HomePageState extends State<HomePage>
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
+        backgroundColor: Colors.grey.shade400,
         appBar: (selectedIndex == 0)
             ? AppBar(
                 elevation: 0,
                 backgroundColor: Colors.teal.shade700,
-                title: const SearchWithIcons(),
+                title: SearchWithIcons(),
                 flexibleSpace: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

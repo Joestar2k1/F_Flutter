@@ -1,5 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/repository/user.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWithAvatar extends StatelessWidget {

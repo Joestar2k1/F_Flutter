@@ -1,13 +1,26 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SearchWithIcons extends StatelessWidget {
+class SearchWithIcons extends StatefulWidget {
   const SearchWithIcons({
     Key key,
   }) : super(key: key);
+
+  @override
+  State<SearchWithIcons> createState() => _SearchWithIconsState();
+}
+
+class _SearchWithIconsState extends State<SearchWithIcons> {
+  final _quantityCartBloc = CartBloc();
+  @override
+  void dispose() {
+    super.dispose();
+    _quantityCartBloc.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,15 +110,20 @@ class SearchWithIcons extends StatelessWidget {
                       color: Colors.red,
                       shape: BoxShape.circle,
                     ),
-                    child: Center(
-                        child: Text(
-                      3.toString(),
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.white,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    )),
+                    child: StreamBuilder<int>(
+                        initialData: 0,
+                        stream: _quantityCartBloc.cartQuantityStream,
+                        builder: (context, snapshot) {
+                          return Center(
+                              child: Text(
+                            snapshot.data.toString(),
+                            style: const TextStyle(
+                              fontSize: 15,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ));
+                        }),
                   ),
                 ),
               ],

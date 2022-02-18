@@ -1,8 +1,11 @@
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
+
+import '../../../function.dart';
 
 // ignore: must_be_immutable
 class ProductsHome extends StatefulWidget {
@@ -54,7 +57,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                 );
               } else {
                 return SizedBox(
-                  height: 1400,
+                  height: size.height * RepositoryProduct.getHeight(),
                   child: GridView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       gridDelegate:
@@ -98,7 +101,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailsProductScreen(),
+                      builder: (context) => const DetailsProductScreen(),
                     ),
                   );
                 },
@@ -117,7 +120,9 @@ class _ProductsHomeState extends State<ProductsHome> {
                   ),
                   child: Center(
                     child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        RepositoryCart.addToCart(snapshot.data[index].id);
+                      },
                       child: const Text(
                         "+",
                         style: TextStyle(
@@ -168,7 +173,7 @@ class _ProductsHomeState extends State<ProductsHome> {
                 ),
               ),
               const TextSpan(
-                text: " \\ ",
+                text: "\\",
                 style: TextStyle(
                   fontSize: 18,
                   color: Color(0xFF717171),

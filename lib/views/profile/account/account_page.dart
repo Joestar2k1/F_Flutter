@@ -1,4 +1,3 @@
-import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/views/profile/account/widgets/body.dart';
 import 'package:flutter/material.dart';
 
@@ -41,7 +40,7 @@ class AccountPage extends StatelessWidget {
           ),
           backgroundColor: Colors.white,
         ),
-        body: Body(),
+        body: const Body(),
       ),
     );
   }

@@ -1,0 +1,4 @@
+enum AccountEvent {
+  editAccount,
+  addOrEditAddress,
+}

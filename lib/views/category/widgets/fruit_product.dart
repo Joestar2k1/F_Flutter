@@ -14,7 +14,7 @@ class _FruitPageState extends State<FruitPage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchFruit);
+    cateBloc.eventSink.add(CategoryEvent.fetchFruit);
     super.initState();
   }
 

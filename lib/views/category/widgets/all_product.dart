@@ -14,7 +14,7 @@ class _AllPageState extends State<AllPage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchAll);
+    cateBloc.eventSink.add(CategoryEvent.fetchAll);
     super.initState();
   }
 
@@ -112,7 +112,7 @@ class _AllPageState extends State<AllPage> {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  "\$${snapshot.data[index].price}",
+                                                  "${snapshot.data[index].price}đ",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Color(0xFF717171),

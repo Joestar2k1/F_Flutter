@@ -14,7 +14,7 @@ class _DrinkPageState extends State<DrinkPage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchDrink);
+    cateBloc.eventSink.add(CategoryEvent.fetchDrink);
     super.initState();
   }
 

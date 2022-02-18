@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/views/cart/widgets/body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +13,7 @@ class CartPage extends StatefulWidget {
 class _CartPageState extends State<CartPage> {
   @override
   Widget build(BuildContext context) {
+    Size size = MediaQuery.of(context).size;
     return SafeArea(
       child: Scaffold(
         backgroundColor: Colors.white,
@@ -43,8 +45,66 @@ class _CartPageState extends State<CartPage> {
             style: TextStyle(fontSize: 26),
           ),
         ),
-        body: Body(),
+        body: const Body(),
+        bottomNavigationBar: buildBottomBar(size),
       ),
+    );
+  }
+
+  Row buildBottomBar(Size size) {
+    return Row(
+      children: [
+        SizedBox(
+          width: size.width * 0.5,
+          height: size.height * 0.06,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(buttonColor),
+            ),
+            onPressed: () {
+              setState(() {});
+            },
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.delete),
+                Text(
+                  "Xóa",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SizedBox(
+          width: size.width * 0.5,
+          height: size.height * 0.06,
+          child: ElevatedButton(
+            style: ButtonStyle(
+              backgroundColor: MaterialStateProperty.all(
+                buttonColor,
+              ),
+            ),
+            onPressed: () {},
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: const [
+                Icon(Icons.card_travel),
+                Text(
+                  "CheckOut",
+                  style: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

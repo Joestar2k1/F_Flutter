@@ -14,7 +14,7 @@ class _MeetPageState extends State<MeetPage> {
 
   @override
   void initState() {
-    cateBloc.eventSink.add(ProductAciton.fetchMeet);
+    cateBloc.eventSink.add(CategoryEvent.fetchMeet);
     super.initState();
   }
 
