@@ -1,9 +1,10 @@
-import 'package:fluter_19pmd/bloc/counter_event.dart';
-import 'package:fluter_19pmd/bloc/counter_state.dart';
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/counter_event.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
+import 'package:fluter_19pmd/views/cart/counter_cart_bloc/counter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
@@ -25,6 +26,7 @@ class _BodyState extends State<Body> {
   @override
   void dispose() {
     super.dispose();
+    _counterBloc.dispose();
     _cartBloc.dispose();
   }
 
@@ -43,14 +45,24 @@ class _BodyState extends State<Body> {
                 return Column(
                   children: [
                     SizedBox(
-                      height: size.height * 0.3,
+                      height: size.height * 0.35,
                     ),
-                    const Center(
-                      child: Text(
-                        "Bạn chưa có sản phẩm trong giỏ hàng",
-                        style: TextStyle(
-                          fontSize: 20,
-                        ),
+                    Center(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Image.asset(
+                            "assets/images/icons-png/shopping_cart.png",
+                            width: 30,
+                            height: 30,
+                          ),
+                          const Text(
+                            "Bạn chưa có sản phẩm trong giỏ hàng",
+                            style: TextStyle(
+                              fontSize: 20,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
@@ -80,7 +92,11 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   child: InkWell(
-                      onTap: () {},
+                      onTap: () {
+                        RepositoryCart.deleteProductCart(
+                            snapshot.data[index].id);
+                        _cartBloc.eventSink.add(CartEvent.fetchCart);
+                      },
                       child: Image.asset("assets/images/icons-png/trash.png")),
                 ),
                 Container(
@@ -121,7 +137,10 @@ class _BodyState extends State<Body> {
                       height: 10,
                     ),
                     _counter(
-                        size: size, quantity: snapshot.data[index].quantity),
+                        size: size,
+                        quantity: snapshot.data[index].quantity,
+                        productID: snapshot.data[index].id,
+                        stock: snapshot.data[index].stock),
                   ],
                 ),
               ],
@@ -158,7 +177,8 @@ class _BodyState extends State<Body> {
         ),
       );
 
-  Widget _counter({Size size, int quantity}) => SizedBox(
+  Widget _counter({Size size, int quantity, String productID, int stock}) =>
+      SizedBox(
         width: 150,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -175,7 +195,11 @@ class _BodyState extends State<Body> {
               child: Center(
                 child: IconButton(
                   onPressed: () {
-                    _counterBloc.eventSink.add(CounterEvent.decrement);
+                    if (quantity > 1) {
+                      RepositoryCart.getID = productID;
+                      _counterBloc.eventSink.add(CounterEvent.decrement);
+                      _cartBloc.eventSink.add(CartEvent.fetchCart);
+                    }
                   },
                   icon: const Icon(Icons.remove),
                 ),
@@ -199,7 +223,11 @@ class _BodyState extends State<Body> {
               ),
               child: IconButton(
                 onPressed: () {
-                  _counterBloc.eventSink.add(CounterEvent.increment);
+                  if (quantity < stock) {
+                    RepositoryCart.getID = productID;
+                    _counterBloc.eventSink.add(CounterEvent.increment);
+                    _cartBloc.eventSink.add(CartEvent.fetchCart);
+                  }
                 },
                 icon: const Icon(Icons.add),
               ),

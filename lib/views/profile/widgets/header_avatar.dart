@@ -1,55 +1,83 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/user_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:flutter/material.dart';
 
-class HeaderWithAvatar extends StatelessWidget {
+class HeaderWithAvatar extends StatefulWidget {
   const HeaderWithAvatar({Key key}) : super(key: key);
+
+  @override
+  State<HeaderWithAvatar> createState() => _HeaderWithAvatarState();
+}
+
+class _HeaderWithAvatarState extends State<HeaderWithAvatar> {
+  final _profileBloc = ProfileBloc();
+  @override
+  void initState() {
+    super.initState();
+    _profileBloc.eventSink.add(UserEvent.fetch);
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _profileBloc.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return SizedBox(
       width: size.width,
       height: size.height * 0.33,
-      child: Stack(
-        children: <Widget>[
-          Container(
-            width: size.width,
-            height: size.height * 0.3,
-            decoration: BoxDecoration(
-              color: buttonColor,
-              borderRadius: const BorderRadius.only(
-                bottomLeft: Radius.circular(30),
-                bottomRight: Radius.circular(30),
-              ),
-              gradient: LinearGradient(
-                colors: [Colors.teal, Colors.teal.shade200],
-                begin: Alignment.bottomLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
-            child: Column(
+      child: StreamBuilder<User>(
+          initialData: User(),
+          stream: _profileBloc.userOnlineStream,
+          builder: (context, snapshot) {
+            return Stack(
               children: <Widget>[
-                buildHeader(size, context),
-                builAvatar(size),
+                Container(
+                  width: size.width,
+                  height: size.height * 0.3,
+                  decoration: BoxDecoration(
+                    color: buttonColor,
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(30),
+                      bottomRight: Radius.circular(30),
+                    ),
+                    gradient: LinearGradient(
+                      colors: [Colors.teal, Colors.teal.shade200],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                  ),
+                  child: Column(
+                    children: <Widget>[
+                      buildHeader(size, context),
+                      builAvatar(size, snapshot.data.avatar),
+                    ],
+                  ),
+                ),
+                buildNameUser(size, snapshot.data.fullName),
               ],
-            ),
-          ),
-          buildNameUser(size),
-        ],
-      ),
+            );
+          }),
     );
   }
 
-  Stack builAvatar(Size size) {
+  Stack builAvatar(Size size, String avatar) {
     return Stack(
       children: [
         SizedBox(
           height: size.height * 0.2,
           width: size.width * 0.37,
-          child: CircleAvatar(
-            backgroundImage: AssetImage(
-                "assets/images/person/${RepositoryUser.info.avatar}"),
-          ),
+          child: (avatar == null)
+              ? const CircleAvatar()
+              : CircleAvatar(
+                  backgroundImage: AssetImage("assets/images/person/$avatar"),
+                ),
         ),
         Positioned(
           right: 0,
@@ -96,7 +124,7 @@ class HeaderWithAvatar extends StatelessWidget {
     );
   }
 
-  Positioned buildNameUser(Size size) {
+  Positioned buildNameUser(Size size, String fullName) {
     return Positioned(
       left: size.width / 5,
       bottom: 5,
@@ -116,15 +144,19 @@ class HeaderWithAvatar extends StatelessWidget {
           ],
         ),
         child: Center(
-          child: Text(
-            RepositoryUser.info.fullName,
-            style: const TextStyle(
-              color: textColor,
-              fontSize: 18,
-              letterSpacing: 1,
-              fontFamily: "RobotoSlab",
-            ),
-          ),
+          child: (fullName == null)
+              ? const Text(
+                  "",
+                )
+              : Text(
+                  fullName,
+                  style: const TextStyle(
+                    color: textColor,
+                    fontSize: 18,
+                    letterSpacing: 1,
+                    fontFamily: "RobotoSlab",
+                  ),
+                ),
         ),
       ),
     );

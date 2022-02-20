@@ -14,20 +14,17 @@ class RepositoryUser {
     return dem;
   }
 
-  static void _getFromUserServe(
-    User users,
-  ) {
-    info = User(
-      id: users.id,
-      username: users.username,
-      fullName: users.fullName,
-      email: users.email,
-      password: users.password,
-      phone: users.phone,
-      avatar: users.avatar,
-      status: users.status,
-      address: users.address,
+  static Future<User> fetchUserOnline() async {
+    var client = http.Client();
+    var response = await client.get(
+      Uri.parse('http://10.0.2.2:8000/api/users/return-user/${info.id}'),
     );
+    if (response.statusCode == 200) {
+      var user = await userFromJson(response.body);
+      return user;
+    } else {
+      throw Exception("............................");
+    }
   }
 
   static Future<void> login(
@@ -40,8 +37,7 @@ class RepositoryUser {
               'password': password,
             }));
     if (response.statusCode == 200) {
-      var user = userFromJson(response.body);
-      _getFromUserServe(user[0]);
+      info = userFromJson(response.body);
       Navigator.push(
           context,
           MaterialPageRoute(
@@ -70,5 +66,28 @@ class RepositoryUser {
         ),
       );
     } else {}
+  }
+
+  static Future<void> updateAccount(String username, String fullName,
+      String email, String password, String phone) async {
+    var client = http.Client();
+    var response = await client.put(
+        Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
+        body: ({
+          'username': username,
+          'fullName': fullName,
+          'email': email,
+          'phone': phone,
+          'password': password,
+        }));
+    if (response.statusCode == 200) {
+      info = userFromJson(response.body);
+    } else if (response.statusCode == 201) {
+      await Future.delayed(const Duration(seconds: 1));
+      throw Exception("Không ổn");
+    } else {
+      await Future.delayed(const Duration(seconds: 1));
+      throw Exception("Không ổn");
+    }
   }
 }

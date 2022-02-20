@@ -66,7 +66,7 @@ class _HomePageState extends State<HomePage>
             ? AppBar(
                 elevation: 0,
                 backgroundColor: Colors.teal.shade700,
-                title: SearchWithIcons(),
+                title: const SearchWithIcons(),
                 flexibleSpace: Container(
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

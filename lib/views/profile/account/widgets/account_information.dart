@@ -1,5 +1,7 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/user_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:fluter_19pmd/views/profile/account/account_bloc.dart';
 import 'package:fluter_19pmd/views/profile/account/account_event.dart';
 import 'package:flutter/material.dart';
@@ -12,20 +14,27 @@ class AccountInformation extends StatefulWidget {
 }
 
 class _AccountInformationState extends State<AccountInformation> {
-  final _profileBloc = ProfileInfoAccountBloc();
+  final _profileBloc = ProfileBloc();
+  final _openEdit = OpenEditAccount();
 
-  final _username = TextEditingController();
+  final _username = TextEditingController(text: RepositoryUser.info.username);
 
-  final _email = TextEditingController();
+  final _email = TextEditingController(text: RepositoryUser.info.email);
 
-  final _fullName = TextEditingController();
+  final _fullName = TextEditingController(text: RepositoryUser.info.fullName);
 
-  final _phone = TextEditingController();
+  final _phone = TextEditingController(text: RepositoryUser.info.phone);
+  final _password = TextEditingController();
+  @override
+  void initState() {
+    super.initState();
+    _profileBloc.eventSink.add(UserEvent.fetch);
+  }
 
   @override
   void dispose() {
     super.dispose();
-    _profileBloc.dispose();
+    _openEdit.dispose();
   }
 
   @override
@@ -45,7 +54,7 @@ class _AccountInformationState extends State<AccountInformation> {
               padding: const EdgeInsets.all(15.0),
               child: StreamBuilder<bool>(
                   initialData: false,
-                  stream: _profileBloc.editProfileStream,
+                  stream: _openEdit.editProfileStream,
                   builder: (context, snapshot) {
                     if (!snapshot.data) {
                       return Column(
@@ -63,7 +72,7 @@ class _AccountInformationState extends State<AccountInformation> {
                                 ),
                               ),
                               TextButton(
-                                onPressed: () => _profileBloc.eventSink
+                                onPressed: () => _openEdit.eventSink
                                     .add(AccountEvent.editAccount),
                                 child: Row(
                                   children: const [
@@ -102,29 +111,45 @@ class _AccountInformationState extends State<AccountInformation> {
                                   fontWeight: FontWeight.bold,
                                 ),
                               ),
-                              TextButton(
-                                onPressed: () => _profileBloc.eventSink
-                                    .add(AccountEvent.editAccount),
-                                child: Row(
-                                  children: const [
-                                    Text(
-                                      "Lưu",
-                                      style: TextStyle(
-                                        fontSize: 24,
-                                        color: buttonColor,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Icon(
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  TextButton(
+                                    onPressed: () {
+                                      RepositoryUser.updateAccount(
+                                          _username.text,
+                                          _fullName.text,
+                                          _email.text,
+                                          _password.text,
+                                          _phone.text);
+
+                                      _openEdit.eventSink
+                                          .add(AccountEvent.saveAccount);
+                                      // _userEvent.eventSink
+                                      //     .add(AccountEvent.editAccount);
+                                    },
+                                    child: const Icon(
                                       Icons.save,
                                       color: buttonColor,
                                     ),
-                                  ],
-                                ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      _openEdit.eventSink
+                                          .add(AccountEvent.saveAccount);
+                                    },
+                                    child: const Icon(
+                                      Icons.close,
+                                      color: buttonColor,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
-                          _buildTextForm(_username, _email, _fullName, _phone),
+                          _buildTextForm(
+                              _username, _email, _fullName, _phone, _password),
                         ],
                       );
                     }
@@ -137,18 +162,37 @@ class _AccountInformationState extends State<AccountInformation> {
   }
 
   Widget _buildTitle() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildText('Tên hiển thị:', RepositoryUser.info.username),
-        const SizedBox(height: 20),
-        _buildText('Email:', RepositoryUser.info.email),
-        const SizedBox(height: 20),
-        _buildText('Họ tên:', RepositoryUser.info.fullName),
-        const SizedBox(height: 20),
-        _buildText('Số điện thoại:', RepositoryUser.info.phone),
-      ],
-    );
+    return StreamBuilder<User>(
+        initialData: User(),
+        stream: null,
+        builder: (context, snapshot) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child:
+                    _buildText('Tên hiển thị:', RepositoryUser.info.username),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _buildText('Email:', RepositoryUser.info.email),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _buildText('Họ tên:', RepositoryUser.info.fullName),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _buildText('Số điện thoại:', RepositoryUser.info.phone),
+              ),
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: _buildText('Mật khẩu:', '***********'),
+              ),
+            ],
+          );
+        });
   }
 
   Widget _buildText(title, text) => Row(
@@ -178,6 +222,7 @@ class _AccountInformationState extends State<AccountInformation> {
     TextEditingController email,
     TextEditingController fullName,
     TextEditingController phone,
+    TextEditingController password,
   ) {
     return GestureDetector(
       onTap: () {
@@ -190,6 +235,7 @@ class _AccountInformationState extends State<AccountInformation> {
           _input(email, 'Email', RepositoryUser.info.username),
           _input(fullName, 'Họ tên', RepositoryUser.info.username),
           _input(phone, 'Số điện thoại', RepositoryUser.info.username),
+          _input(password, 'Mật khẩu', RepositoryUser.info.username),
         ],
       ),
     );

@@ -8,6 +8,7 @@ class Body extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    print('widget-account');
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,

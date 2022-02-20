@@ -1,8 +1,10 @@
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
+import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
+import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../function.dart';

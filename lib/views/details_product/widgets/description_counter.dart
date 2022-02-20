@@ -1,5 +1,3 @@
-import 'package:fluter_19pmd/bloc/counter_event.dart';
-import 'package:fluter_19pmd/bloc/counter_state.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionWidthCounter extends StatefulWidget {
@@ -11,11 +9,11 @@ class DescriptionWidthCounter extends StatefulWidget {
 }
 
 class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
-  final counterBloc = CounterBloc();
+  // final counterBloc = CounterBloc();
 
   @override
   void dispose() {
-    counterBloc.dispose();
+    // counterBloc.dispose();
     super.dispose();
   }
 
@@ -41,15 +39,21 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
               ),
             ),
           ),
-          const Padding(
+          Padding(
             padding: EdgeInsets.symmetric(vertical: 20.0),
-            child: Text(
-              "Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,",
-              style: TextStyle(
-                fontSize: 20,
-                letterSpacing: 1.5,
-                fontFamily: "RobotoSlab",
-                color: Colors.black54,
+            child: Container(
+              height: 100,
+              width: size.width,
+              child: const Text(
+                "Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,Rất giàu cho sức khỏe,",
+                maxLines: 4,
+                style: TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 1.5,
+                  fontFamily: "RobotoSlab",
+                  color: Colors.black54,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ),
@@ -73,7 +77,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                   children: [
                     IconButton(
                       onPressed: () {
-                        counterBloc.eventSink.add(CounterEvent.decrement);
+                        // counterBloc.eventSink.add(CounterEvent.decrement);
                       },
                       icon: const Icon(Icons.remove),
                     ),
@@ -87,18 +91,13 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                       width: size.width * 0.15,
                       height: size.height * 0.05,
                       child: Center(
-                        child: StreamBuilder(
-                            stream: counterBloc.counterStream,
-                            initialData: 1,
-                            builder: (context, snapshot) {
-                              return Text(
-                                snapshot.data.toString(),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              );
-                            }),
+                        child: Text(
+                          1.toString(),
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
                     ),
                     Container(
@@ -108,7 +107,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                     ),
                     IconButton(
                       onPressed: () {
-                        counterBloc.eventSink.add(CounterEvent.increment);
+                        // counterBloc.eventSink.add(CounterEvent.increment);
                       },
                       icon: const Icon(Icons.add),
                     ),

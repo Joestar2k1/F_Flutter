@@ -1,4 +1,4 @@
 enum AccountEvent {
   editAccount,
-  addOrEditAddress,
+  saveAccount,
 }

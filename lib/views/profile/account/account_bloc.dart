@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:fluter_19pmd/views/profile/account/account_event.dart';
 
-class ProfileInfoAccountBloc {
+class OpenEditAccount {
   bool openAccount = false;
-  bool openAddress = false;
   final _stateStreamController = StreamController<bool>();
   StreamSink<bool> get editProfileSink => _stateStreamController.sink;
   Stream<bool> get editProfileStream => _stateStreamController.stream;
@@ -13,16 +12,17 @@ class ProfileInfoAccountBloc {
   StreamSink<AccountEvent> get eventSink => _eventStreamController.sink;
   Stream<AccountEvent> get _eventStream => _eventStreamController.stream;
 
-  ProfileInfoAccountBloc() {
+  OpenEditAccount() {
     _eventStream.listen((event) {
       switch (event) {
         case AccountEvent.editAccount:
           openAccount = !openAccount;
           editProfileSink.add(openAccount);
           break;
-        case AccountEvent.addOrEditAddress:
-          openAddress = true;
-          editProfileSink.add(openAddress);
+        case AccountEvent.saveAccount:
+          openAccount = !openAccount;
+
+          editProfileSink.add(openAccount);
           break;
         default:
       }

@@ -1,7 +1,8 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
+import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
+import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -15,12 +16,7 @@ class SearchWithIcons extends StatefulWidget {
 }
 
 class _SearchWithIconsState extends State<SearchWithIcons> {
-  final _quantityCartBloc = CartBloc();
-  @override
-  void dispose() {
-    super.dispose();
-    _quantityCartBloc.dispose();
-  }
+  final _quantityCartBloc = LoadQuantityCart();
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +59,6 @@ class _SearchWithIconsState extends State<SearchWithIcons> {
           ),
           buildIcon(
             size: size,
-            numItems: 0,
             img: "assets/icons/filter.svg",
             press: () {
               Navigator.push(
@@ -134,50 +129,23 @@ class _SearchWithIconsState extends State<SearchWithIcons> {
     );
   }
 
-  InkWell buildIcon({Size size, int numItems, String img, Function() press}) {
+  InkWell buildIcon({Size size, String img, Function() press}) {
     return InkWell(
       onTap: press,
       borderRadius: BorderRadius.circular(50),
-      child: Stack(
-        children: [
-          Container(
-            padding: const EdgeInsets.all(15),
-            width: size.width * 0.12,
-            height: size.height * 0.08,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-            ),
-            child: SvgPicture.asset(
-              img,
-              fit: BoxFit.cover,
-              color: textColor,
-            ),
-          ),
-          if (numItems != 0)
-            Positioned(
-              top: 5,
-              right: -0,
-              child: Container(
-                width: 20,
-                height: 20,
-                decoration: const BoxDecoration(
-                  color: Colors.red,
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Text(
-                    numItems.toString(),
-                    style: const TextStyle(
-                      fontSize: 15,
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-              ),
-            ),
-        ],
+      child: Container(
+        padding: const EdgeInsets.all(15),
+        width: size.width * 0.12,
+        height: size.height * 0.08,
+        decoration: const BoxDecoration(
+          color: Colors.white,
+          shape: BoxShape.circle,
+        ),
+        child: SvgPicture.asset(
+          img,
+          fit: BoxFit.cover,
+          color: textColor,
+        ),
       ),
     );
   }
