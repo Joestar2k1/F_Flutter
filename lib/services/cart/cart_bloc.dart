@@ -10,11 +10,6 @@ class CartBloc {
   StreamSink<List<Product>> get _cartSink => _stateStreamController.sink;
   Stream<List<Product>> get cartStream => _stateStreamController.stream;
 
-  //load-quantity-cart
-  final _cartQuantity = StreamController<int>();
-  StreamSink<int> get cartQuantitySink => _cartQuantity.sink;
-  Stream<int> get cartQuantityStream => _cartQuantity.stream;
-
   final _eventStreamController = StreamController<CartEvent>();
   StreamSink<CartEvent> get eventSink => _eventStreamController.sink;
   Stream<CartEvent> get _eventStream => _eventStreamController.stream;
@@ -22,8 +17,6 @@ class CartBloc {
     _eventStream.listen((event) async {
       if (event == CartEvent.fetchCart) {
         getCart();
-      } else if (event == CartEvent.fetchQuantityCart) {
-        // await RepositoryCart.
       }
     });
   }
@@ -43,6 +36,5 @@ class CartBloc {
 
   void dispose() {
     _stateStreamController.close();
-    _cartQuantity.close();
   }
 }

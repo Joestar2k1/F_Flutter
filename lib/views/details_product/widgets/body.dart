@@ -1,4 +1,3 @@
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/app_bar.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/description_counter.dart';
@@ -8,7 +7,7 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class Body extends StatefulWidget {
-  Body({Key key}) : super(key: key);
+  const Body({Key key}) : super(key: key);
 
   @override
   State<Body> createState() => _BodyState();
@@ -45,7 +44,7 @@ class _BodyState extends State<Body> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            1.toString(),
+                            'Dâu tằm'.toString(),
                             style: const TextStyle(
                                 fontSize: 30,
                                 fontFamily: "RobotoSlab",
@@ -55,7 +54,7 @@ class _BodyState extends State<Body> {
                             height: 30,
                           ),
                           Text(
-                            1.toString(),
+                            25000.toString(),
                             style: const TextStyle(
                               fontSize: 25,
                               fontFamily: "RobotoSlab",
@@ -66,12 +65,9 @@ class _BodyState extends State<Body> {
                       ),
                     ),
                     Expanded(
-                      child: Hero(
-                        tag: 1,
-                        child: Image.asset(
-                          "assets/images/products/1.png",
-                          fit: BoxFit.cover,
-                        ),
+                      child: Image.asset(
+                        "assets/images/products/1.png",
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ],
@@ -80,6 +76,8 @@ class _BodyState extends State<Body> {
               ],
             ),
           ),
+          const DescriptionWidthCounter(),
+          const UserReview(),
         ],
       ),
     );

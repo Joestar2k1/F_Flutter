@@ -43,8 +43,9 @@ class RepositoryInvoice {
         });
       });
       return listProduct;
+    } else {
+      return null;
     }
-    return null;
   }
 
   static Future<List<Product>> pickingUpGoods() async {

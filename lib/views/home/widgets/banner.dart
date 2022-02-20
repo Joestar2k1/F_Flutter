@@ -15,11 +15,11 @@ class BannerHome extends StatelessWidget {
     },
     {
       'title': "Quả mọng",
-      'subTitle': "chọn lọc",
+      'subTitle': "Chọn lọc",
       'img': "assets/images/silder/hero-bg-2.jpg",
     },
     {
-      'title': "Cam sale 20%",
+      'title': "Cam mỹ ngọt",
       'subTitle': "Mã Voucher : ux211",
       'img': "assets/images/silder/hero-bg-3.jpg",
     }

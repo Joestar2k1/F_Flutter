@@ -4,11 +4,9 @@
 
 import 'dart:convert';
 
-List<User> userFromJson(String str) =>
-    List<User>.from(json.decode(str).map((x) => User.fromJson(x)));
+User userFromJson(String str) => User.fromJson(json.decode(str));
 
-String userToJson(List<User> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String userToJson(User data) => json.encode(data.toJson());
 
 class User {
   User({
@@ -36,7 +34,7 @@ class User {
   String avatar;
   int status;
   dynamic emailVerifiedAt;
-  dynamic rememberToken;
+  String rememberToken;
   dynamic createdAt;
   dynamic updatedAt;
   List<Address> address;
@@ -93,9 +91,4 @@ class Address {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
-
-  @override
-  String toString() {
-    return toJson().toString();
-  }
 }

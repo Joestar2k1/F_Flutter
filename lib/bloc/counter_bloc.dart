@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:fluter_19pmd/bloc/counter_event.dart';
+import 'package:fluter_19pmd/counter_event.dart';
 
 class CounterBloc {
   int counter;

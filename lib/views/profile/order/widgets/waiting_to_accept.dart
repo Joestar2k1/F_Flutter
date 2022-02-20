@@ -59,8 +59,8 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
               child: Text(
                 "Bạn không có đơn xác nhận",
                 style: TextStyle(
-                  fontSize: 2,
-                  color: Color(0xFFF34848),
+                  fontSize: 25,
+                  color: Colors.grey,
                   fontWeight: FontWeight.bold,
                 ),
               ),
