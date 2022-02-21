@@ -91,4 +91,28 @@ class RepositoryUser {
       throw Exception("Không ổn");
     }
   }
+
+  static Future register(String username, String fullName, String email,
+      String password, String phone, String address) async {
+    var client = http.Client();
+    print(username + fullName + email + password + phone + address);
+    var response =
+        await client.post(Uri.parse('http://10.0.2.2:8000/api/users/register'),
+            body: ({
+              'username': username,
+              'fullName': fullName,
+              'email': email,
+              'phone': phone,
+              'password': password,
+              'address': address,
+            }));
+    print(response.statusCode);
+    if (response.statusCode == 200) {
+      return 200;
+    } else if (response.statusCode == 201) {
+      return 201;
+    } else {
+      return 201;
+    }
+  }
 }

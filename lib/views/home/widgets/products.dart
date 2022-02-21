@@ -166,7 +166,7 @@ class _ProductsHomeState extends State<ProductsHome> {
           text: TextSpan(
             children: [
               TextSpan(
-                text: "${snapshot.data[index].price}đ",
+                text: "${convertToVND(snapshot.data[index].price)}đ",
                 style: const TextStyle(
                   fontSize: 18,
                   color: Color(0xFF717171),

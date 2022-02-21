@@ -3,6 +3,7 @@ import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/body.dart';
+import 'package:fluter_19pmd/views/home/home_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -77,14 +78,14 @@ class DetailsProductScreen extends StatelessWidget {
                       ),
                     ),
                     onPressed: () {
-                      RepositoryCart.addToCart(RepositoryProduct.getID);
+                      RepositoryCart.addToCartDetails(RepositoryProduct.getID);
                       // print(RepositoryProduct.getID);
                       // print(RepositoryCart.getQuantity);
-                      // Navigator.push(
-                      //     context,
-                      //     MaterialPageRoute(
-                      //       builder: (context) => const CartPage(),
-                      //     ));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => const HomePage(),
+                          ));
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,

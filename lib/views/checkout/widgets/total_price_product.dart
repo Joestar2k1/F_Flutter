@@ -1,3 +1,5 @@
+import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:flutter/material.dart';
 
 class TotalPriceProduct extends StatelessWidget {
@@ -37,7 +39,7 @@ class TotalPriceProduct extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "200.000đ",
+                  "${convertToVND(RepositoryCart.subTotalCart())}đ",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.grey.shade600,

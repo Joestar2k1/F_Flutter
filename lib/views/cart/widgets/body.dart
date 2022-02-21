@@ -1,5 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/counter_event.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
@@ -131,8 +132,7 @@ class _BodyState extends State<Body> {
                       height: 10,
                     ),
                     _buildItemInfo(
-                        text: "Số lượng  tồn kho : ",
-                        number: snapshot.data[index].stock),
+                        text: "Tồn kho: ", number: snapshot.data[index].stock),
                     const SizedBox(
                       height: 10,
                     ),
@@ -166,7 +166,7 @@ class _BodyState extends State<Body> {
               ),
             ),
             TextSpan(
-              text: number.toString(),
+              text: "${convertToVND(number)}",
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
