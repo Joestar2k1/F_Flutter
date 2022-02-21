@@ -1,5 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/views/cart/widgets/body.dart';
+import 'package:fluter_19pmd/views/checkout/checkout_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -46,65 +47,68 @@ class _CartPageState extends State<CartPage> {
           ),
         ),
         body: const Body(),
-        bottomNavigationBar: buildBottomBar(size),
-      ),
-    );
-  }
-
-  Row buildBottomBar(Size size) {
-    return Row(
-      children: [
-        SizedBox(
-          width: size.width * 0.5,
-          height: size.height * 0.06,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(buttonColor),
-            ),
-            onPressed: () {
-              setState(() {});
-            },
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.delete),
-                Text(
-                  "Xóa",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
-                  ),
+        bottomNavigationBar: Row(
+          children: [
+            SizedBox(
+              width: size.width * 0.5,
+              height: size.height * 0.07,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(buttonColor),
                 ),
-              ],
-            ),
-          ),
-        ),
-        SizedBox(
-          width: size.width * 0.5,
-          height: size.height * 0.06,
-          child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(
-                buttonColor,
+                onPressed: () {
+                  setState(() {});
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.delete),
+                    Text(
+                      "Xóa",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
-            onPressed: () {},
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: const [
-                Icon(Icons.card_travel),
-                Text(
-                  "CheckOut",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Colors.white,
+            SizedBox(
+              width: size.width * 0.5,
+              height: size.height * 0.07,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(
+                    buttonColor,
                   ),
                 ),
-              ],
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const CheckOutPage(),
+                    ),
+                  );
+                },
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: const [
+                    Icon(Icons.card_travel),
+                    Text(
+                      "CheckOut",
+                      style: TextStyle(
+                        fontSize: 20,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-          ),
+          ],
         ),
-      ],
+      ),
     );
   }
 }

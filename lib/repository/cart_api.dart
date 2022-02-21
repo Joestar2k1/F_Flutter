@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 class RepositoryCart {
   static String getID;
   static List<Invoice> cartClient = [];
+  static int getQuantity;
   static Future<List<Product>> getCart() async {
     var client = http.Client();
     List<Invoice> carts;
@@ -30,18 +31,33 @@ class RepositoryCart {
   }
 
   static Future<void> addToCart(String productID) async {
-    print('Call Api AddToCart');
     var client = http.Client();
-    var response = await client.post(
-      Uri.parse(
-        'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
-      ),
-      body: ({
-        'productID': productID,
-        'shippingName': RepositoryUser.info.fullName,
-        'shippingPhone': RepositoryUser.info.phone,
-      }),
-    );
+    var response;
+    print(getQuantity);
+    if (getQuantity != 0) {
+      response = await client.post(
+        Uri.parse(
+          'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
+        ),
+        body: ({
+          'productID': productID,
+          'shippingName': RepositoryUser.info.fullName,
+          'shippingPhone': RepositoryUser.info.phone,
+          'quantity': getQuantity.toString(),
+        }),
+      );
+    } else {
+      response = await client.post(
+        Uri.parse(
+          'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
+        ),
+        body: ({
+          'productID': productID,
+          'shippingName': RepositoryUser.info.fullName,
+          'shippingPhone': RepositoryUser.info.phone,
+        }),
+      );
+    }
     print(response.body);
   }
 

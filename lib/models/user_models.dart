@@ -91,4 +91,8 @@ class Address {
   Map<String, dynamic> toJson() => {
         "name": name,
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

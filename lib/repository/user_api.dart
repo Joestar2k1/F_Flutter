@@ -36,6 +36,7 @@ class RepositoryUser {
               'email': email,
               'password': password,
             }));
+
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
       Navigator.push(

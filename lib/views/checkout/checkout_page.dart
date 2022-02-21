@@ -1,5 +1,9 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/invoice_api.dart';
+import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
+import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/body.dart';
+import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 
 class CheckOutPage extends StatefulWidget {
@@ -10,6 +14,14 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
+  final _payment = InvoiceBloc();
+
+  @override
+  void dispose() {
+    _payment.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -27,8 +39,15 @@ class _CheckOutPageState extends State<CheckOutPage> {
               ),
             ),
           ),
-          leading:
-              IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
+          leading: IconButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomePage(),
+                    ));
+              },
+              icon: const Icon(Icons.arrow_back)),
           title: const Center(
             child: Text(
               "Trang thanh toán",
@@ -122,13 +141,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         buttonColor,
                       ),
                     ),
-                    onPressed: () {},
+                    onPressed: () {
+                      RepositoryInvoice.getContext = context;
+                      _payment.eventSink.add(InvoiceEvent.payment);
+                    },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: const [
                         Icon(Icons.card_travel),
                         Text(
-                          "Đặng hàng",
+                          "Đặt hàng",
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,

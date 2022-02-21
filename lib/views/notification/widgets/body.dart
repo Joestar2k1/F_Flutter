@@ -91,6 +91,7 @@ class _BodyState extends State<Body> {
             height: 10,
           ),
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Image.asset(
                 "assets/images/sales/${snapshot.data[int].image}",

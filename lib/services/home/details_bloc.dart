@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 
@@ -10,10 +11,10 @@ class ProductDetailsBloc {
   Stream<EventProduct> get _eventStream => _eventStreamController.stream;
 
   //details
-  final _stateDetailsStreamController = StreamController<List<Product>>();
-  StreamSink<List<Product>> get _detailsSink =>
+  final _stateDetailsStreamController = StreamController<ProductDetails>();
+  StreamSink<ProductDetails> get _detailsSink =>
       _stateDetailsStreamController.sink;
-  Stream<List<Product>> get detailsStream =>
+  Stream<ProductDetails> get detailsStream =>
       _stateDetailsStreamController.stream;
   ProductDetailsBloc() {
     _eventStream.listen((event) async {

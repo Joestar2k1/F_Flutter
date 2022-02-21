@@ -2,6 +2,7 @@ import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
+import 'package:fluter_19pmd/services/home/details_bloc.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
@@ -21,6 +22,7 @@ class ProductsHome extends StatefulWidget {
 
 class _ProductsHomeState extends State<ProductsHome> {
   final productBloc = ProductBloc();
+  final _viewDetails = ProductDetailsBloc();
   @override
   void initState() {
     productBloc.eventSink.add(EventProduct.fetch);
@@ -30,6 +32,7 @@ class _ProductsHomeState extends State<ProductsHome> {
   @override
   void dispose() {
     productBloc.dispose();
+    _viewDetails.dispose();
     super.dispose();
   }
 
@@ -99,7 +102,6 @@ class _ProductsHomeState extends State<ProductsHome> {
               InkWell(
                 onTap: () {
                   RepositoryProduct.getID = snapshot.data[index].id;
-
                   Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -148,11 +150,8 @@ class _ProductsHomeState extends State<ProductsHome> {
         SizedBox(
           width: size.width,
           height: size.height * 0.21,
-          child: Hero(
-            tag: snapshot.data[index].id,
-            child: Image.asset(
-                "assets/images/products/${snapshot.data[index].image}"),
-          ),
+          child: Image.asset(
+              "assets/images/products/${snapshot.data[index].image}"),
         ),
         Text(
           snapshot.data[index].name,

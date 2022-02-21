@@ -3,4 +3,5 @@ enum InvoiceEvent {
   fetchWaitingToAccept,
   fetchPickingUpGoods,
   fetchOnDelivery,
+  payment,
 }
