@@ -1,4 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
@@ -16,7 +18,21 @@ class SearchWithIcons extends StatefulWidget {
 }
 
 class _SearchWithIconsState extends State<SearchWithIcons> {
+  final _cart = CartBloc();
   final _quantityCartBloc = LoadQuantityCart();
+  @override
+  void initState() {
+    _cart.eventSink.add(CartEvent.fetchCart);
+    _quantityCartBloc.cartQuantitySink.add(RepositoryCart.cartClient.length);
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _cart.dispose();
+    _quantityCartBloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -95,32 +111,27 @@ class _SearchWithIconsState extends State<SearchWithIcons> {
                     color: textColor,
                   ),
                 ),
-                Positioned(
-                  top: 5,
-                  right: -0,
-                  child: Container(
-                    width: 20,
-                    height: 20,
-                    decoration: const BoxDecoration(
-                      color: Colors.red,
-                      shape: BoxShape.circle,
-                    ),
-                    child: StreamBuilder<int>(
-                        initialData: 0,
-                        stream: _quantityCartBloc.cartQuantityStream,
-                        builder: (context, snapshot) {
-                          return Center(
-                              child: Text(
-                            snapshot.data.toString(),
-                            style: const TextStyle(
-                              fontSize: 15,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ));
-                        }),
-                  ),
-                ),
+                // Positioned(
+                //   top: 5,
+                //   right: -0,
+                //   child: Container(
+                //     width: 20,
+                //     height: 20,
+                //     decoration: const BoxDecoration(
+                //       color: Colors.red,
+                //       shape: BoxShape.circle,
+                //     ),
+                //     child: Center(
+                //         child: Text(
+                //       snapshot.data.toString(),
+                //       style: const TextStyle(
+                //         fontSize: 15,
+                //         color: Colors.white,
+                //         fontWeight: FontWeight.bold,
+                //       ),
+                //     )),
+                //   ),
+                // ),
               ],
             ),
           ),

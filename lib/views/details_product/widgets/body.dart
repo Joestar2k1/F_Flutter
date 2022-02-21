@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/services/home/details_bloc.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
@@ -75,7 +76,7 @@ class _BodyState extends State<Body> {
                                 ),
                                 Text(
                                   (snapshot.data.price != null)
-                                      ? '${snapshot.data.price}đ/${snapshot.data.unit}'
+                                      ? '${convertToVND(snapshot.data.price)}đ/${snapshot.data.unit}'
                                       : "",
                                   style: const TextStyle(
                                     fontSize: 20,

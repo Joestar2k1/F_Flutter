@@ -1,6 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/user_models.dart';
-import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:flutter/material.dart';
 
@@ -70,14 +69,28 @@ class _HeaderWithAvatarState extends State<HeaderWithAvatar> {
   Stack builAvatar(Size size, String avatar) {
     return Stack(
       children: [
-        SizedBox(
+        Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.all(
+              Radius.circular(70),
+            ),
+          ),
           height: size.height * 0.2,
           width: size.width * 0.37,
           child: (avatar == null)
-              ? const CircleAvatar()
-              : CircleAvatar(
-                  backgroundImage: AssetImage("assets/images/person/$avatar"),
-                ),
+              ? Image.network(
+                  'https://image.thanhnien.vn/w660/Uploaded/2022/ygtmjz/2021_02_15/thanh_guom_diet_quy_djkh.jpg',
+                  fit: BoxFit.cover,
+                )
+              : (avatar == '')
+                  ? Image.network(
+                      'https://image.thanhnien.vn/w660/Uploaded/2022/ygtmjz/2021_02_15/thanh_guom_diet_quy_djkh.jpg',
+                      fit: BoxFit.cover,
+                    )
+                  : CircleAvatar(
+                      backgroundImage:
+                          AssetImage("assets/images/person/$avatar"),
+                    ),
         ),
         Positioned(
           right: 0,

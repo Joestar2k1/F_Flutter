@@ -1,27 +1,38 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/repository/user_api.dart';
-import 'package:fluter_19pmd/views/home/home_page.dart';
-import 'package:fluter_19pmd/views/register/signup_screen.dart';
+import 'package:fluter_19pmd/views/register/completed_page.dart';
 import 'package:flutter/material.dart';
 
-class SignInPage extends StatefulWidget {
-  const SignInPage({Key key}) : super(key: key);
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({Key key}) : super(key: key);
 
   @override
-  _SignInPageState createState() => _SignInPageState();
+  _SignUpScreenState createState() => _SignUpScreenState();
 }
 
-class _SignInPageState extends State<SignInPage> {
+class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
+  var isLoading = false;
   final emailController = TextEditingController();
-  final passwordController = TextEditingController();
-  void _submit(BuildContext context, String email, String password) async {
+  final addressController = TextEditingController();
+  final phoneController = TextEditingController();
+  final fullNameController = TextEditingController();
+  void _submit(context, email, fullName, address, phone) {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
-    RepositoryUser.login(context, email, password);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PageCompleteSignUp(
+          email: email.text,
+          fullName: fullName.text,
+          address: address.text,
+          phone: phone.text,
+        ),
+      ),
+    );
   }
 
   @override
@@ -53,7 +64,7 @@ class _SignInPageState extends State<SignInPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: size.height * 0.2,
+                  height: size.height * 0.05,
                 ),
                 const Text(
                   "Xin chào bạn",
@@ -65,7 +76,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
                 const SizedBox(height: 20),
                 const Text(
-                  "Welcome to Be Healthy!",
+                  "Đây là trang đăng ký!",
                   style: TextStyle(
                     fontSize: 25,
                     color: textColor,
@@ -73,13 +84,15 @@ class _SignInPageState extends State<SignInPage> {
                   ),
                 ),
                 _emailLogin(),
-                const SizedBox(height: 20),
-                _passwordLogin(),
-                const SizedBox(height: 30),
-                _buttonLogin(
-                    context, emailController.text, passwordController.text),
-                const SizedBox(height: 20),
-                _forgotAndSignUp(),
+                const SizedBox(height: 10),
+                _input("Enter họ tên", fullNameController),
+                const SizedBox(height: 10),
+                _input("Enter địa chỉ", addressController),
+                const SizedBox(height: 10),
+                _input("Enter số điện thoại", phoneController),
+                const SizedBox(height: 10),
+                _buttonGoOn(context, emailController, fullNameController,
+                    addressController, phoneController),
               ],
             ),
           ),
@@ -108,32 +121,30 @@ class _SignInPageState extends State<SignInPage> {
           },
         ),
       );
-
-  Widget _passwordLogin() => Padding(
+  Widget _input(text, controller) => Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         child: TextFormField(
-          controller: passwordController,
+          controller: controller,
           obscureText: false,
           style: const TextStyle(fontSize: 20),
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
-          decoration: const InputDecoration(
+          decoration: InputDecoration(
             focusedBorder: InputBorder.none,
-            errorStyle: TextStyle(fontSize: 25),
-            labelText: "Enter password",
-            labelStyle: TextStyle(fontSize: 20),
+            errorStyle: const TextStyle(fontSize: 18),
+            labelText: text,
+            labelStyle: const TextStyle(fontSize: 20),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
-              return 'Please enter some text';
+              return 'Không được bỏ trống';
             }
             return null;
           },
         ),
       );
 
-  Widget _buttonLogin(BuildContext context, String email, String password) =>
-      Center(
+  Widget _buttonGoOn(context, email, fullName, address, phone) => Center(
         child: SizedBox(
           height: 50,
           width: 200,
@@ -141,49 +152,9 @@ class _SignInPageState extends State<SignInPage> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(buttonColor),
             ),
-            onPressed: () => _submit(context, email, password),
-            child: const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
+            onPressed: () => _submit(context, email, fullName, address, phone),
+            child: const Text('Tiếp Tục', style: TextStyle(fontSize: 18)),
           ),
         ),
-      );
-
-  Widget _forgotAndSignUp() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Row(
-            children: [
-              const Text(
-                "Chưa có tài khoản?",
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpScreen(),
-                      ));
-                },
-                child: const Text(
-                  "Đăng ký",
-                  style: TextStyle(
-                    fontSize: 18,
-                  ),
-                ),
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () {},
-            child: const Text(
-              "Quên mật khẩu ?",
-              style: TextStyle(
-                fontSize: 16,
-              ),
-            ),
-          ),
-        ],
       );
 }

@@ -143,9 +143,9 @@ class _OrderHistoryState extends State<OrderHistory> {
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: const [
-              Icon(Icons.cancel),
+              Icon(Icons.add),
               Text(
-                "Hủy đơn hàng",
+                "Mua lại",
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.white,

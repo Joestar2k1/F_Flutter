@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,7 @@ class MyOrder extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "${carts[index].price}đ",
+                          "${convertToVND(carts[index].price)}đ",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.grey.shade800,

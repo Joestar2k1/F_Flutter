@@ -1,4 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
@@ -123,7 +125,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      "220.000đ",
+                      "${convertToVND(RepositoryCart.subTotalCart() + 20000)}đ",
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.grey.shade800,

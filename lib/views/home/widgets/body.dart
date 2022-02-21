@@ -1,8 +1,12 @@
+import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/best_seller_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:fluter_19pmd/views/home/widgets/banner.dart';
 import 'package:fluter_19pmd/views/home/widgets/products.dart';
 import 'package:flutter/material.dart';
@@ -162,7 +166,7 @@ class _BodyState extends State<Body> {
                                 ),
                               ),
                               Text(
-                                "${snapshot.data[index].price}đ",
+                                "${convertToVND(snapshot.data[index].price)}đ",
                                 style: const TextStyle(
                                   fontSize: 20,
                                   color: Color(0xFF717171),
@@ -170,7 +174,21 @@ class _BodyState extends State<Body> {
                                 ),
                               ),
                               ElevatedButton(
-                                onPressed: () {},
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(buttonColor),
+                                ),
+                                onPressed: () {
+                                  RepositoryProduct.getID =
+                                      snapshot.data[index].id;
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) =>
+                                          const DetailsProductScreen(),
+                                    ),
+                                  );
+                                },
                                 child: const Text(
                                   'Xem ngay',
                                   style: TextStyle(

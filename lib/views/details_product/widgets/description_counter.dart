@@ -48,7 +48,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 20.0),
                   child: SizedBox(
-                    height: 50,
+                    height: 100,
                     width: size.width,
                     child: Text(
                       widget.description,
@@ -64,12 +64,13 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
                   ),
                 ),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     const Text(
-                      "Chọn số lượng mua :",
-                      style: TextStyle(fontSize: 18),
+                      "Số lượng:",
+                      style: TextStyle(fontSize: 20),
                     ),
+                    const SizedBox(width: 30),
                     _counter(),
                   ],
                 ),

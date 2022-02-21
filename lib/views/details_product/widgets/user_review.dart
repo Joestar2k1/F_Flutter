@@ -10,7 +10,7 @@ class UserReview extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return Padding(
-      padding: const EdgeInsets.only(top: 20.0),
+      padding: const EdgeInsets.only(top: 40.0),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

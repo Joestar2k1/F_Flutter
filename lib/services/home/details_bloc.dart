@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
