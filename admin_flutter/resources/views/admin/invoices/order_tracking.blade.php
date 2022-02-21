@@ -1,123 +1,64 @@
 @extends('admin.app')
 @section('title') Theo dõi hóa đơn @endsection
 @section('content')
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<link  href="{{asset('backend/assets/css/order_tracking.css')}}" rel="stylesheet">
 <div class="container">
-<div style="color:green;text-align:center">
-        <h3>Danh sách hóa đơn đang theo dõi</h3>
-</div>
-<div style="height:50px"></div>
-<div class="row">
-  <div class="col"></div>
-  <div class="col"> 
-      <form class="d-flex" method="GET" action= "" >     
-            <input class="form-control me-2"  name="keyWord" type="text" placeholder="vd:Mã HĐ..">
-            <button class="btn btn-success" type="submit">Tìm kiếm</button>
-        </form> </div>
-  <div class="col">
-        <div class="col-sm-4 text-white"> 
-        <div class="dropdown dropend">
-            <button type="button" class="btn btn-success dropdown-toggle"   data-bs-toggle="dropdown">
-                Xem hóa đơn
-            </button>
-            <ul class="dropdown-menu">             
-                <li><a class="dropdown-item" href="">Tất cả</a></li>          
-                <li><a class="dropdown-item" href="">Mới nhất</a></li>          
-                <li><a class="dropdown-item" href="">Đang giao hàng</a></li> 
-                <li><a class="dropdown-item" href="">Chờ xác nhận</a></li>                   
-            </ul>
-        </div>
-        
+<div class="app-title">
+    <div>
+      <h1>Hóa đơn / Theo dõi đơn hàng</h1>  
+        <p>Xin chào  {{Session::get('emp')->fullName}} </p>
     </div>
-  </div>
-</div>
-<div style="height:50px"></div>
-<div class="container-fluid">
-    <div class="container mt-3">
-        <table class="table table-bordered">
-            <thead>
-                <tr class="success">
-                    <th>
-                       Mã hóa đơn
-                    </th>
-                    <th>
-                       Nhân viên
-                    </th>
-                    <th>
-                      Khách hàng
-                    </th> 
-                    <th>
-                        Ngày tạo
-                    </th>                                                        
-                    <th>
-                        Tổng
-                    </th>   
-                    <th>
-                       Thanh toán
-                    </th> 
-                    
-                    <th>
-                       Trạng thái
-                    </th>       
-                </tr>
-            </thead>
-            <tbody>   
-                @foreach($invoices as $item)
-                <tr>                        
-                    <td>{{$item->id}}</td>
-                    <td>{{$item->employeeID}}</td>
-                    <td>{{$item->fullName}}</td>
-                     <td> {{$item->dateCreated}}</td>                           
-                     <td> {{$item->total}}</td>
-                   <td>   
-                        @if($item->isPaid ==0)
-                         <span>   <i class="fa fa-close" style="color:red"></i>Chưa</span>
-                        @endif                    
-                    </td>
-                    <td>
-                       @if($item->status==1)
-                        <a href="{{route('admin.invoice.confirmStatus',$item->id)}}" class="btn btn-success">Xác nhận?</a>
-                       @endif
-                       @if($item->status==2)
-                       <div class="dropdown">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                              Đã xác nhận
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('admin.invoice.confirmStatus',$item->id)}}">Đang lấy hàng</a></li>
-                            </ul>
-                        </div>
-                       @endif
-                       @if($item->status==3)
-                       <div class="dropdown">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                              Đang lấy hàng
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('admin.invoice.confirmStatus',$item->id)}}">Đang vận chuyển</a></li>
-                            </ul>
-                        </div>
-                       @endif
-                       @if($item->status==4)
-                       <div class="dropdown">
-                            <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown">
-                             Đang vận chuyển
-                            </button>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{route('admin.invoice.confirmStatus',$item->id)}}">Thành công</a></li>
-                            </ul>
-                        </div>
-                       @endif
-                       @if($item->status==5)
-                        <a href="" class="btn btn-success">Thành công</a>
-                       @endif
-                    </td>
-                </tr>    
-                @endforeach           
-            </tbody>
-        </table>
+    <ul class="app-breadcrumb breadcrumb">
      
-    </div>
+      <li class="breadcrumb-item"><i class="fa fa-home" aria-hidden="true"></i></li>
+      <li class="breadcrumb-item"><a href="#">Theo dõi đơn hàng</a></li>
+    </ul>
+  </div>
+<div class="col-lg-9 my-lg-0 my-1">
+            <div id="main-content" class="bg-white border">
+                <div class="d-flex my-4 flex-wrap">
+                    <div class="box me-4 my-1 bg-light"> 
+                            <div class="my-eye">
+                                <img src="https://www.freepnglogos.com/uploads/box-png/cardboard-box-brown-vector-graphic-pixabay-2.png" alt="">
+                                <a href="{{route('admin.invoice.waiting')}}"><i class="fa fa-eye"></i></a>
+                            </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Đơn mới</div>
+                            <div class="ms-auto number">{{$WaitingToAccept}}</div>
+                        </div>
+                    </div>
+                    <div class="box me-4 my-1 bg-light">                         
+                        <div class="my-eye">
+                            <img src="https://www.freepnglogos.com/uploads/tick-png/check-mark-tick-vector-graphic-21.png" alt="">
+                            <a href="{{route('admin.invoice.confirmed')}}"><i class="fa fa-eye"></i></a>
+                        </div>
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Đã xác nhận</div>
+                            <div class="ms-auto number">{{$Confirmed}}</div>
+                        </div>
+                    </div>
+                    <div class="box me-4 my-1 bg-light"> 
+                        <div class="my-eye">
+                            <img src="https://www.freepnglogos.com/uploads/logo-ifood-png/happy-ifood-logo-delivery-ifood-transparent-21.png" alt="">
+                            <a href="{{route('admin.invoice.delivery')}}"><i class="fa fa-eye"></i></a>
+                        </div>                         
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Đang vận chuyển</div>
+                            <div class="ms-auto number">{{$Delivery}}</div>
+                        </div>
+                    </div>
+                    <div class="box me-4 my-1 bg-light"> 
+                           
+                        <div class="my-eye">
+                        <img src="https://www.freepnglogos.com/uploads/thank-you-png/thank-you-png-testimonials-calm-order-professional-home-organizing-29.png" alt="">
+                            <a href="{{route('admin.invoice.success')}}"><i class="fa fa-eye"></i></a>
+                        </div>    
+                        <div class="d-flex align-items-center mt-2">
+                            <div class="tag">Thành công</div>
+                            <div class="ms-auto number">{{$Success}}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 </div>
 @endsection

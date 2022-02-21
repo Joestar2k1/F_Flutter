@@ -18,10 +18,13 @@ class DatabaseSeeder extends Seeder
         $this->call([
 
             User::class,
+            Address::class,
             Product::class,
             EmployeeSeeder::class,
+            Notification::class,
             Invoice::class,
             InvoiceDetails::class,
+            Review::class,
         ]);
     }
 }

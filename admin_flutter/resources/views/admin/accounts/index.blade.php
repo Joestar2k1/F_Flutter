@@ -1,5 +1,5 @@
 @extends('admin.app')
-@section('title') Admin-Account @endsection
+@section('title') Tài khoản người dùng @endsection
 @section('content')
     <div class="page-wrapper">
 
@@ -21,9 +21,9 @@
                         Lựa chọn
                     </button>
                     <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="">Tất cả</a></li>
-                        <li><a class="dropdown-item" href="">Nhân viên mới vào</a></li>
-                        <li><a class="dropdown-item" href="">Nhân viên đang hoạt động</a></li>
+                        <li><a class="dropdown-item" href="{{ route('admin.account') }}">Tất cả</a></li>
+                        <!-- <li><a class="dropdown-item" href="">Nhân viên mới vào</a></li> -->
+                        <li><a class="dropdown-item" href="">Người dùng đang hoạt động</a></li>
                     </ul>
                 </div>
 
@@ -48,7 +48,7 @@
                         <th>
                             Họ tên
                         </th>
-                     
+
                         <th>
                             Số điện thoại
                         </th>
@@ -58,7 +58,7 @@
                         <th>
                             Trạng thái
                         </th>
-                       
+
                     </tr>
                 </thead>
                 <tbody>
@@ -69,21 +69,39 @@
                             <td> {{ $item->email }}</td>
                             <td></td>
                             <td> {{ $item->fullName }}</td>
-                          
+
                             <td> {{ $item->phone }}</td>
                             <td> <img style="background:white"
+
                                     src="{{ asset('backend/assets/img/avaters/' . $item->avatar) }}" class="rounded"
                                     alt="Ảnh" width="70" height="70"> </td>
                            @if( $item->status == 1)
-                           <td>  Hoạt động   </td> 
+                                <td>  Hoạt động   </td> 
+                            @endif
+                            @if( $item->status == 0)
+                                <td>  Off </td> 
+                            @endif
+                            @if( $item->status == -1)
+                                <td>  Bị khóa </td> 
+                            @endif
+                            <th>
+                            <div class="btn-group">
+                                @if($item->status==-1)
+                                    <a class="btn btn-primary" href="{{route('admin.account.unLockUser',$item->id)}}">
+                                        <i class="fa fa-unlock"></i>
+                                    </a>
                                 @endif
-                            
-                            <td>
-                                <a class="btn btn-success">Edit</a>
-                            </td>
-                            <td>
-                                <a href="{{ route('admin.account.delete', $item->id) }}" class="btn btn-danger">Delete</a>
-                            </td>
+                                @if($item->status!=-1)
+                                    <a class="btn btn-primary" href="{{route('admin.account.lockUser',$item->id)}}">
+                                        <i class="fa fa-lock"></i>
+                                    </a>
+                                @endif
+                                <a class="btn btn-primary" href="{{ route('admin.account.delete', $item->id) }}">
+                                    <i class="fa fa-lg fa-trash"></i>
+                                </a>
+                            </div>
+                            </th>
+                           
                         </tr>
                     @endforeach
                 </tbody>
@@ -91,8 +109,8 @@
             {{ $data->links() }}
         </div>
     </div>
-  </div>
-</div>
+    </div>
+    </div>
 
 
 @endsection

@@ -9,7 +9,8 @@
             <div class="p-3 bg-white rounded">
                 <div class="row">
                     <div class="col-md-6">
-                        <h5 class="text-uppercase">Chi tiết hóa đơn bán hàng</h5>
+                        <h6 class="text-uppercase">Chi tiết hóa đơn bán hàng
+                        </h6>
                         <div class="billed"><span class="font-weight-bold text-uppercase">Cửa hàng:</span><span class="ml-1">Trái cây</span></div>
                         <div class="billed"><span class="font-weight-bold text-uppercase">Ngày lập:</span><span class="ml-1">{{$item->dateCreated}}</span></div>
                         <div class="billed"><span class="font-weight-bold text-uppercase">Mã hóa đơn:</span><span class="ml-1">{{$item->id}}</span></div>
@@ -17,6 +18,9 @@
                             <span class="font-weight-bold text-uppercase">Thanh toán:</span>
                            @if($item->isPaid==1)
                              <i class="fa fa-check"><span class="ml-1"></span></i>
+                           @endif
+                           @if($item->isPaid==0)
+                           <i class="fa fa-close"><span class="ml-1"></span></i>
                            @endif
                         </div>
                     </div>
@@ -79,7 +83,7 @@
                     </div>
                 </div>
                 <div class="text-right mb-3">
-                <a  href="{{route('admin.invoice')}}" class="btn btn-primary">Quay lại</a>
+                    <a  href="{{route('admin.invoice.success')}}" class="btn btn-primary">Quay lại</a>
                 </div>
             </div>
             @endforeach

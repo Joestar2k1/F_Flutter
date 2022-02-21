@@ -13,13 +13,17 @@ use PhpParser\Node\Expr\FuncCall;
 class AccountController extends Controller
 {
     public function loadAccount(){
-        $data =DB::table('users')->paginate(3);
+        $data =DB::table('users')->paginate(5);
         return view('admin.accounts.index',compact('data'));
     }
-    public function loadAccountAdmin(){
-        $data =DB::table('users')->where('isAdmin',1)->paginate(3);
+
+
+    public function loadUserActive(){
+        $data =DB::table('users')
+        ->where('status',1)->paginate(5);
         return view('admin.accounts.index',compact('data'));
     }
+
 
     public function deleteAccount($id){
         $users = User::find($id);
@@ -30,10 +34,11 @@ class AccountController extends Controller
     }
 
     public function searchAccount(Request $request){
+      
         if(isset($_GET['keyWord'])){
             $searchText = $_GET['keyWord'];
             $data = DB::table('users')->where('fullName','LIKE','%'.$searchText.'%')
-            ->where('type','LIKE','%NV%')
+            // ->where('type','LIKE','%NV%')
             ->paginate(4);
             $data ->appends($request->all());
             return view('admin.accounts.index',compact('data'));
@@ -45,4 +50,21 @@ class AccountController extends Controller
     public function viewProfile(){
        return view('admin.accounts.profile');
     }
+
+    public function lockUser($userID){
+         DB::table('users')
+        ->where('id',$userID)
+        ->update([
+            'status' => -1,
+        ]);
+        return redirect()->route('admin.account');
+    }
+    public function unLockUser($userID){
+        DB::table('users')
+       ->where('id',$userID)
+       ->update([
+           'status' => 0,
+       ]);
+       return redirect()->route('admin.account');
+   }
 }

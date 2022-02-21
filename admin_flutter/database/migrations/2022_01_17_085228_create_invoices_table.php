@@ -18,7 +18,7 @@ class CreateInvoicesTable extends Migration
             $table->string('userID');
             $table->string('employeeID')->nullable();
             $table->string('shippingName');
-            $table->string('shippingAddress');
+            $table->string('shippingAddress')->nullable();
             $table->string('shippingPhone');
             $table->integer('total');
             $table->dateTime('dateCreated');

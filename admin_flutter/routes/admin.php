@@ -5,7 +5,7 @@ use App\Http\Controllers\Admin\LoginController;
 use App\Http\Controllers\Admin\HomeController;
 use App\Http\Controllers\Admin\AccountController;
 use App\Http\Controllers\Admin\EmployeeController;
-use App\Http\Controllers\Admin\ImportedInvoiceController;
+use App\Http\Controllers\Admin\Imported_Invoice_Controller;
 use App\Http\Controllers\Admin\ProductController;
 use App\Http\Controllers\Admin\InvoiceController;
 use App\Http\Controllers\Admin\ProviderController;
@@ -22,6 +22,12 @@ Route::group(['prefix' => '/'], function () {
        Route::get('/account', [AccountController::class, 'loadAccount'])->
        name('admin.account');
 
+       Route::get('/account/lockUser/{id}', [AccountController::class, 'lockUser'])->
+       name('admin.account.lockUser');
+
+       Route::get('/account/unLockUser/{id}', [AccountController::class, 'unLockUser'])->
+       name('admin.account.unLockUser');
+       
        Route::get('/account/delete/{id}', [AccountController::class, 'deleteAccount'])->
        name('admin.account.delete');
 
@@ -56,35 +62,35 @@ Route::group(['prefix' => '/'], function () {
 
         //----------------------------------------------------------------------------------------
        Route::group(['prefix' => '/invoices'], function () {
-               Route::get('/', [InvoiceController::class, 'showInvoice'])->name('admin.invoice');
+
                Route::get('/details/{invoiceID}', [InvoiceController::class, 'detailsInvoice'])->name('admin.invoice.details');
-           
+
+               Route::get('/search', [InvoiceController::class, 'Search']);
+
                Route::get('/order-tracking', [InvoiceController::class, 'orderTracking'])->name('admin.invoice.orderTracking');
 
-               Route::get('/confirmStatus/{invoiceID}', [InvoiceController::class, 'handleConfirmStatus'])->name('admin.invoice.confirmStatus');
+               Route::get('/order-tracking/confirmStatus/{invoiceID}', [InvoiceController::class, 'handleConfirmStatus'])->name('admin.invoice.confirmStatus');
 
+               Route::get('/waiting-to-accept', [InvoiceController::class, 'waitingToAccept'])->name('admin.invoice.waiting');
+
+               Route::get('/confirmed', [InvoiceController::class, 'confirmed'])->name('admin.invoice.confirmed');
+
+               Route::get('/on-delivery', [InvoiceController::class, 'onDelivery'])->name('admin.invoice.delivery');
+
+               Route::get('/success-delivery', [InvoiceController::class, 'success'])->name('admin.invoice.success');
         });
 
 
         //----------------------------------------------------------
-        Route::group(['prefix' => '/imported_invoices'], function(){
-          Route::get('/', [ImportedInvoiceController::class, 'show'])->name('admin.imported_invoice.index');
-          Route::get('/create', [ImportedInvoiceController::class, 'createView'])->name('admin.imported_invoice.createView');
-          Route::get('/createDetail', [ImportedInvoiceController::class, 'createDetailView'])->name('admin.imported_invoice.createDetail');
-     });
+      
 
 //----------------------------------------------------------------------------------------
 
-     Route::group(['prefix' => '/provider'], function(){
-      Route::get('', [ProviderController::class, 'loadProvider'])->name('admin.provider.index');
-
-      Route::get('/create', [ProviderController::class, 'loadProvider'])->name('admin.provider.index'); // dùng cho paginate
-
-      Route::post('/create', [ProviderController::class, 'createProvider'])->name('admin.provider.createProvider');
-
-     });
+    
 //----------------------------------------------------------------------------------------
 Route::group(['prefix' => '/employee'], function(){
+
+    // --------------------   Tạo nhân viên--------------------------------------------
     Route::get('', [EmployeeController::class, 'loadEmployee'])->name('admin.employee.index');
 
     Route::get('/create', [EmployeeController::class, 'loadEmployee'])->name('admin.employee.index'); // dùng cho paginate

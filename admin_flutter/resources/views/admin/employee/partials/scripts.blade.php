@@ -11,17 +11,15 @@
             var index = $("table tbody tr:last-child").index();
             var row = '<tr>' +
                 '<td><input type="text" class="form-control" name="" id="" disabled></td>' +
-                '<td><input type="text" class="form-control" name="username" id="Username"></td>' +
-                '<td><input type="text" class="form-control" name="identify_id" id="identifyID"></td>' +
+                '<td><input type="text" class="form-control" name="username" id="username"></td>' +
                 '<td><input type="text" class="form-control" name="fullname" id="fullname"></td>' +
                 '<td><input type="text" class="form-control" name="email" id="email"></td>' +
-                '<td><input type="text" class="form-control" name="email" id="password"></td>' +
                 '<td><input type="text" class="form-control" name="phone" id="phone"></td>' +
                 '<td><input type="text" class="form-control" name="address" id="address"></td>' +
                 '<td><input type="text" class="form-control" name="salary" id="salary"></td>' +
-                '<td><input type="text" class="form-control" name="position" id="position"></td>' +
-                '<td><input type="text" class="form-control" name="avatar" id="avatar"></td>' +
-                '<td><input type="text" class="form-control" name="status" id="status" true ></td>' +
+                '<td><input type="text" class="form-control" name="type" id="type"></td>' +
+                '<td><input type="file" class="form-control" accept="image/png, image/jpeg, image/jpg" name="avatar" id="avatar"></td>' +
+                '<td><input type="text" class="form-control" name="status" id="status" value="1" ></td>' +
                 '<td>' + actions + '</td>' +
                 '</tr>';
             $("table").append(row);

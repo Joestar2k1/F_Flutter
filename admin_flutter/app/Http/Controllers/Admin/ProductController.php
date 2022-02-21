@@ -37,10 +37,9 @@ class ProductController extends Controller
         if($request->has('image')){
             $file= $request->image;
             $ext = $request->image->extension();//lấy đuôi file png||jpg
-            $file_name = Date('Ymd').'-'.'product'.$countPrd.$ext;
-            $file->move(public_path('backend/assets/img/products'),$file_name);
+            $file_name = Date('Ymd').'-'.'product'.$countPrd.'.'.$ext;
+            $file->move(public_path('backend/assets/img/products'),$file_name);//chuyển file vào đường dẫn chỉ định
         }
-
         $date = Date('Y-m-d');
         $randomID = 'f'.$date .'pr' . $countPrd;
         $products = new Product;

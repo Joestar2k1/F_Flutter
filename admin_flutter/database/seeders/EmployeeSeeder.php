@@ -34,7 +34,7 @@ class EmployeeSeeder extends Seeder
             [
                 'id' => 'NV202201252',
                 'username' => 'layer02',
-                'password' => Hash::make('4214232524232'),
+                'password' => Hash::make('987654321'),
                 'email' => 'tuannghia@gmail.com',
                 'fullName' => 'Huỳnh Tấn Nghĩa',
                 'address' => 'Quận 6',
@@ -47,7 +47,7 @@ class EmployeeSeeder extends Seeder
             [
                 'id' => 'NV202201253',
                 'username' => 'layer03',
-                'password' => Hash::make('4531231246'),
+                'password' => Hash::make('123456789'),
                 'email' => 'vantuan@gmail.com',
                 'fullName' => 'Hồ Văn Tuân',
                 'address' => 'Quận 5',

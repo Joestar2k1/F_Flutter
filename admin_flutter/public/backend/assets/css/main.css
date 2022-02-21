@@ -1633,7 +1633,7 @@ pre code {
 }
 
 .table {
-  width: 100%;
+  /* width: 100%; */
   max-width: 100%;
   margin-bottom: 1rem;
   background-color: transparent;
@@ -2519,6 +2519,8 @@ a.btn.disabled, fieldset:disabled a.btn {
   color: #FFF;
   background-color: #17a2b8;
   border-color: #17a2b8;
+  margin-left: 20px;
+  margin-top: 20px;
 }
 
 .btn-info:hover {

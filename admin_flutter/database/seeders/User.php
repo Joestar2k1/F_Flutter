@@ -19,14 +19,23 @@ class User extends Seeder
         DB::table('users')->insert([
             [
                 'id' => 'KH202201255',
-                'username' => 'user05',
-                'password' => Hash::make('Minhlong@1902'),
-                'email' => 'josephminhlong@gmail.com',
-                'fullName' => 'Nguyễn Vũ Minh Long',
-                'address' => 'TP Hồ Chí minh',
-                'phone' => '0123456789',
-                 'avatar' => 'avatar1.png',
-                'status' => 1,
+                'username' => 'chuongzano',
+                'password' => Hash::make('hoaichuongaA'),
+                'email' => 'russian2311@gmail.com',
+                'fullName' => 'Nguyễn Hoài Chương',
+                'phone' => '0917439160',
+                 'avatar' => 'a.png',
+                'status' => 0,
+            ],
+            [
+                'id' => 'KH202201252',
+                'username' => 'Kim Loan',
+                'password' => Hash::make('kimloan123'),
+                'email' => 'kimloanvn@gmail.com',
+                'fullName' => 'Tran Thi Kim Loan',
+                'phone' => '0917439160',
+                 'avatar' => 'b.png',
+                'status' => 0,
             ],
         ]);
     }

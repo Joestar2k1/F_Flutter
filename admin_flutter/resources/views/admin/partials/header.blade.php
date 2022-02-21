@@ -1,5 +1,5 @@
 <header class="app-header">
-    <a class=" app-header__logo" href="index-2.html">Vali</a>
+    <a class=" app-header__logo" href="{{route('admin.dashboard')}}">Laravel 8</a>
     <!-- Sidebar toggle button--><a class=" app-sidebar__toggle fas fa-list" href="#" data-toggle="sidebar"
         aria-label="Hide Sidebar"></a>
     <!-- Navbar Right Menu-->
