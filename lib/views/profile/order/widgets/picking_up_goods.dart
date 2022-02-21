@@ -1,3 +1,5 @@
+import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/invoice_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
@@ -33,11 +35,12 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return StreamBuilder<List<Product>>(
+    return StreamBuilder<List<Invoice>>(
         initialData: const [],
         stream: _invoiceSuccess.invoiceStream,
         builder: (context, snapshot) {
-          if (snapshot.data.isNotEmpty) {
+          print(snapshot.hasData);
+          if (snapshot.hasData) {
             return Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -57,7 +60,7 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
           } else {
             return const Center(
               child: Text(
-                "Bạn không có đơn",
+                "Bạn không có đơn xác nhận",
                 style: TextStyle(
                   fontSize: 25,
                   color: Colors.grey,
@@ -77,80 +80,77 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
         ),
         margin: const EdgeInsets.all(12),
         child: Padding(
-          padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    snapshot.data[index].type,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      color: Color(0xFFF34848),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  SizedBox(
-                    width: size.width * 0.5,
-                  ),
-                  SizedBox(
-                    height: 30,
-                    width: 45,
-                    child: Text(
-                      'x${snapshot.data[index].quantity}',
-                      style: const TextStyle(
-                        fontSize: 15,
-                        color: Colors.red,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ],
+              Text(
+                "#${snapshot.data[index].id}",
+                style: const TextStyle(
+                  fontSize: 20,
+                  color: Color(0xFFF34848),
+                  fontWeight: FontWeight.bold,
+                ),
               ),
               Row(
                 children: [
                   SizedBox(
                     height: 130,
                     width: 130,
-                    child: Image.asset(
-                        'assets/images/products/${snapshot.data[index].image}'),
+                    child: Image.asset('assets/images/icons-png/invoice.png'),
                   ),
                   const SizedBox(
-                    width: 50,
+                    width: 40,
                   ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        snapshot.data[index].name,
-                        style: const TextStyle(
-                          fontSize: 26,
+                      const Text(
+                        "Đơn hàng trái cây",
+                        style: TextStyle(
+                          fontSize: 24,
                           color: Color(0xFF717171),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
-                      Text(
-                        "${snapshot.data[index].price}đ",
-                        style: TextStyle(
-                          fontSize: 18,
-                          color: const Color(0xFF717171).withOpacity(0.8),
-                          fontWeight: FontWeight.bold,
-                        ),
+                      const SizedBox(
+                        height: 20,
                       ),
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: const Text(
-                          'Hủy đơn hàng',
-                          style: TextStyle(
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
+                      _button(size),
                     ],
                   ),
                 ],
+              ),
+              Text(
+                "Tổng đơn : ${snapshot.data[index].total}",
+                style: const TextStyle(
+                  fontSize: 24,
+                  color: Color(0xFF717171),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+  Widget _button(size) => SizedBox(
+        child: ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              buttonColor,
+            ),
+          ),
+          onPressed: () {},
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: const [
+              Icon(Icons.cancel),
+              Text(
+                "Hủy đơn hàng",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.white,
+                ),
               ),
             ],
           ),

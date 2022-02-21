@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class TotalPriceProduct extends StatelessWidget {
-  const TotalPriceProduct({Key key}) : super(key: key);
-
+  const TotalPriceProduct({Key key, this.quantity_pr}) : super(key: key);
+  final int quantity_pr;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -26,7 +26,7 @@ class TotalPriceProduct extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '(1)'.toString(),
+                        text: '($quantity_pr)',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade600,

@@ -1,13 +1,15 @@
 import 'dart:async';
 
+import 'package:fluter_19pmd/models/invoice_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 
 class InvoiceBloc {
-  final _stateStreamController = StreamController<List<Product>>();
-  StreamSink<List<Product>> get _invoiceSink => _stateStreamController.sink;
-  Stream<List<Product>> get invoiceStream => _stateStreamController.stream;
+  final _stateStreamController = StreamController<List<Invoice>>();
+  StreamSink<List<Invoice>> get _invoiceSink => _stateStreamController.sink;
+  Stream<List<Invoice>> get invoiceStream => _stateStreamController.stream;
 
   final _eventStreamController = StreamController<InvoiceEvent>();
   StreamSink<InvoiceEvent> get eventSink => _eventStreamController.sink;
@@ -20,6 +22,20 @@ class InvoiceBloc {
         handelEventFetchWaitingToAccept();
       } else if (event == InvoiceEvent.fetchPickingUpGoods) {
         handelEventFetchPickingUpGoods();
+      } else if (event == InvoiceEvent.fetchOnDelivery) {
+        var invoiceSuccess = await RepositoryInvoice.getOnDelivery();
+        try {
+          if (invoiceSuccess != null) {
+            await Future.delayed(const Duration(seconds: 1));
+            _invoiceSink.add(invoiceSuccess);
+          } else {
+            _invoiceSink.addError('get products don\'t completed');
+          }
+        } on Exception {
+          _invoiceSink.addError('get products don\'t completed');
+        }
+      } else if (event == InvoiceEvent.payment) {
+        await RepositoryInvoice.payment();
       }
     });
   }

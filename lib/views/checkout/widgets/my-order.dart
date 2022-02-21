@@ -1,8 +1,10 @@
+import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:flutter/material.dart';
 
 class MyOrder extends StatelessWidget {
-  const MyOrder({Key key}) : super(key: key);
-
+  MyOrder({Key key, this.carts}) : super(key: key);
+  List<Product> carts;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -21,9 +23,10 @@ class MyOrder extends StatelessWidget {
               ),
             ),
             Container(
-              height: size.height * 0.15,
+              height: size.height * RepositoryInvoice.heightMyOrder(),
               child: ListView.builder(
-                itemCount: 2,
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: carts.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.symmetric(vertical: 15),
@@ -33,7 +36,7 @@ class MyOrder extends StatelessWidget {
                         Row(
                           children: [
                             Text(
-                              "x1",
+                              "x${carts[index].quantity}",
                               style: TextStyle(
                                 fontSize: 18,
                                 color: Colors.grey.shade400,
@@ -41,9 +44,9 @@ class MyOrder extends StatelessWidget {
                               ),
                             ),
                             const SizedBox(width: 20),
-                            const Text(
-                              "Dâu tằm",
-                              style: TextStyle(
+                            Text(
+                              carts[index].name,
+                              style: const TextStyle(
                                 fontSize: 22,
                                 color: Colors.black87,
                                 fontWeight: FontWeight.bold,
@@ -52,7 +55,7 @@ class MyOrder extends StatelessWidget {
                           ],
                         ),
                         Text(
-                          "100.000đ",
+                          "${carts[index].price}đ",
                           style: TextStyle(
                             fontSize: 18,
                             color: Colors.grey.shade800,

@@ -1,4 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:flutter/material.dart';
 
 class AddressInPayment extends StatelessWidget {
@@ -29,7 +31,7 @@ class AddressInPayment extends StatelessWidget {
                   width: size.width * 0.6,
                   height: 70,
                   child: Text(
-                    "46 Phạm Thị Ngư, Xã phong Nẫm, Tp. Phan Thiết",
+                    RepositoryUser.info.address[0].name,
                     style: TextStyle(
                       fontSize: 23,
                       fontWeight: FontWeight.bold,

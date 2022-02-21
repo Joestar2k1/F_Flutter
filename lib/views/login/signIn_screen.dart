@@ -141,7 +141,7 @@ class _SignInPageState extends State<SignInPage> {
               backgroundColor: MaterialStateProperty.all(buttonColor),
             ),
             onPressed: () => _submit(context, email, password),
-            child: const Text('Login', style: TextStyle(fontSize: 18)),
+            child: const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
           ),
         ),
       );

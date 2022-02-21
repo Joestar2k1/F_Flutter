@@ -3,8 +3,8 @@ import 'package:fluter_19pmd/views/profile/widgets/item_profile.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class Body extends StatelessWidget {
-  Body({Key key}) : super(key: key);
+class BodyProfile extends StatelessWidget {
+  BodyProfile({Key key}) : super(key: key);
 
   heightContainer() {
     var dem = 0.0;

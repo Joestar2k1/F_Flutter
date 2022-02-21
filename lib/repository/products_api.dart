@@ -1,9 +1,19 @@
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryProduct {
   static var getID;
   static List<Product> products = [];
+  static List<Review> reviews = [];
+  static double getHeightForUserReview() {
+    double dem = 0;
+    for (var i = 1; i <= reviews.length; i++) {
+      dem += 0.3;
+    }
+    return dem;
+  }
+
   static double getHeight() {
     double dem = 0;
     for (var i = 1; i <= products.length; i++) {
@@ -29,15 +39,16 @@ class RepositoryProduct {
     return null;
   }
 
-  static Future<List<Product>> viewDetails() async {
+  static Future<ProductDetails> viewDetails() async {
     var client = http.Client();
-    List<Product> newProduct;
+    ProductDetails newProduct;
     var response = await client.get(
       Uri.parse('http://10.0.2.2:8000/api/products/details-product/${getID}'),
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      newProduct = productFromJson(jsonString);
+      newProduct = detailsFromJson(jsonString);
+      reviews = newProduct.reviews;
       return newProduct;
     }
     return null;
