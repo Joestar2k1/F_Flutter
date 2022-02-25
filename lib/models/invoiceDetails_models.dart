@@ -1,16 +1,21 @@
+// To parse this JSON data, do
+//
+//     final invoices = invoicesFromJson(jsonString);
+
 import 'dart:convert';
 
 import 'package:fluter_19pmd/models/product_models.dart';
 
-List<Invoice> invoiceFromJson(String str) =>
-    List<Invoice>.from(json.decode(str).map((x) => Invoice.fromJson(x)));
+InvoiceDetails invoicesFromJson(String str) =>
+    InvoiceDetails.fromJson(json.decode(str));
 
-String invoiceToJson(List<Invoice> data) =>
-    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String invoicesToJson(InvoiceDetails data) => json.encode(data.toJson());
 
-class Invoice {
-  Invoice({
+class InvoiceDetails {
+  InvoiceDetails({
     this.id,
+    this.userId,
+    this.employeeId,
     this.shippingName,
     this.shippingAddress,
     this.shippingPhone,
@@ -24,24 +29,28 @@ class Invoice {
   });
 
   String id;
+  String userId;
+  String employeeId;
   String shippingName;
   String shippingAddress;
   String shippingPhone;
   int total;
-  DateTime dateCreated;
+  String dateCreated;
   int isPaid;
   int status;
   dynamic createdAt;
   dynamic updatedAt;
   List<Product> products;
 
-  factory Invoice.fromJson(Map<String, dynamic> json) => Invoice(
+  factory InvoiceDetails.fromJson(Map<String, dynamic> json) => InvoiceDetails(
         id: json["id"],
+        userId: json["userID"],
+        employeeId: json["employeeID"],
         shippingName: json["shippingName"],
         shippingAddress: json["shippingAddress"],
         shippingPhone: json["shippingPhone"],
         total: json["total"],
-        dateCreated: DateTime.parse(json["dateCreated"]),
+        dateCreated: json["dateCreated"],
         isPaid: json["isPaid"],
         status: json["status"],
         createdAt: json["created_at"],
@@ -52,19 +61,17 @@ class Invoice {
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "userID": userId,
+        "employeeID": employeeId,
         "shippingName": shippingName,
         "shippingAddress": shippingAddress,
         "shippingPhone": shippingPhone,
         "total": total,
-        "dateCreated": dateCreated.toIso8601String(),
+        "dateCreated": dateCreated,
         "isPaid": isPaid,
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
       };
-  @override
-  String toString() {
-    return toJson().toString();
-  }
 }

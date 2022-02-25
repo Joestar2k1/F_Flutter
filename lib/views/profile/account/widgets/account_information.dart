@@ -34,7 +34,12 @@ class _AccountInformationState extends State<AccountInformation> {
   @override
   void dispose() {
     super.dispose();
+    _profileBloc.dispose();
     _openEdit.dispose();
+    _email.dispose();
+    _fullName.dispose();
+    _phone.dispose();
+    _password.dispose();
   }
 
   @override

@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/counter_event.dart';
 import 'package:fluter_19pmd/views/details_product/counter_bloc.dart';
 import 'package:flutter/material.dart';
@@ -25,63 +26,58 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return (widget.description != null)
-        ? Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Align(
-                  alignment: Alignment.topCenter,
-                  child: Text(
-                    "Thông tin sản phẩm",
-                    style: TextStyle(
-                      fontSize: 23,
-                      fontFamily: "RobotoSlab",
-                      color: Colors.orange.shade400,
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.symmetric(vertical: 20.0),
-                  child: SizedBox(
-                    height: 100,
-                    width: size.width,
-                    child: Text(
-                      widget.description,
-                      maxLines: 4,
-                      style: const TextStyle(
-                        fontSize: 20,
-                        letterSpacing: 1.5,
-                        fontFamily: "RobotoSlab",
-                        color: Colors.teal,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ),
-                  ),
-                ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    const Text(
-                      "Số lượng:",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                    const SizedBox(width: 30),
-                    _counter(),
-                  ],
-                ),
-                // const BottomNav(),
-              ],
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 20.0),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(
+            height: 10,
+          ),
+          Align(
+            alignment: Alignment.topCenter,
+            child: Text(
+              "Thông tin sản phẩm",
+              style: TextStyle(
+                fontSize: 23,
+                fontFamily: "RobotoSlab",
+                color: Colors.orange.shade400,
+              ),
             ),
-          )
-        : const Center(
-            child: CircularProgressIndicator(
-            color: Colors.teal,
-          ));
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 20.0),
+            child: SizedBox(
+              height: 120,
+              width: size.width,
+              child: Text(
+                widget.description,
+                maxLines: 5,
+                style: const TextStyle(
+                  fontSize: 20,
+                  letterSpacing: 1.5,
+                  fontFamily: "RobotoSlab",
+                  color: textColor,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+            ),
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text(
+                "Số lượng:",
+                style: TextStyle(fontSize: 20),
+              ),
+              const SizedBox(width: 30),
+              _counter(),
+            ],
+          ),
+          // const BottomNav(),
+        ],
+      ),
+    );
   }
 
   Widget _counter() => StreamBuilder<int>(

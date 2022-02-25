@@ -166,7 +166,7 @@ class _BodyState extends State<Body> {
               ),
             ),
             TextSpan(
-              text: "${convertToVND(number)}",
+              text: convertToVND(number),
               style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,

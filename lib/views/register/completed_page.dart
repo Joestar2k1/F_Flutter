@@ -3,19 +3,35 @@ import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
 
-class PageCompleteSignUp extends StatelessWidget {
-  PageCompleteSignUp(
+class PageCompleteSignUp extends StatefulWidget {
+  const PageCompleteSignUp(
       {Key key, this.email, this.fullName, this.address, this.phone})
       : super(key: key);
   final String email;
   final String fullName;
   final String address;
   final String phone;
+
+  @override
+  State<PageCompleteSignUp> createState() => _PageCompleteSignUpState();
+}
+
+class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
   final usernameController = TextEditingController();
+
   final passwordController = TextEditingController();
+
   final confirmController = TextEditingController();
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    confirmController.dispose();
+    super.dispose();
+  }
 
   final _formKey = GlobalKey<FormState>();
+
   void _submit(
       context, email, fullName, address, phone, password, username) async {
     final isValid = _formKey.currentState.validate();
@@ -108,10 +124,10 @@ class PageCompleteSignUp extends StatelessWidget {
                 _input("Enter Nhập lại mật khẩu", confirmController),
                 _buttonGoOn(
                   context,
-                  email,
-                  fullName,
-                  address,
-                  phone,
+                  widget.email,
+                  widget.fullName,
+                  widget.address,
+                  widget.phone,
                   usernameController.text,
                   passwordController.text,
                 ),

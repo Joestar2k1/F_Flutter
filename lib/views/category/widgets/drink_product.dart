@@ -1,5 +1,9 @@
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/catetogory/cate_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
 class DrinkPage extends StatefulWidget {
@@ -76,16 +80,15 @@ class _DrinkPageState extends State<DrinkPage> {
                               children: [
                                 InkWell(
                                   onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         DetailsProductScreen(
-                                    //       products: productController
-                                    //           .productList[index],
-                                    //     ),
-                                    //   ),
-                                    // );
+                                    RepositoryProduct.getID =
+                                        snapshot.data[index].id;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DetailsProductScreen(),
+                                      ),
+                                    );
                                   },
                                   child: Column(
                                     children: [
@@ -112,7 +115,7 @@ class _DrinkPageState extends State<DrinkPage> {
                                           children: [
                                             TextSpan(
                                               text:
-                                                  "\$${snapshot.data[index].price}",
+                                                  "${convertToVND(snapshot.data[index].price)}đ",
                                               style: const TextStyle(
                                                 fontSize: 18,
                                                 color: Color(0xFF717171),
@@ -155,7 +158,10 @@ class _DrinkPageState extends State<DrinkPage> {
                                     ),
                                     child: Center(
                                       child: InkWell(
-                                        onTap: () {},
+                                        onTap: () {
+                                          RepositoryCart.addToCart(
+                                              snapshot.data[index].id);
+                                        },
                                         child: const Text(
                                           "+",
                                           style: TextStyle(

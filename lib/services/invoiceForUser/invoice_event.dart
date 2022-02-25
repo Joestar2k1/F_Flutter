@@ -4,4 +4,5 @@ enum InvoiceEvent {
   fetchPickingUpGoods,
   fetchOnDelivery,
   payment,
+  orderDetails,
 }

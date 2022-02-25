@@ -14,11 +14,12 @@ class ProductDetailsBloc {
       _stateDetailsStreamController.sink;
   Stream<ProductDetails> get detailsStream =>
       _stateDetailsStreamController.stream;
+  //total details
+
   ProductDetailsBloc() {
     _eventStream.listen((event) async {
       if (event == EventProduct.viewDetails) {
         var products = await RepositoryProduct.viewDetails();
-
         try {
           if (products != null) {
             _detailsSink.add(products);

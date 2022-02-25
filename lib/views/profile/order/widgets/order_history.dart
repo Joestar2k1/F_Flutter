@@ -1,8 +1,11 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/models/invoice_models.dart';
+import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
+import 'package:fluter_19pmd/views/profile/order/details/order_details.dart';
 import 'package:flutter/material.dart';
 
 class OrderHistory extends StatefulWidget {
@@ -35,7 +38,7 @@ class _OrderHistoryState extends State<OrderHistory> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return StreamBuilder<List<Invoice>>(
+    return StreamBuilder<List<Invoices>>(
         initialData: const [],
         stream: _invoiceSuccess.invoiceStream,
         builder: (context, snapshot) {
@@ -71,64 +74,75 @@ class _OrderHistoryState extends State<OrderHistory> {
         });
   }
 
-  Widget itemCart(size, index, snapshot) => Card(
-        shadowColor: Colors.teal,
-        elevation: 10,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
-        ),
-        margin: const EdgeInsets.all(12),
-        child: Padding(
-          padding: const EdgeInsets.all(10.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "#${snapshot.data[index].id}",
-                style: const TextStyle(
-                  fontSize: 20,
-                  color: Color(0xFFF34848),
-                  fontWeight: FontWeight.bold,
+  Widget itemCart(size, index, snapshot) => InkWell(
+        onTap: () {
+          RepositoryInvoice.getInvoiceID = snapshot.data[index].id;
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const OrderDetails(),
+            ),
+          );
+        },
+        child: Card(
+          shadowColor: Colors.teal,
+          elevation: 10,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(15.0),
+          ),
+          margin: const EdgeInsets.all(12),
+          child: Padding(
+            padding: const EdgeInsets.all(10.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "#${snapshot.data[index].id}",
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Color(0xFFF34848),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              Row(
-                children: [
-                  SizedBox(
-                    height: 130,
-                    width: 130,
-                    child: Image.asset('assets/images/icons-png/invoice.png'),
-                  ),
-                  const SizedBox(
-                    width: 40,
-                  ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Đơn hàng trái cây",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Color(0xFF717171),
-                          fontWeight: FontWeight.bold,
+                Row(
+                  children: [
+                    SizedBox(
+                      height: 130,
+                      width: 130,
+                      child: Image.asset('assets/images/icons-png/invoice.png'),
+                    ),
+                    const SizedBox(
+                      width: 40,
+                    ),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          "Đơn hàng trái cây",
+                          style: TextStyle(
+                            fontSize: 24,
+                            color: Color(0xFF717171),
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      const SizedBox(
-                        height: 20,
-                      ),
-                      _button(size),
-                    ],
-                  ),
-                ],
-              ),
-              Text(
-                "Tổng đơn : ${snapshot.data[index].total}",
-                style: const TextStyle(
-                  fontSize: 24,
-                  color: Color(0xFF717171),
-                  fontWeight: FontWeight.bold,
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        _button(size),
+                      ],
+                    ),
+                  ],
                 ),
-              ),
-            ],
+                Text(
+                  "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
+                  style: const TextStyle(
+                    fontSize: 24,
+                    color: Color(0xFF717171),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

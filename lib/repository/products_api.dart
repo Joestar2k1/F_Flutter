@@ -43,11 +43,12 @@ class RepositoryProduct {
     var client = http.Client();
     ProductDetails newProduct;
     var response = await client.get(
-      Uri.parse('http://10.0.2.2:8000/api/products/details-product/${getID}'),
+      Uri.parse('http://10.0.2.2:8000/api/products/details-product/$getID'),
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
       newProduct = detailsFromJson(jsonString);
+
       reviews = newProduct.reviews;
       return newProduct;
     }
