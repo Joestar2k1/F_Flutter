@@ -1,28 +1,73 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
-import 'package:fluter_19pmd/views/cart/cart_screen.dart';
+import 'package:fluter_19pmd/services/home/details_bloc.dart';
+import 'package:fluter_19pmd/services/home/product_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/counter_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
 
 import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
-class DetailsProductScreen extends StatelessWidget {
+class DetailsProductScreen extends StatefulWidget {
   const DetailsProductScreen({Key key}) : super(key: key);
+
+  @override
+  State<DetailsProductScreen> createState() => _DetailsProductScreenState();
+}
+
+class _DetailsProductScreenState extends State<DetailsProductScreen> {
+  final _viewDetails = ProductDetailsBloc();
+  final _counterBloc = CounterDetailsBloc();
+  @override
+  void initState() {
+    super.initState();
+    _viewDetails.eventSink.add(EventProduct.viewDetails);
+  }
+
+  @override
+  void dispose() {
+    _viewDetails.dispose();
+    _counterBloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(
-        body: const Body(),
-        bottomNavigationBar: _buildBottomNav(size, context),
-      ),
+      child: StreamBuilder<ProductDetails>(
+          initialData: null,
+          stream: _viewDetails.detailsStream,
+          builder: (context, snapshot) {
+            if (snapshot.data == null) {
+              return Scaffold(
+                body: Column(
+                  children: [
+                    SizedBox(height: size.height * 0.45),
+                    const Center(
+                      child: CircularProgressIndicator(
+                        color: Colors.teal,
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+
+            return Scaffold(
+              body: Body(details: snapshot.data),
+              bottomNavigationBar:
+                  _buildBottomNav(size, context, snapshot.data.price),
+            );
+          }),
     );
   }
 
-  Widget _buildBottomNav(size, context) {
+  Widget _buildBottomNav(size, context, price) {
     return Container(
       height: 120,
       decoration: const BoxDecoration(
@@ -58,14 +103,20 @@ class DetailsProductScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 15),
-                    Text(
-                      "220.000đ",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.grey.shade800,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
+                    StreamBuilder<int>(
+                        initialData: price,
+                        stream: _counterBloc.totalStream,
+                        builder: (context, snapshot) {
+                          print(snapshot.data);
+                          return Text(
+                            '${convertToVND(snapshot.data)}đ',
+                            style: TextStyle(
+                              fontSize: 22,
+                              color: Colors.grey.shade800,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          );
+                        }),
                   ],
                 ),
                 SizedBox(
@@ -79,8 +130,6 @@ class DetailsProductScreen extends StatelessWidget {
                     ),
                     onPressed: () {
                       RepositoryCart.addToCartDetails(RepositoryProduct.getID);
-                      // print(RepositoryProduct.getID);
-                      // print(RepositoryCart.getQuantity);
                       Navigator.push(
                           context,
                           MaterialPageRoute(

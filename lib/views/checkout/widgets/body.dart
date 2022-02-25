@@ -32,10 +32,10 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
     return StreamBuilder<List<Product>>(
-        initialData: [],
+        initialData: null,
         stream: _cartBloc.cartStream,
         builder: (context, snapshot) {
-          if (snapshot.hasData) {
+          if (snapshot.data != null) {
             return SingleChildScrollView(
               child: Column(
                 children: [
@@ -46,8 +46,13 @@ class _BodyState extends State<Body> {
               ),
             );
           } else {
-            return const Center(
-              child: CircularProgressIndicator(),
+            return Column(
+              children: const [
+                SizedBox(height: 300),
+                Center(
+                  child: CircularProgressIndicator(),
+                ),
+              ],
             );
           }
         });

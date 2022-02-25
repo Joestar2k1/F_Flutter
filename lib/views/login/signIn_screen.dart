@@ -15,13 +15,54 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
-  void _submit(BuildContext context, String email, String password) async {
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+  }
+
+  _submit(BuildContext context, String email, String password) async {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
-    RepositoryUser.login(context, email, password);
+    var check = await RepositoryUser.login(context, email, password);
+    print(check == 200);
+    if (check == 200) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          elevation: 10,
+          backgroundColor: Colors.teal,
+          content: const Text(
+            'Hãy thêm sản phẩm',
+            style: TextStyle(
+              fontSize: 22,
+            ),
+          ),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Xem sản phẩm',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
+            },
+          ), // SnackBarAction
+        ));
+    }
   }
 
   @override
@@ -141,7 +182,9 @@ class _SignInPageState extends State<SignInPage> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(buttonColor),
             ),
-            onPressed: () => _submit(context, email, password),
+            onPressed: () {
+              _submit(context, email, password);
+            },
             child: const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
           ),
         ),

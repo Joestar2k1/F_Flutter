@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:fluter_19pmd/models/invoice_models.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 
@@ -8,7 +8,7 @@ import 'package:http/http.dart' as http;
 
 class RepositoryCart {
   static String getID;
-  static List<Invoice> cartClient = [];
+  static List<Invoices> cartClient = [];
   static int getQuantity;
   static subTotalCart() => cartClient[0].products.fold(
         0,
@@ -18,7 +18,7 @@ class RepositoryCart {
 
   static Future<List<Product>> getCart() async {
     var client = http.Client();
-    List<Invoice> carts;
+    List<Invoices> carts;
     List<Product> listProduct;
     var response = await client.get(
       Uri.parse(

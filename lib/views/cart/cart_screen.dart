@@ -1,6 +1,8 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/views/cart/widgets/body.dart';
 import 'package:fluter_19pmd/views/checkout/checkout_page.dart';
+import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -56,9 +58,7 @@ class _CartPageState extends State<CartPage> {
                 style: ButtonStyle(
                   backgroundColor: MaterialStateProperty.all(buttonColor),
                 ),
-                onPressed: () {
-                  setState(() {});
-                },
+                onPressed: () {},
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: const [
@@ -83,13 +83,9 @@ class _CartPageState extends State<CartPage> {
                     buttonColor,
                   ),
                 ),
+                // ignore: void_checks
                 onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CheckOutPage(),
-                    ),
-                  );
+                  checkOut();
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -110,5 +106,41 @@ class _CartPageState extends State<CartPage> {
         ),
       ),
     );
+  }
+
+  void checkOut() {
+    if (RepositoryCart.cartClient.isNotEmpty) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const CheckOutPage(),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(SnackBar(
+          elevation: 10,
+          backgroundColor: Colors.teal,
+          content: const Text(
+            'Hãy thêm sản phẩm',
+            style: TextStyle(
+              fontSize: 22,
+            ),
+          ),
+          duration: const Duration(seconds: 5),
+          action: SnackBarAction(
+            label: 'Xem sản phẩm',
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
+            },
+          ), // SnackBarAction
+        ));
+    }
   }
 }

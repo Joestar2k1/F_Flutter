@@ -1,5 +1,9 @@
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/catetogory/cate_bloc.dart';
+import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
 class AllPage extends StatefulWidget {
@@ -72,109 +76,111 @@ class _AllPageState extends State<AllPage> {
                                   width: 1.5,
                                   color: Colors.teal,
                                 )),
-                            child: Stack(
-                              children: [
-                                InkWell(
-                                  onTap: () {
-                                    // Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) =>
-                                    //         DetailsProductScreen(
-                                    //       products: productController
-                                    //           .productList[index],
-                                    //     ),
-                                    //   ),
-                                    // );
-                                  },
-                                  child: Column(
-                                    children: [
-                                      SizedBox(
-                                        width: size.width,
-                                        height: size.height * 0.21,
-                                        child: Hero(
-                                          tag: snapshot.data[index].id,
-                                          child: Image.asset(
-                                              "assets/images/products/${snapshot.data[index].image}"),
-                                        ),
-                                      ),
-                                      Text(
-                                        snapshot.data[index].name,
-                                        style: const TextStyle(
-                                          fontSize: 25,
-                                          color: Color(0xFF717171),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 10),
-                                      RichText(
-                                        text: TextSpan(
-                                          children: [
-                                            TextSpan(
-                                              text:
-                                                  "${snapshot.data[index].price}đ",
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            const TextSpan(
-                                              text: " \\ ",
-                                              style: TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                            TextSpan(
-                                              text:
-                                                  " ${snapshot.data[index].unit}",
-                                              style: const TextStyle(
-                                                fontSize: 18,
-                                                color: Color(0xFF717171),
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Align(
-                                  alignment: Alignment.bottomRight,
-                                  child: Container(
-                                    width: 40,
-                                    height: 40,
-                                    decoration: BoxDecoration(
-                                      color: Colors.orange.withOpacity(1),
-                                      borderRadius: const BorderRadius.all(
-                                        Radius.circular(30),
-                                      ),
-                                    ),
-                                    child: Center(
-                                      child: InkWell(
-                                        onTap: () {},
-                                        child: const Text(
-                                          "+",
-                                          style: TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 25,
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                )
-                              ],
-                            ),
+                            child: _itemProduct(snapshot, index, context, size),
                           ),
                         );
                       });
                 }
               }),
         ),
+      ],
+    );
+  }
+
+  Stack _itemProduct(AsyncSnapshot<List<Product>> snapshot, int index,
+      BuildContext context, Size size) {
+    return Stack(
+      children: [
+        InkWell(
+          onTap: () {
+            RepositoryProduct.getID = snapshot.data[index].id;
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const DetailsProductScreen(),
+              ),
+            );
+          },
+          child: Column(
+            children: [
+              SizedBox(
+                width: size.width,
+                height: size.height * 0.21,
+                child: Hero(
+                  tag: snapshot.data[index].id,
+                  child: Image.asset(
+                      "assets/images/products/${snapshot.data[index].image}"),
+                ),
+              ),
+              Text(
+                snapshot.data[index].name,
+                style: const TextStyle(
+                  fontSize: 25,
+                  color: Color(0xFF717171),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              RichText(
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: "${convertToVND(snapshot.data[index].price)}đ",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF717171),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const TextSpan(
+                      text: " \\ ",
+                      style: TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF717171),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    TextSpan(
+                      text: " ${snapshot.data[index].unit}",
+                      style: const TextStyle(
+                        fontSize: 18,
+                        color: Color(0xFF717171),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        Align(
+          alignment: Alignment.bottomRight,
+          child: Container(
+            width: 40,
+            height: 40,
+            decoration: BoxDecoration(
+              color: Colors.orange.withOpacity(1),
+              borderRadius: const BorderRadius.all(
+                Radius.circular(30),
+              ),
+            ),
+            child: Center(
+              child: InkWell(
+                onTap: () {
+                  RepositoryCart.addToCart(snapshot.data[index].id);
+                },
+                child: const Text(
+                  "+",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
+                  ),
+                ),
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

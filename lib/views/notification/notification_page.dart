@@ -26,7 +26,7 @@ class NotificationPage extends StatelessWidget {
               style: TextStyle(
                 fontFamily: "Pacifico",
                 fontSize: 24,
-                color: Colors.black,
+                color: Colors.white,
               ),
             ),
           ),

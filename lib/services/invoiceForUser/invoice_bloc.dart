@@ -1,15 +1,18 @@
 import 'dart:async';
 
-import 'package:fluter_19pmd/models/invoice_models.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/models/invoiceDetails_models.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
-import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 
 class InvoiceBloc {
-  final _stateStreamController = StreamController<List<Invoice>>();
-  StreamSink<List<Invoice>> get _invoiceSink => _stateStreamController.sink;
-  Stream<List<Invoice>> get invoiceStream => _stateStreamController.stream;
+  final _stateStreamController = StreamController<List<Invoices>>();
+  StreamSink<List<Invoices>> get _invoiceSink => _stateStreamController.sink;
+  Stream<List<Invoices>> get invoiceStream => _stateStreamController.stream;
+
+  final _orderDetailsController = StreamController<InvoiceDetails>();
+  StreamSink<InvoiceDetails> get _detailsSink => _orderDetailsController.sink;
+  Stream<InvoiceDetails> get detailsStream => _orderDetailsController.stream;
 
   final _eventStreamController = StreamController<InvoiceEvent>();
   StreamSink<InvoiceEvent> get eventSink => _eventStreamController.sink;
@@ -36,6 +39,9 @@ class InvoiceBloc {
         }
       } else if (event == InvoiceEvent.payment) {
         await RepositoryInvoice.payment();
+      } else if (event == InvoiceEvent.orderDetails) {
+        var invoice = await RepositoryInvoice.orderDetails();
+        _detailsSink.add(invoice);
       }
     });
   }
@@ -83,5 +89,6 @@ class InvoiceBloc {
 
   void dispose() {
     _stateStreamController.close();
+    _orderDetailsController.close();
   }
 }

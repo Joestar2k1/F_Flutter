@@ -27,7 +27,7 @@ class RepositoryUser {
     }
   }
 
-  static Future<void> login(
+  static Future<int> login(
       BuildContext context, String email, String password) async {
     var client = http.Client();
     var response =
@@ -39,17 +39,12 @@ class RepositoryUser {
 
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
+
+      return 200;
     } else if (response.statusCode == 201) {
-      await Future.delayed(const Duration(seconds: 1));
-      throw Exception("Không ổn mật khẩu hoặc email sai");
+      return response.statusCode;
     } else {
-      await Future.delayed(const Duration(seconds: 1));
-      throw Exception("Không ổn mật khẩu hoặc email sai");
+      return response.statusCode;
     }
   }
 

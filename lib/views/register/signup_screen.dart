@@ -16,12 +16,33 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final addressController = TextEditingController();
   final phoneController = TextEditingController();
   final fullNameController = TextEditingController();
+  @override
+  void dispose() {
+    emailController.dispose();
+    addressController.dispose();
+    phoneController.dispose();
+    fullNameController.dispose();
+    super.dispose();
+  }
+
   void _submit(context, email, fullName, address, phone) {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(SnackBar(
+        content: const Text('This is a message'),
+        duration: const Duration(seconds: 5),
+        action: SnackBarAction(
+          label: 'CLICK ME',
+          onPressed: () {
+            print('Hello world');
+          },
+        ), // SnackBarAction
+      )); // SnackBar
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -64,8 +85,11 @@ class _SignUpScreenState extends State<SignUpScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 SizedBox(
-                  height: size.height * 0.05,
+                  height: size.height * 0.03,
                 ),
+                InkWell(
+                    onTap: () {},
+                    child: const Icon(Icons.arrow_back, color: Colors.teal)),
                 const Text(
                   "Xin chào bạn",
                   style: TextStyle(
