@@ -11,6 +11,25 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
+  final List<dynamic> categories = List.unmodifiable([
+    {
+      'text': "Trái cây",
+      'isCheck': false,
+    },
+    {
+      'text': "Thức uống",
+      'isCheck': false,
+    },
+    {
+      'text': "Thịt",
+      'isCheck': false,
+    },
+    {
+      'text': "Rau salad",
+      'isCheck': false,
+    },
+  ]);
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -23,9 +42,9 @@ class _BodyState extends State<Body> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                "Lọc",
+                "Danh mục",
                 style: TextStyle(
-                  fontSize: 24,
+                  fontSize: 30,
                   fontWeight: FontWeight.bold,
                   foreground: Paint()
                     ..shader = ui.Gradient.linear(
@@ -33,7 +52,7 @@ class _BodyState extends State<Body> {
                       const Offset(150, 20),
                       [
                         Colors.red,
-                        Colors.yellow,
+                        Colors.teal,
                       ],
                     ),
                 ),
@@ -41,6 +60,7 @@ class _BodyState extends State<Body> {
               Container(
                 margin: const EdgeInsets.only(top: 20.0),
                 width: size.width,
+                padding: const EdgeInsets.all(30.0),
                 // height: double.infinity,
                 decoration: BoxDecoration(
                   color: Colors.white,
@@ -51,21 +71,29 @@ class _BodyState extends State<Body> {
                   children: [
                     Container(
                       height: 300,
-                      child: ListView.builder(
-                        itemCount: 1,
+                      child: ListView.separated(
+                        physics: const NeverScrollableScrollPhysics(),
+                        separatorBuilder: (context, index) =>
+                            const SizedBox(height: 40),
+                        itemCount: categories.length,
                         itemBuilder: (context, index) {
-                          return Column(
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              RadioListTile<dynamic>(
-                                title: const Text(
-                                  'Trái cây',
-                                  style: TextStyle(
-                                    fontSize: 24,
-                                  ),
+                              Text(
+                                categories[index]['text'],
+                                style: const TextStyle(
+                                  fontSize: 22,
                                 ),
-                                value: 'Trái cây',
-                                groupValue: '',
-                                onChanged: (dynamic value) {},
+                              ),
+                              Checkbox(
+                                activeColor: Colors.green,
+                                value: categories[index]['isCheck'],
+                                onChanged: (bool newValue) {
+                                  setState(() {
+                                    categories[index]['isCheck'] = newValue;
+                                  });
+                                },
                               ),
                             ],
                           );
@@ -79,11 +107,11 @@ class _BodyState extends State<Body> {
           ),
         ),
         const SizedBox(
-          height: 50,
+          height: 30,
         ),
         const RangeCoin(),
         const SizedBox(
-          height: 50,
+          height: 30,
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -104,7 +132,10 @@ class _BodyState extends State<Body> {
               ),
             ),
           ),
-        )
+        ),
+        const SizedBox(
+          height: 30,
+        ),
       ],
     );
   }

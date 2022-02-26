@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -13,7 +14,12 @@ class AppBarDetails extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
             },
             child: SvgPicture.asset(
               "assets/icons/arrow_back.svg",

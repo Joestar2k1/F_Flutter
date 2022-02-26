@@ -6,12 +6,17 @@ import 'package:fluter_19pmd/repository/products_api.dart';
 enum EventProduct {
   fetch,
   viewDetails,
+  search,
 }
 
 class ProductBloc {
   final _stateStreamController = StreamController<List<Product>>();
   StreamSink<List<Product>> get _productSink => _stateStreamController.sink;
   Stream<List<Product>> get productStream => _stateStreamController.stream;
+
+  final _stateSearchStreamController = StreamController<List<Product>>();
+  StreamSink<List<Product>> get searchSink => _stateSearchStreamController.sink;
+  Stream<List<Product>> get searchStream => _stateSearchStreamController.stream;
 
   final _eventStreamController = StreamController<EventProduct>();
   StreamSink<EventProduct> get eventSink => _eventStreamController.sink;
@@ -37,5 +42,6 @@ class ProductBloc {
 
   void dispose() {
     _stateStreamController.close();
+    _stateSearchStreamController.close();
   }
 }
