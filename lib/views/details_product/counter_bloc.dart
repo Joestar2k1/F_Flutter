@@ -29,12 +29,10 @@ class CounterDetailsBloc {
       } else if (event == CounterEvent.increment) {
         counter++;
         RepositoryCart.getQuantity = counter;
-        var product = await RepositoryProduct.viewDetails();
-        print(product.price * counter);
-        print('?');
-        _totalSink.add(counter * product.price);
       }
+      var product = await RepositoryProduct.viewDetails();
 
+      _totalSink.add(counter * product.price);
       counterSink.add(counter);
     });
   }

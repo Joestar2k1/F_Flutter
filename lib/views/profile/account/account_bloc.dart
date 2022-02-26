@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:fluter_19pmd/views/profile/account/account_event.dart';
 
 class OpenEditAccount {
@@ -13,10 +12,11 @@ class OpenEditAccount {
   Stream<AccountEvent> get _eventStream => _eventStreamController.stream;
 
   OpenEditAccount() {
-    _eventStream.listen((event) {
+    _eventStream.listen((event) async {
       switch (event) {
         case AccountEvent.editAccount:
           openAccount = !openAccount;
+
           editProfileSink.add(openAccount);
           break;
         case AccountEvent.saveAccount:

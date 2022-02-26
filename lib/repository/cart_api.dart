@@ -55,7 +55,7 @@ class RepositoryCart {
     print(response.body);
   }
 
-  static Future<void> addToCart(String productID) async {
+  static Future<dynamic> addToCart(String productID) async {
     var client = http.Client();
     var response;
 
@@ -69,11 +69,14 @@ class RepositoryCart {
         'shippingPhone': RepositoryUser.info.phone,
       }),
     );
-
-    print(response.body);
+    if (response.statusCode == 200) {
+      return "Thêm thành công";
+    } else {
+      return "Thêm thất bại";
+    }
   }
 
-  static Future<void> deleteProductCart(String productID) async {
+  static Future<dynamic> deleteProductCart(String productID) async {
     var client = http.Client();
     var response = await client.delete(
       Uri.parse(
@@ -84,9 +87,9 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      print(response.body);
+      return "Xóa sản phẩm thành công";
     } else {
-      throw Exception("Xóa lỗi");
+      return "Xóa sản phẩm thành công";
     }
   }
 

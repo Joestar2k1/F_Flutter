@@ -72,6 +72,7 @@ class Body extends StatelessWidget {
           DescriptionWidthCounter(
             description: details.description,
             stock: details.stock,
+            price: details.price,
           ),
           UserReview(userReview: details.reviews),
         ],

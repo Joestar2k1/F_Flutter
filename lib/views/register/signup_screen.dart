@@ -30,19 +30,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
     if (!isValid) {
       return;
     }
-    _formKey.currentState.save();
-    ScaffoldMessenger.of(context)
-      ..removeCurrentSnackBar()
-      ..showSnackBar(SnackBar(
-        content: const Text('This is a message'),
-        duration: const Duration(seconds: 5),
-        action: SnackBarAction(
-          label: 'CLICK ME',
-          onPressed: () {
-            print('Hello world');
-          },
-        ), // SnackBarAction
-      )); // SnackBar
+    _formKey.currentState.save(); // SnackBar
     Navigator.push(
       context,
       MaterialPageRoute(

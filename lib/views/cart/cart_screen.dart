@@ -34,7 +34,12 @@ class _CartPageState extends State<CartPage> {
           ),
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
             },
             icon: SvgPicture.asset(
               'assets/icons/arrow_back.svg',
@@ -85,7 +90,16 @@ class _CartPageState extends State<CartPage> {
                 ),
                 // ignore: void_checks
                 onPressed: () {
-                  checkOut();
+                  if (RepositoryCart.cartClient.isNotEmpty) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const CheckOutPage(),
+                      ),
+                    );
+                  } else {
+                    _showMyDialog();
+                  }
                 },
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -108,39 +122,58 @@ class _CartPageState extends State<CartPage> {
     );
   }
 
-  void checkOut() {
-    if (RepositoryCart.cartClient.isNotEmpty) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const CheckOutPage(),
-        ),
-      );
-    } else {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          elevation: 10,
-          backgroundColor: Colors.teal,
-          content: const Text(
-            'Hãy thêm sản phẩm',
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text(
+            'Giỏ hàng',
             style: TextStyle(
+              fontWeight: FontWeight.bold,
               fontSize: 22,
             ),
           ),
-          duration: const Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'Xem sản phẩm',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text(
+                  '-Hiện tại giỏ hàng của bạn chưa có sản phẩm.',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
                 ),
-              );
-            },
-          ), // SnackBarAction
-        ));
-    }
+                Text(
+                  '-Hãy quay lại trang chủ để thêm vào giỏ hàng.',
+                  style: TextStyle(
+                    fontSize: 22,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Đồng ý',
+                style: TextStyle(
+                  fontSize: 22,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const HomePage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }

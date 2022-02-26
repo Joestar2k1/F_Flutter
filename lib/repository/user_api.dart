@@ -1,5 +1,4 @@
 import 'package:fluter_19pmd/models/user_models.dart';
-import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -20,14 +19,14 @@ class RepositoryUser {
       Uri.parse('http://10.0.2.2:8000/api/users/return-user/${info.id}'),
     );
     if (response.statusCode == 200) {
-      var user = await userFromJson(response.body);
+      var user = userFromJson(response.body);
       return user;
     } else {
       throw Exception("............................");
     }
   }
 
-  static Future<int> login(
+  static Future<dynamic> login(
       BuildContext context, String email, String password) async {
     var client = http.Client();
     var response =
@@ -42,9 +41,9 @@ class RepositoryUser {
 
       return 200;
     } else if (response.statusCode == 201) {
-      return response.statusCode;
+      return 201;
     } else {
-      return response.statusCode;
+      return 404;
     }
   }
 
@@ -64,33 +63,45 @@ class RepositoryUser {
     } else {}
   }
 
-  static Future<void> updateAccount(String username, String fullName,
+  static Future<dynamic> updateAccount(String username, String fullName,
       String email, String password, String phone) async {
     var client = http.Client();
-    var response = await client.put(
-        Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
-        body: ({
-          'username': username,
-          'fullName': fullName,
-          'email': email,
-          'phone': phone,
-          'password': password,
-        }));
+    var response;
+    if (password == '') {
+      print(1);
+      response = await client.put(
+          Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
+          body: ({
+            'username': username,
+            'fullName': fullName,
+            'email': email,
+            'phone': phone,
+          }));
+    } else {
+      print(2);
+      response = await client.put(
+          Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
+          body: ({
+            'username': username,
+            'fullName': fullName,
+            'email': email,
+            'phone': phone,
+            'password': password,
+          }));
+    }
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
+      return "Chỉnh sửa thành công";
     } else if (response.statusCode == 201) {
-      await Future.delayed(const Duration(seconds: 1));
-      throw Exception("Không ổn");
+      return "Chỉnh sửa thất bại";
     } else {
-      await Future.delayed(const Duration(seconds: 1));
-      throw Exception("Không ổn");
+      return "Chỉnh sửa thất bại";
     }
   }
 
   static Future register(String username, String fullName, String email,
       String password, String phone, String address) async {
     var client = http.Client();
-    print(username + fullName + email + password + phone + address);
     var response =
         await client.post(Uri.parse('http://10.0.2.2:8000/api/users/register'),
             body: ({
@@ -101,13 +112,12 @@ class RepositoryUser {
               'password': password,
               'address': address,
             }));
-    print(response.statusCode);
     if (response.statusCode == 200) {
       return 200;
     } else if (response.statusCode == 201) {
       return 201;
     } else {
-      return 201;
+      return 404;
     }
   }
 }
