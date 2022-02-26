@@ -87,6 +87,7 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
+      cartClient = null;
       return "Xóa sản phẩm thành công";
     } else {
       return "Xóa sản phẩm thành công";

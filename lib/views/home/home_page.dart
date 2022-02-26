@@ -18,7 +18,7 @@ class _HomePageState extends State<HomePage>
   AnimationController animationController;
   int selectedIndex = 0;
   final screens = [
-    Body(),
+    const Body(),
     const CategoryPage(),
     const NotificationPage(),
     const ProfilePage(),

@@ -133,4 +133,19 @@ class RepositoryProduct {
     }
     return null;
   }
+
+  static Future<List<Product>> resultSearch(String value) async {
+    var client = http.Client();
+    List<Product> newProduct;
+    var response = await client.get(
+      Uri.parse('http://10.0.2.2:8000/api/products/search-product/$value'),
+    );
+    if (response.statusCode == 200) {
+      var jsonString = response.body;
+      newProduct = productFromJson(jsonString);
+      products = newProduct;
+      return newProduct;
+    }
+    return newProduct;
+  }
 }

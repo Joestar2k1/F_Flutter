@@ -2,7 +2,6 @@ import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
-import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/best_seller_bloc.dart';

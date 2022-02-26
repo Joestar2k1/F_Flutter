@@ -189,6 +189,7 @@ class _SignInPageState extends State<SignInPage> {
                   "Đăng ký",
                   style: TextStyle(
                     fontSize: 18,
+                    color: Colors.teal,
                   ),
                 ),
               ),
@@ -200,6 +201,7 @@ class _SignInPageState extends State<SignInPage> {
               "Quên mật khẩu ?",
               style: TextStyle(
                 fontSize: 16,
+                color: Colors.teal,
               ),
             ),
           ),

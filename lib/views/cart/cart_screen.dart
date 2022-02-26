@@ -90,7 +90,7 @@ class _CartPageState extends State<CartPage> {
                 ),
                 // ignore: void_checks
                 onPressed: () {
-                  if (RepositoryCart.cartClient.isNotEmpty) {
+                  if (RepositoryCart.cartClient != null) {
                     Navigator.push(
                       context,
                       MaterialPageRoute(

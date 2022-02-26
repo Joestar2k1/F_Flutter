@@ -1,13 +1,11 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/details_bloc.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
-import 'package:fluter_19pmd/views/details_product/counter_bloc.dart';
+import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/body.dart';
-import 'package:fluter_19pmd/views/home/home_page.dart';
 
 import 'package:flutter/material.dart';
 
@@ -98,7 +96,7 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const HomePage(),
+                      builder: (context) => const CartPage(),
                     ));
               },
               child: Row(

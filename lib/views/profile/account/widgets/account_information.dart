@@ -172,7 +172,7 @@ class _AccountInformationState extends State<AccountInformation> {
                                   ],
                                 ),
                                 _buildTextForm(_username, _email, _fullName,
-                                    _phone, _password),
+                                    _phone, _password, snapshot.data),
                               ],
                             );
                           }
@@ -236,26 +236,22 @@ class _AccountInformationState extends State<AccountInformation> {
         ],
       );
   Widget _buildTextForm(
-    TextEditingController us,
-    TextEditingController email,
-    TextEditingController fullName,
-    TextEditingController phone,
-    TextEditingController password,
+    us,
+    email,
+    fullName,
+    phone,
+    password,
+    data,
   ) {
-    return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _input(us, 'Tên hiển thị'),
-          _input(email, 'Email'),
-          _input(fullName, 'Họ tên'),
-          _input(phone, 'Số điện thoại'),
-          _input(password, 'Mật khẩu'),
-        ],
-      ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _input(us, 'Tên hiển thị'),
+        _input(email, 'Email'),
+        _input(fullName, 'Họ tên'),
+        _input(phone, 'Số điện thoại'),
+        _input(password, 'Mật khẩu'),
+      ],
     );
   }
 

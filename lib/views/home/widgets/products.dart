@@ -4,6 +4,7 @@ import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/details_bloc.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
+import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
 import 'package:flutter/material.dart';
@@ -237,7 +238,12 @@ class _ProductsHomeState extends State<ProductsHome> {
                 ),
               ),
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartPage(),
+                  ),
+                );
               },
             ),
           ],

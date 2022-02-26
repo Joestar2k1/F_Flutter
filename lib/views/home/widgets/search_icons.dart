@@ -5,34 +5,14 @@ import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
 import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
+import 'package:fluter_19pmd/views/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-class SearchWithIcons extends StatefulWidget {
+class SearchWithIcons extends StatelessWidget {
   const SearchWithIcons({
     Key key,
   }) : super(key: key);
-
-  @override
-  State<SearchWithIcons> createState() => _SearchWithIconsState();
-}
-
-class _SearchWithIconsState extends State<SearchWithIcons> {
-  final _cart = CartBloc();
-  final _quantityCartBloc = LoadQuantityCart();
-  @override
-  void initState() {
-    _cart.eventSink.add(CartEvent.fetchCart);
-    _quantityCartBloc.cartQuantitySink.add(RepositoryCart.cartClient.length);
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _cart.dispose();
-    _quantityCartBloc.dispose();
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -42,37 +22,7 @@ class _SearchWithIconsState extends State<SearchWithIcons> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            width: size.width * 0.65,
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.all(
-                Radius.circular(15),
-              ),
-            ),
-            child: TextField(
-              onChanged: (value) {},
-              decoration: const InputDecoration(
-                enabledBorder: InputBorder.none,
-                focusedBorder: InputBorder.none,
-                contentPadding: EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 30,
-                ),
-                hintText: "Tìm kiếm...",
-                hintStyle: TextStyle(
-                  color: Colors.black87,
-                  fontSize: 20,
-                  // fontWeight: FontWeight.bold,
-                ),
-                prefixIcon: Icon(
-                  Icons.search,
-                  size: 25,
-                  color: Colors.black87,
-                ),
-              ),
-            ),
-          ),
+          _buttonSearch(size, context),
           buildIcon(
             size: size,
             img: "assets/icons/filter.svg",
@@ -140,6 +90,42 @@ class _SearchWithIconsState extends State<SearchWithIcons> {
     );
   }
 
+  Widget _buttonSearch(size, context) => InkWell(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const SearchPage(),
+            ),
+          );
+        },
+        child: Container(
+          padding: const EdgeInsets.all(10),
+          width: size.width * 0.65,
+          height: size.height * 0.06,
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.all(
+              Radius.circular(15),
+            ),
+          ),
+          child: Row(
+            children: const [
+              Icon(
+                Icons.search,
+                color: Colors.teal,
+              ),
+              Text(
+                "Tìm kiếm",
+                style: TextStyle(
+                  fontSize: 22,
+                  color: textColor,
+                ),
+              )
+            ],
+          ),
+        ),
+      );
   InkWell buildIcon({Size size, String img, Function() press}) {
     return InkWell(
       onTap: press,

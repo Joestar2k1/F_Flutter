@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:fluter_19pmd/models/user_models.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
@@ -69,6 +71,7 @@ class RepositoryUser {
     var response;
     if (password == '') {
       print(1);
+      print(username + fullName + email + phone);
       response = await client.put(
           Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
           body: ({
@@ -90,10 +93,11 @@ class RepositoryUser {
           }));
     }
     if (response.statusCode == 200) {
+      print(json.decode(response.body));
       info = userFromJson(response.body);
       return "Chỉnh sửa thành công";
     } else if (response.statusCode == 201) {
-      return "Chỉnh sửa thất bại";
+      return "Email đã tồn tại";
     } else {
       return "Chỉnh sửa thất bại";
     }
