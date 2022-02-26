@@ -32,40 +32,28 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
 
   final _formKey = GlobalKey<FormState>();
 
-  void _submit(
-      context, email, fullName, address, phone, password, username) async {
+  void _submit(context, email, fullName, address, phone, password, username,
+      confirm) async {
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
-    var dataFromServer = await RepositoryUser.register(
-        username, fullName, email, password, phone, address);
-    if (dataFromServer == 200) {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(
-            content: const Text(
-              "Đăng ký thành công",
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            action: SnackBarAction(
-              label: "OK",
-              textColor: Colors.teal,
-              onPressed: () {},
-            ),
+    if (password == confirm) {
+      var dataFromServer = await RepositoryUser.register(
+          username, fullName, email, password, phone, address);
+      if (dataFromServer == 200) {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignInPage(),
           ),
         );
-      Future.delayed(const Duration(seconds: 2));
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SignInPage(),
-        ),
-      );
+      } else {
+        _showMyDialog("Đăng ký thất bại", context);
+      }
+    } else {
+      _showMyDialog("Mật khẩu không trùng khớp", context);
     }
   }
 
@@ -130,6 +118,7 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
                   widget.phone,
                   usernameController.text,
                   passwordController.text,
+                  confirmController.text,
                 ),
               ],
             ),
@@ -160,8 +149,8 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
         ),
       );
 
-  Widget _buttonGoOn(
-          context, email, fullName, address, phone, username, password) =>
+  Widget _buttonGoOn(context, email, fullName, address, phone, username,
+          password, confirm) =>
       Center(
         child: SizedBox(
           height: 50,
@@ -170,10 +159,54 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all(buttonColor),
             ),
-            onPressed: () => _submit(
-                context, email, fullName, address, phone, password, username),
+            onPressed: () => _submit(context, email, fullName, address, phone,
+                password, username, confirm),
             child: const Text('Đăng ký', style: TextStyle(fontSize: 18)),
           ),
         ),
       );
+  Future<void> _showMyDialog(message, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                "assets/images/icons-png/error.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          content: Center(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.teal,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Thử lại',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

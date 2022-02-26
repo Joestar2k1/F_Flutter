@@ -43,22 +43,30 @@ class _OnDeliveryState extends State<OnDelivery> {
         stream: _invoiceSuccess.invoiceStream,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(
-                  child: ListView.separated(
-                      separatorBuilder: (context, index) => const SizedBox(
-                            height: 15,
-                          ),
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: snapshot.data.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return itemCart(size, index, snapshot);
-                      }),
+            if (snapshot.data.length == null) {
+              return const Center(
+                child: CircularProgressIndicator(
+                  color: Colors.teal,
                 ),
-              ],
-            );
+              );
+            } else {
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                        separatorBuilder: (context, index) => const SizedBox(
+                              height: 15,
+                            ),
+                        physics: const BouncingScrollPhysics(),
+                        itemCount: snapshot.data.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return itemCart(size, index, snapshot);
+                        }),
+                  ),
+                ],
+              );
+            }
           } else {
             return const Center(
               child: Text(

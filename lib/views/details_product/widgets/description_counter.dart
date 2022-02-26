@@ -1,14 +1,17 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/counter_event.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/views/details_product/counter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionWidthCounter extends StatefulWidget {
-  const DescriptionWidthCounter({Key key, this.description, this.stock})
+  const DescriptionWidthCounter(
+      {Key key, this.description, this.stock, this.price})
       : super(key: key);
 
   final String description;
   final int stock;
+  final int price;
 
   @override
   State<DescriptionWidthCounter> createState() =>
@@ -32,7 +35,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(
-            height: 10,
+            height: 15,
           ),
           Align(
             alignment: Alignment.topCenter,
@@ -64,16 +67,34 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
             ),
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               const Text(
                 "Số lượng:",
-                style: TextStyle(fontSize: 20),
+                style: TextStyle(fontSize: 22, color: Colors.teal),
               ),
-              const SizedBox(width: 30),
               _counter(),
             ],
           ),
+          const SizedBox(height: 30),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text(
+                "Tổng: ",
+                style: TextStyle(fontSize: 22, color: Colors.teal),
+              ),
+              StreamBuilder<int>(
+                  initialData: widget.price,
+                  stream: _counterBloc.totalStream,
+                  builder: (context, snapshot) {
+                    return Text(
+                      "${convertToVND(snapshot.data)}đ",
+                      style: const TextStyle(fontSize: 20),
+                    );
+                  }),
+            ],
+          )
           // const BottomNav(),
         ],
       ),
@@ -85,7 +106,7 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
       stream: _counterBloc.counterStream,
       builder: (context, snapshot) {
         return SizedBox(
-          width: 150,
+          width: 120,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [

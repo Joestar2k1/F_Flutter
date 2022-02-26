@@ -93,9 +93,12 @@ class _BodyState extends State<Body> {
                     ),
                   ),
                   child: InkWell(
-                      onTap: () {
-                        RepositoryCart.deleteProductCart(
+                      onTap: () async {
+                        var message = await RepositoryCart.deleteProductCart(
                             snapshot.data[index].id);
+                        if (message != null) {
+                          _showMyDialog(message, context);
+                        }
                         _cartBloc.eventSink.add(CartEvent.fetchCart);
                       },
                       child: Image.asset("assets/images/icons-png/trash.png")),
@@ -235,4 +238,49 @@ class _BodyState extends State<Body> {
           ],
         ),
       );
+
+  Future<void> _showMyDialog(message, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                "assets/images/icons-png/Check.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          content: Center(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.teal,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Ok',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

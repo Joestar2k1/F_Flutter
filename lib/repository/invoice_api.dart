@@ -18,7 +18,7 @@ class RepositoryInvoice {
     return dem;
   }
 
-  static Future<void> payment() async {
+  static Future<dynamic> payment() async {
     var client = http.Client();
     var response = await client.put(
       Uri.parse(
@@ -29,13 +29,10 @@ class RepositoryInvoice {
       }),
     );
     if (response.statusCode == 200) {
-      Navigator.push(
-          getContext,
-          MaterialPageRoute(
-            builder: (context) => const HomePage(),
-          ));
+      RepositoryCart.cartClient = null;
+      return "Đặt hàng thành công";
     } else {
-      print('Lỗi');
+      return "Đặt hàng thất bại";
     }
   }
 

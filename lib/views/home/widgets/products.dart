@@ -124,8 +124,13 @@ class _ProductsHomeState extends State<ProductsHome> {
                   ),
                   child: Center(
                     child: InkWell(
-                      onTap: () {
-                        RepositoryCart.addToCart(snapshot.data[index].id);
+                      onTap: () async {
+                        var message = await RepositoryCart.addToCart(
+                            snapshot.data[index].id);
+                        if (message == null) {
+                        } else {
+                          _showMyDialog(message, context);
+                        }
                       },
                       child: const Text(
                         "+",
@@ -193,6 +198,51 @@ class _ProductsHomeState extends State<ProductsHome> {
           ),
         ),
       ],
+    );
+  }
+
+  Future<void> _showMyDialog(message, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                "assets/images/icons-png/Check.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          content: Center(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.teal,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Ok',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -41,14 +41,14 @@ class _CategoryPageState extends State<CategoryPage> {
               ),
             ),
           ),
-          body: bodyTabbar(),
+          body: _item(),
           // body: Body(),
         ),
       ),
     );
   }
 
-  Widget bodyTabbar() => const TabBarView(
+  Widget _item() => const TabBarView(
         dragStartBehavior: DragStartBehavior.down,
         children: [
           AllPage(),

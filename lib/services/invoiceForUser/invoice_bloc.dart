@@ -37,8 +37,6 @@ class InvoiceBloc {
         } on Exception {
           _invoiceSink.addError('get products don\'t completed');
         }
-      } else if (event == InvoiceEvent.payment) {
-        await RepositoryInvoice.payment();
       } else if (event == InvoiceEvent.orderDetails) {
         var invoice = await RepositoryInvoice.orderDetails();
         _detailsSink.add(invoice);

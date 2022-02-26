@@ -2,10 +2,10 @@ import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
-import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
-import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
+import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
+import 'package:fluter_19pmd/views/profile/order/order_page.dart';
 import 'package:flutter/material.dart';
 
 class CheckOutPage extends StatefulWidget {
@@ -16,14 +16,6 @@ class CheckOutPage extends StatefulWidget {
 }
 
 class _CheckOutPageState extends State<CheckOutPage> {
-  final _payment = InvoiceBloc();
-
-  @override
-  void dispose() {
-    _payment.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -143,9 +135,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
                         buttonColor,
                       ),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
                       RepositoryInvoice.getContext = context;
-                      _payment.eventSink.add(InvoiceEvent.payment);
+                      var message = await RepositoryInvoice.payment();
+                      if (message != null) {
+                        _showMyDialog(message, context);
+                      }
                     },
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -167,6 +162,80 @@ class _CheckOutPageState extends State<CheckOutPage> {
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> _showMyDialog(message, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Center(
+            child: Container(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                "assets/images/icons-png/Check.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          content: Center(
+            child: Row(
+              children: [
+                Image.asset("assets/images/icons-png/delivery.png",
+                    width: 60, height: 60),
+                const SizedBox(width: 15),
+                Text(
+                  message,
+                  style: const TextStyle(
+                    fontSize: 22,
+                    color: Colors.teal,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Quay lại giỏ hàng',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const CartPage(),
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: const Text(
+                'Xem đơn hàng',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OrderPage(),
+                  ),
+                );
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }

@@ -29,7 +29,6 @@ class _SignInPageState extends State<SignInPage> {
     }
     _formKey.currentState.save();
     var check = await RepositoryUser.login(context, email, password);
-    print(check == 200);
     if (check == 200) {
       Navigator.push(
         context,
@@ -38,30 +37,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
     } else {
-      ScaffoldMessenger.of(context)
-        ..removeCurrentSnackBar()
-        ..showSnackBar(SnackBar(
-          elevation: 10,
-          backgroundColor: Colors.teal,
-          content: const Text(
-            'Hãy thêm sản phẩm',
-            style: TextStyle(
-              fontSize: 22,
-            ),
-          ),
-          duration: const Duration(seconds: 5),
-          action: SnackBarAction(
-            label: 'Xem sản phẩm',
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
-            },
-          ), // SnackBarAction
-        ));
+      _showMyDialog("Đăng nhập thất bại, kiểm tra lại tài khoản", context);
     }
   }
 
@@ -229,4 +205,49 @@ class _SignInPageState extends State<SignInPage> {
           ),
         ],
       );
+
+  Future<void> _showMyDialog(message, context) async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          title: Center(
+            child: SizedBox(
+              width: 100,
+              height: 100,
+              child: Image.asset(
+                "assets/images/icons-png/error.png",
+                fit: BoxFit.fill,
+              ),
+            ),
+          ),
+          content: Center(
+            child: Text(
+              message,
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.teal,
+              ),
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text(
+                'Thử lại',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.teal,
+                ),
+              ),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }

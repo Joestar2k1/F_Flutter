@@ -21,7 +21,6 @@ class DetailsProductScreen extends StatefulWidget {
 
 class _DetailsProductScreenState extends State<DetailsProductScreen> {
   final _viewDetails = ProductDetailsBloc();
-  final _counterBloc = CounterDetailsBloc();
   @override
   void initState() {
     super.initState();
@@ -31,7 +30,6 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
   @override
   void dispose() {
     _viewDetails.dispose();
-    _counterBloc.dispose();
     super.dispose();
   }
 
@@ -60,16 +58,15 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
 
             return Scaffold(
               body: Body(details: snapshot.data),
-              bottomNavigationBar:
-                  _buildBottomNav(size, context, snapshot.data.price),
+              bottomNavigationBar: _buildBottomNav(size, context),
             );
           }),
     );
   }
 
-  Widget _buildBottomNav(size, context, price) {
+  Widget _buildBottomNav(size, context) {
     return Container(
-      height: 120,
+      height: 80,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
           colors: [Colors.white, Colors.white],
@@ -87,71 +84,36 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 10, bottom: 10, right: 10),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  children: [
-                    Text(
-                      "Tổng cộng",
-                      style: TextStyle(
-                        fontSize: 20,
-                        color: Colors.grey.shade400,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 15),
-                    StreamBuilder<int>(
-                        initialData: price,
-                        stream: _counterBloc.totalStream,
-                        builder: (context, snapshot) {
-                          print(snapshot.data);
-                          return Text(
-                            '${convertToVND(snapshot.data)}đ',
-                            style: TextStyle(
-                              fontSize: 22,
-                              color: Colors.grey.shade800,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          );
-                        }),
-                  ],
+          SizedBox(
+            width: size.width * 0.5,
+            height: size.height * 0.08,
+            child: ElevatedButton(
+              style: ButtonStyle(
+                backgroundColor: MaterialStateProperty.all(
+                  buttonColor,
                 ),
-                SizedBox(
-                  width: size.width * 0.5,
-                  height: size.height * 0.08,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(
-                        buttonColor,
-                      ),
-                    ),
-                    onPressed: () {
-                      RepositoryCart.addToCartDetails(RepositoryProduct.getID);
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const HomePage(),
-                          ));
-                    },
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: const [
-                        Icon(Icons.card_travel),
-                        Text(
-                          "Thêm giỏ hàng",
-                          style: TextStyle(
-                            fontSize: 20,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ],
+              ),
+              onPressed: () async {
+                await RepositoryCart.addToCartDetails(RepositoryProduct.getID);
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const HomePage(),
+                    ));
+              },
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Icon(Icons.card_travel),
+                  Text(
+                    "Thêm giỏ hàng",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.white,
                     ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
