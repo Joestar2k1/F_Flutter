@@ -79,16 +79,20 @@ class User {
 
 class Address {
   Address({
+    this.id,
     this.name,
   });
 
+  int id;
   String name;
 
   factory Address.fromJson(Map<String, dynamic> json) => Address(
+        id: json["id"],
         name: json["name"],
       );
 
   Map<String, dynamic> toJson() => {
+        "id": id,
         "name": name,
       };
   @override

@@ -93,21 +93,9 @@ class _AccountInformationState extends State<AccountInformation> {
                                     TextButton(
                                       onPressed: () => _openEdit.eventSink
                                           .add(AccountEvent.editAccount),
-                                      child: Row(
-                                        children: const [
-                                          Text(
-                                            "Sửa",
-                                            style: TextStyle(
-                                              fontSize: 24,
-                                              color: buttonColor,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Icon(
-                                            Icons.mode_edit_outline_outlined,
-                                            color: buttonColor,
-                                          ),
-                                        ],
+                                      child: const Icon(
+                                        Icons.mode_edit_outline_outlined,
+                                        color: buttonColor,
                                       ),
                                     ),
                                   ],
