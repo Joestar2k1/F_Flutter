@@ -1,5 +1,7 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/views/forgot_password/forgot_page.dart';
+import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:fluter_19pmd/views/register/signup_screen.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +15,7 @@ class SignInPage extends StatefulWidget {
 
 class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
+  final _isLoading = LoadingBloc();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   @override
@@ -20,16 +23,20 @@ class _SignInPageState extends State<SignInPage> {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
+    _isLoading.dispose();
   }
 
   _submit(BuildContext context, String email, String password) async {
+    _isLoading.loadingSink.add(true);
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
     _formKey.currentState.save();
+
     var check = await RepositoryUser.login(context, email, password);
     if (check == 200) {
+      _isLoading.loadingSink.add(false);
       Navigator.push(
         context,
         MaterialPageRoute(
@@ -37,7 +44,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
     } else {
-      _showMyDialog("Đăng nhập thất bại, kiểm tra lại tài khoản", context);
+      _showMyDialog("Lỗi, kiểm tra lại tài khoản", context);
     }
   }
 
@@ -65,40 +72,50 @@ class _SignInPageState extends State<SignInPage> {
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: size.height * 0.2,
-                ),
-                const Text(
-                  "Xin chào bạn",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Welcome to Be Healthy!",
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                _emailLogin(),
-                const SizedBox(height: 20),
-                _passwordLogin(),
-                const SizedBox(height: 30),
-                _buttonLogin(
-                    context, emailController.text, passwordController.text),
-                const SizedBox(height: 20),
-                _forgotAndSignUp(),
-              ],
-            ),
+            child: StreamBuilder<bool>(
+                initialData: false,
+                stream: _isLoading.loadingStream,
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.2,
+                      ),
+                      const Text(
+                        "Xin chào bạn",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Welcome to Be Healthy!",
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      _emailLogin(),
+                      const SizedBox(height: 20),
+                      _passwordLogin(),
+                      const SizedBox(height: 30),
+                      (state.data)
+                          ? const Center(
+                              child: CircularProgressIndicator(
+                              color: Colors.red,
+                            ))
+                          : _buttonLogin(context, emailController.text,
+                              passwordController.text),
+                      const SizedBox(height: 20),
+                      _forgotAndSignUp(),
+                    ],
+                  );
+                }),
           ),
         ),
       );
@@ -129,11 +146,11 @@ class _SignInPageState extends State<SignInPage> {
   Widget _passwordLogin() => Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         child: TextFormField(
+          autofocus: false,
           controller: passwordController,
           obscureText: false,
           style: const TextStyle(fontSize: 20),
           keyboardType: TextInputType.emailAddress,
-          onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
             focusedBorder: InputBorder.none,
             errorStyle: TextStyle(fontSize: 25),
@@ -196,7 +213,13 @@ class _SignInPageState extends State<SignInPage> {
             ],
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: () {
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ForgotPasswordPage(),
+                  ));
+            },
             child: const Text(
               "Quên mật khẩu ?",
               style: TextStyle(
@@ -244,6 +267,7 @@ class _SignInPageState extends State<SignInPage> {
                 ),
               ),
               onPressed: () {
+                _isLoading.loadingSink.add(false);
                 Navigator.of(context).pop();
               },
             ),

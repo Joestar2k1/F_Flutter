@@ -22,6 +22,7 @@ class RepositoryUser {
     );
     if (response.statusCode == 200) {
       var user = userFromJson(response.body);
+      info = user;
       return user;
     } else {
       throw Exception("............................");
@@ -31,6 +32,7 @@ class RepositoryUser {
   static Future<dynamic> login(
       BuildContext context, String email, String password) async {
     var client = http.Client();
+
     var response =
         await client.post(Uri.parse('http://10.0.2.2:8000/api/users/login'),
             body: ({
@@ -40,7 +42,6 @@ class RepositoryUser {
 
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
-
       return 200;
     } else if (response.statusCode == 201) {
       return 201;
@@ -70,8 +71,6 @@ class RepositoryUser {
     var client = http.Client();
     var response;
     if (password == '') {
-      print(1);
-      print(username + fullName + email + phone);
       response = await client.put(
           Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
           body: ({
@@ -81,7 +80,6 @@ class RepositoryUser {
             'phone': phone,
           }));
     } else {
-      print(2);
       response = await client.put(
           Uri.parse('http://10.0.2.2:8000/api/users/editUser/${info.id}'),
           body: ({
@@ -122,6 +120,52 @@ class RepositoryUser {
       return 201;
     } else {
       return 404;
+    }
+  }
+
+  static Future createAddress(String name) async {
+    var client = http.Client();
+    var response = await client.post(
+        Uri.parse('http://10.0.2.2:8000/api/users/create-Address'),
+        body: ({
+          'name': name,
+          'userID': info.id,
+        }));
+    if (response.statusCode == 200) {
+      return 200;
+    } else if (response.statusCode == 201) {
+      return 201;
+    } else {
+      return 404;
+    }
+  }
+
+  static Future deleteAddress(int id) async {
+    var client = http.Client();
+    var response = await client
+        .get(Uri.parse('http://10.0.2.2:8000/api/users/delete-address/$id'));
+    if (response.statusCode == 200) {
+      return 200;
+    } else if (response.statusCode == 201) {
+      return 201;
+    } else {
+      return 404;
+    }
+  }
+
+  static Future forgotPassword(String email) async {
+    var client = http.Client();
+    var response = await client.post(
+        Uri.parse('http://10.0.2.2:8000/api/users/Forgot-Password'),
+        body: ({
+          'email': email,
+        }));
+    if (response.statusCode == 200) {
+      return json.decode(response.body)['success'];
+    } else if (response.statusCode == 201) {
+      return json.decode(response.body)['success'];
+    } else {
+      return json.decode(response.body)['success'];
     }
   }
 }

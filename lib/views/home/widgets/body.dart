@@ -2,8 +2,6 @@ import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
-import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
-import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/best_seller_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:fluter_19pmd/views/home/widgets/banner.dart';
@@ -18,12 +16,10 @@ class Body extends StatefulWidget {
 }
 
 class _BodyState extends State<Body> {
-  var textSearch = TextEditingController();
   final _bestSeller = BestSellerBloc();
-  final _cartBloc = CartBloc();
+
   @override
   void initState() {
-    _cartBloc.eventSink.add(CartEvent.fetchCart);
     _bestSeller.eventSink.add(Event.fetch);
     super.initState();
   }
@@ -32,7 +28,6 @@ class _BodyState extends State<Body> {
   void dispose() {
     super.dispose();
     _bestSeller.dispose();
-    _cartBloc.dispose();
   }
 
   @override

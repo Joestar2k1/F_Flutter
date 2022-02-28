@@ -1,6 +1,12 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/bloc/loading_bloc.dart';
+import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:mailer/smtp_server/gmail.dart';
+import 'package:toast/toast.dart';
+import 'package:mailer/mailer.dart';
+import 'package:mailer/smtp_server.dart';
 
 class ForgotPasswordPage extends StatefulWidget {
   const ForgotPasswordPage({Key key}) : super(key: key);
@@ -11,11 +17,13 @@ class ForgotPasswordPage extends StatefulWidget {
 
 class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   final _formKey = GlobalKey<FormState>();
+  final _isLoading = LoadingBloc();
   final emailController = TextEditingController();
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
+    _isLoading.dispose();
   }
 
   @override
@@ -34,28 +42,60 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    height: size.height * 0.2,
-                  ),
-                  const Text(
-                    "Nhập mật khẩu mà bạn đã đăng ký",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: textColor,
-                      fontWeight: FontWeight.bold,
+            child: StreamBuilder<bool>(
+                initialData: false,
+                stream: _isLoading.loadingStream,
+                builder: (context, state) {
+                  return SingleChildScrollView(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          height: size.height * 0.2,
+                        ),
+                        InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child:
+                              const Icon(Icons.arrow_back, color: Colors.teal),
+                        ),
+                        SizedBox(
+                          height: size.height * 0.07,
+                        ),
+                        const Text(
+                          "Nhập Email mà bạn đã đăng ký",
+                          style: TextStyle(
+                            fontSize: 20,
+                            color: textColor,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        _emailLogin(),
+                        const SizedBox(height: 20),
+                        _buttonLogin(context, emailController.text),
+                        (state.data)
+                            ? Column(
+                                children: [
+                                  const SizedBox(height: 20),
+                                  Row(
+                                    children: const [
+                                      Text(
+                                        "Đang gửi vui lòng chờ trong giây lát..",
+                                        style: TextStyle(
+                                            color: Colors.teal, fontSize: 20),
+                                      ),
+                                      CircularProgressIndicator(),
+                                    ],
+                                  ),
+                                ],
+                              )
+                            : Container(),
+                      ],
                     ),
-                  ),
-                  _emailLogin(),
-                  const SizedBox(height: 20),
-                  _buttonLogin(context, emailController.text),
-                ],
-              ),
-            ),
+                  );
+                }),
           ),
         ),
       );
@@ -104,19 +144,47 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       return;
     }
     _formKey.currentState.save();
-
+    _isLoading.loadingSink.add(true);
     await sendEmail(email);
   }
 
   Future sendEmail(String email) async {
-    String url = 'https://api.emailjs.com/api/v1.0/email/send';
-    var client = http.Client();
-    var response = await client.post(Uri.parse(url),
-        body: ({
-          'template_id': 'service_m6j7ihe',
-          'service_id': 'service_m6j7ihe',
-          'user_id': 'user_pvzEg5i0NPjpUQdVlmrOq',
-        }));
-    print(response.body);
+    String username = 'iloverussian2311@gmail.com';
+    String password = '23112001aZ';
+    var data = await RepositoryUser.forgotPassword(email);
+    // ignore: deprecated_member_use
+    final smtpServer = gmail(username, password);
+    final message = Message()
+      ..from = Address(username, 'BeHealthy C9')
+      ..recipients.add(email)
+      ..ccRecipients.addAll([email, email])
+      ..bccRecipients.add(Address(email))
+      ..subject = 'Bạn đã quên mật khẩu 😀 ${DateTime.now()}'
+      ..html =
+          "<h1>Xin chào</h1>\n<p>Mật khẩu mới của tài khoản $email là $data</p>\n<p>Chúc bạn một ngày tốt lành</p>";
+
+    try {
+      final sendReport = await send(message, smtpServer);
+      showToast("Thay đổi thành công, kiểm tra email",
+          gravity: Toast.BOTTOM, duration: 2);
+    } on MailerException catch (e) {
+      for (var p in e.problems) {}
+    }
+
+    var connection = PersistentConnection(smtpServer);
+    await connection.send(message);
+    await connection.close();
+    _isLoading.loadingSink.add(false);
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const SignInPage(),
+      ),
+    );
+  }
+
+  showToast(String msg, {int duration, int gravity}) {
+    Toast.show(msg, context,
+        duration: duration, gravity: gravity, backgroundColor: Colors.teal);
   }
 }
