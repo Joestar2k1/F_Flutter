@@ -183,7 +183,34 @@ class _AccountInformationState extends State<AccountInformation> {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
-          child: _buildText('Email:', user.email),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const Text(
+                "Email:",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: textColor,
+                ),
+              ),
+              const SizedBox(
+                width: 20,
+              ),
+              Container(
+                width: 270,
+                height: 30,
+                child: Text(
+                  user.email,
+                  style: const TextStyle(
+                    fontSize: 20,
+                    color: Colors.redAccent,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  maxLines: 1,
+                ),
+              ),
+            ],
+          ),
         ),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 10),
@@ -219,7 +246,9 @@ class _AccountInformationState extends State<AccountInformation> {
             style: const TextStyle(
               fontSize: 20,
               color: Colors.redAccent,
+              overflow: TextOverflow.ellipsis,
             ),
+            maxLines: 1,
           ),
         ],
       );

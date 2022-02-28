@@ -37,11 +37,12 @@ dependencies:
   flutter_svg:
   flutter_swiper: ^1.1.6
   flutter_validate:
-  cached_network_image:
   http:
   equatable:
   flutter_bloc:
   bloc:
+  mailer:
+  toast:
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -1,5 +1,8 @@
+import 'dart:ui';
+
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
+import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -17,6 +20,7 @@ class PageCompleteSignUp extends StatefulWidget {
 }
 
 class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
+  final _isLoading = LoadingBloc();
   final usernameController = TextEditingController();
 
   final passwordController = TextEditingController();
@@ -27,6 +31,7 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
     usernameController.dispose();
     passwordController.dispose();
     confirmController.dispose();
+    _isLoading.dispose();
     super.dispose();
   }
 
@@ -34,6 +39,7 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
 
   void _submit(context, email, fullName, address, phone, password, username,
       confirm) async {
+    _isLoading.loadingSink.add(true);
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
@@ -43,6 +49,8 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
       var dataFromServer = await RepositoryUser.register(
           username, fullName, email, password, phone, address);
       if (dataFromServer == 200) {
+        _showMyDialog("Đăng ký thành công", context);
+        _isLoading.loadingSink.add(false);
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -81,47 +89,70 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
             onTap: () {
               FocusScope.of(context).unfocus();
             },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: size.height * 0.05,
-                ),
-                const Text(
-                  "Xin chào bạn",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Đây là trang đăng ký!",
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                _input("Enter tên hiện thị", usernameController),
-                const SizedBox(height: 10),
-                _input("Enter mật khẩu", passwordController),
-                const SizedBox(height: 10),
-                _input("Enter Nhập lại mật khẩu", confirmController),
-                _buttonGoOn(
-                  context,
-                  widget.email,
-                  widget.fullName,
-                  widget.address,
-                  widget.phone,
-                  usernameController.text,
-                  passwordController.text,
-                  confirmController.text,
-                ),
-              ],
-            ),
+            child: StreamBuilder<bool>(
+                initialData: false,
+                stream: _isLoading.loadingStream,
+                builder: (context, state) {
+                  return Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.05,
+                      ),
+                      const Text(
+                        "Xin chào bạn",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Đây là trang đăng ký!",
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: textColor,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      _input("Enter tên hiện thị", usernameController),
+                      const SizedBox(height: 10),
+                      _input("Enter mật khẩu", passwordController),
+                      const SizedBox(height: 10),
+                      _input("Enter Nhập lại mật khẩu", confirmController),
+                      (state.data)
+                          ? Center(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [
+                                  Text(
+                                    'Đang xử lý...',
+                                    style: TextStyle(
+                                      fontSize: 20,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                  CircularProgressIndicator(
+                                      color: Colors.green),
+                                ],
+                              ),
+                            )
+                          : _buttonGoOn(
+                              context,
+                              widget.email,
+                              widget.fullName,
+                              widget.address,
+                              widget.phone,
+                              usernameController.text,
+                              passwordController.text,
+                              confirmController.text,
+                            ),
+                    ],
+                  );
+                }),
           ),
         ),
       );
@@ -201,6 +232,9 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
                 ),
               ),
               onPressed: () {
+                (message.contains('thành công'))
+                    ? _isLoading.loadingSink.add(false)
+                    : _isLoading.loadingSink.add(false);
                 Navigator.pop(context, true);
               },
             ),

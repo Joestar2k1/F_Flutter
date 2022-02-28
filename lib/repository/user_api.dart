@@ -42,7 +42,6 @@ class RepositoryUser {
 
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
-      print(info);
       return 200;
     } else if (response.statusCode == 201) {
       return 201;
@@ -151,6 +150,22 @@ class RepositoryUser {
       return 201;
     } else {
       return 404;
+    }
+  }
+
+  static Future forgotPassword(String email) async {
+    var client = http.Client();
+    var response = await client.post(
+        Uri.parse('http://10.0.2.2:8000/api/users/Forgot-Password'),
+        body: ({
+          'email': email,
+        }));
+    if (response.statusCode == 200) {
+      return json.decode(response.body)['success'];
+    } else if (response.statusCode == 201) {
+      return json.decode(response.body)['success'];
+    } else {
+      return json.decode(response.body)['success'];
     }
   }
 }
