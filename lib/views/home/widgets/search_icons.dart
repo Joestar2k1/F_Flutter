@@ -48,17 +48,18 @@ class SearchWithIcons extends StatelessWidget {
             child: Stack(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(15),
+                  padding: const EdgeInsets.all(10),
                   width: size.width * 0.12,
                   height: size.height * 0.08,
                   decoration: const BoxDecoration(
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: SvgPicture.asset(
-                    "assets/icons/shopping_bag.svg",
+                  child: Image.asset(
+                    "assets/images/icons-png/shopping_cart.png",
                     fit: BoxFit.cover,
-                    color: textColor,
+                    width: 30,
+                    height: 30,
                   ),
                 ),
                 // Positioned(

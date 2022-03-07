@@ -50,6 +50,7 @@ class RepositoryProduct {
       newProduct = detailsFromJson(jsonString);
 
       reviews = newProduct.reviews;
+
       return newProduct;
     }
     return null;

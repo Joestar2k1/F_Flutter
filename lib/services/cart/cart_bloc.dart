@@ -17,7 +17,8 @@ class CartBloc {
     _eventStream.listen((event) async {
       if (event == CartEvent.fetchCart) {
         getCart();
-      }
+      } else if (event == CartEvent.increment) {
+      } else if (event == CartEvent.decrement) {}
     });
   }
   void getCart() async {

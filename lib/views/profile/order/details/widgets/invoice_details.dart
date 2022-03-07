@@ -9,7 +9,7 @@ class Details extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 500,
-      height: 500,
+      height: 200,
       child: ListView.separated(
         physics: const NeverScrollableScrollPhysics(),
         separatorBuilder: (context, index) => const SizedBox(height: 10),
@@ -37,14 +37,15 @@ class Details extends StatelessWidget {
     );
   }
 
-  Widget _item({String value}) => Container(
-        width: 80,
+  Widget _item({String value}) => SizedBox(
+        width: 82,
         height: 80,
         child: Center(
           child: Text(
             value,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 20,
+              color: Colors.grey.shade500,
             ),
           ),
         ),

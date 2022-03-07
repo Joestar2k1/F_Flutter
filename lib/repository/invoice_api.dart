@@ -8,6 +8,7 @@ import 'package:http/http.dart' as http;
 class RepositoryInvoice {
   static var getInvoiceID;
   static var getContext;
+  static String getAddress;
   static double heightMyOrder() {
     double dem = 0;
     for (var i = 1; i <= RepositoryCart.cartClient[0].products.length; i++) {
@@ -22,12 +23,12 @@ class RepositoryInvoice {
       Uri.parse(
           'http://10.0.2.2:8000/api/invoices/payment/${RepositoryCart.cartClient[0].id}'),
       body: ({
-        'address': RepositoryUser.info.address[0].name,
+        'address': getAddress,
         'total': RepositoryCart.subTotalCart().toString(),
       }),
     );
     if (response.statusCode == 200) {
-      RepositoryCart.cartClient = null;
+      RepositoryCart.cartClient = [];
       return "Đặt hàng thành công";
     } else {
       return "Đặt hàng thất bại";

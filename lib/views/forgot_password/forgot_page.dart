@@ -165,22 +165,21 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
     try {
       final sendReport = await send(message, smtpServer);
-      showToast("Thay đổi thành công, kiểm tra email",
-          gravity: Toast.BOTTOM, duration: 2);
+      showToast("Kiểm tra email", gravity: Toast.BOTTOM, duration: 2);
+      _isLoading.loadingSink.add(false);
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const SignInPage(),
+        ),
+      );
     } on MailerException catch (e) {
-      for (var p in e.problems) {}
+      showToast("Lỗigo", gravity: Toast.BOTTOM, duration: 2);
     }
 
     var connection = PersistentConnection(smtpServer);
     await connection.send(message);
     await connection.close();
-    _isLoading.loadingSink.add(false);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignInPage(),
-      ),
-    );
   }
 
   showToast(String msg, {int duration, int gravity}) {

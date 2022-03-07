@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
@@ -10,11 +8,16 @@ class RepositoryCart {
   static String getID;
   static List<Invoices> cartClient = [];
   static int getQuantity;
-  static subTotalCart() => cartClient[0].products.fold(
-        0,
-        (previousValue, element) =>
-            previousValue + (element.price * element.quantity),
-      );
+  static subTotalCart() {
+    if (cartClient == []) {
+      return 0;
+    }
+    return cartClient[0].products.fold(
+          0,
+          (previousValue, element) =>
+              previousValue + (element.price * element.quantity),
+        );
+  }
 
   static Future<List<Product>> getCart() async {
     var client = http.Client();
@@ -36,7 +39,7 @@ class RepositoryCart {
     return null;
   }
 
-  static Future<void> addToCartDetails(String productID) async {
+  static Future<dynamic> addToCartDetails(String productID) async {
     var client = http.Client();
     var response;
 
@@ -52,7 +55,11 @@ class RepositoryCart {
       }),
     );
 
-    print(response.body);
+    if (response.statusCode == 200) {
+      return 200;
+    } else {
+      return 201;
+    }
   }
 
   static Future<dynamic> addToCart(String productID) async {
@@ -106,7 +113,6 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      print(json.encode(response.body));
     } else {
       throw Exception("update Cart lỗi");
     }
@@ -124,7 +130,6 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      print(response.body);
     } else {
       throw Exception("update Cart lỗi");
     }

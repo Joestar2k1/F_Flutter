@@ -1,12 +1,10 @@
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
-import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/services/home/details_bloc.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
-import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
 import 'package:flutter/material.dart';
 
 import '../../../function.dart';
@@ -112,38 +110,40 @@ class _ProductsHomeState extends State<ProductsHome> {
                 },
                 child: contentCard(size, snapshot, index),
               ),
-              Align(
-                alignment: Alignment.bottomRight,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: Colors.orange.withOpacity(1),
-                    borderRadius: const BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: Center(
-                    child: InkWell(
-                      onTap: () async {
-                        var message = await RepositoryCart.addToCart(
-                            snapshot.data[index].id);
-                        if (message == null) {
-                        } else {
-                          _showMyDialog(message, context);
-                        }
-                      },
-                      child: const Text(
-                        "+",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 25,
-                        ),
-                      ),
-                    ),
+              _button(
+                text: const Text(
+                  "+",
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 25,
                   ),
                 ),
-              )
+                background: Colors.teal.withOpacity(0.7),
+                snapshot: snapshot,
+                index: index,
+                align: Alignment.bottomRight,
+                press: () async {
+                  var message =
+                      await RepositoryCart.addToCart(snapshot.data[index].id);
+                  if (message == null) {
+                  } else {
+                    _showMyDialog(message, context);
+                  }
+                },
+              ),
+              Container(
+                margin: const EdgeInsets.only(right: 5),
+                child: _button(
+                    text: const Icon(
+                      Icons.favorite_outline_sharp,
+                      color: Colors.teal,
+                    ),
+                    background: Colors.white,
+                    snapshot: snapshot,
+                    index: index,
+                    align: Alignment.topRight,
+                    press: () {}),
+              ),
             ],
           ),
         ),
@@ -201,6 +201,27 @@ class _ProductsHomeState extends State<ProductsHome> {
       ],
     );
   }
+
+  Widget _button({Widget text, snapshot, index, align, background, press}) =>
+      Align(
+        alignment: align,
+        child: Container(
+          width: 40,
+          height: 40,
+          decoration: BoxDecoration(
+            color: background,
+            borderRadius: const BorderRadius.all(
+              Radius.circular(30),
+            ),
+          ),
+          child: Center(
+            child: InkWell(
+              onTap: press,
+              child: text,
+            ),
+          ),
+        ),
+      );
 
   Future<void> _showMyDialog(message, context) async {
     return showDialog<void>(

@@ -83,6 +83,7 @@ class Review {
     this.quantity,
     this.postedDate,
     this.status,
+    this.image,
     this.createdAt,
     this.updatedAt,
     this.fullName,
@@ -96,6 +97,7 @@ class Review {
   int quantity;
   DateTime postedDate;
   int status;
+  String image;
   dynamic createdAt;
   dynamic updatedAt;
   String fullName;
@@ -107,6 +109,7 @@ class Review {
         productId: json["productID"],
         content: json["content"],
         quantity: json["quantity"],
+        image: json["image"],
         postedDate: DateTime.parse(json["postedDate"]),
         status: json["status"],
         createdAt: json["created_at"],
@@ -123,6 +126,7 @@ class Review {
         "quantity": quantity,
         "postedDate": postedDate.toIso8601String(),
         "status": status,
+        "image": image,
         "created_at": createdAt,
         "updated_at": updatedAt,
         "fullName": fullName,

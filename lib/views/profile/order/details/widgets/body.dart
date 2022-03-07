@@ -1,5 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/invoiceDetails_models.dart';
+import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
 import 'package:fluter_19pmd/views/profile/order/details/widgets/invoice_details.dart';
@@ -49,21 +50,9 @@ class _BodyState extends State<Body> {
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 10.0),
-                    child: Center(
-                      child: Text(
-                        "Đơn hàng của bạn",
-                        style: TextStyle(
-                          fontSize: 24,
-                          color: Colors.redAccent,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
                   Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 5, vertical: 30),
                     child: Card(
                       elevation: 0,
                       child: Column(
@@ -83,19 +72,26 @@ class _BodyState extends State<Body> {
                             title: "Trạng thái đơn hàng: ",
                             value: (snapshot.data.status == 1)
                                 ? "Đang xác nhận."
-                                : "",
+                                : (snapshot.data.status == 2)
+                                    ? "Đã xác nhận"
+                                    : (snapshot.data.status == 3)
+                                        ? "Delivery"
+                                        : (snapshot.data.status == -1)
+                                            ? "Thành công"
+                                            : "",
                           ),
                           const SizedBox(height: 15),
-                          const Center(
-                            child: Text(
-                              "Chi tiết đơn hàng",
-                              style: TextStyle(
-                                fontSize: 24,
-                                color: Colors.redAccent,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
+                          _buildInfo(
+                              title: "Địa chỉ giao hàng: ",
+                              value: snapshot.data.shippingAddress),
+                          const SizedBox(height: 15),
+                          _buildInfo(
+                              title: "Người đặt hàng: ",
+                              value: snapshot.data.shippingName),
+                          const SizedBox(height: 15),
+                          _buildInfo(
+                              title: "Số điện thoại: ",
+                              value: snapshot.data.shippingPhone),
                           Padding(
                             padding: const EdgeInsets.only(top: 30),
                             child: Row(
@@ -130,15 +126,15 @@ class _BodyState extends State<Body> {
               text: title,
               style: const TextStyle(
                 fontSize: 22,
-                color: Colors.teal,
-                fontWeight: FontWeight.bold,
+                color: Colors.black,
+                // fontWeight: FontWeight.bold,
               ),
             ),
             TextSpan(
               text: value,
-              style: const TextStyle(
+              style: TextStyle(
                 fontSize: 20,
-                color: textColor,
+                color: Colors.grey.shade500,
               ),
             ),
           ],
@@ -147,10 +143,9 @@ class _BodyState extends State<Body> {
 
   Widget _nameTable(title) => Text(
         title,
-        style: const TextStyle(
-          fontSize: 20,
-          color: Colors.teal,
-          fontWeight: FontWeight.bold,
+        style: TextStyle(
+          fontSize: 22,
+          color: Colors.grey.shade600,
         ),
       );
 }

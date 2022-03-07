@@ -5,7 +5,6 @@ import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
-import 'package:fluter_19pmd/views/profile/order/order_page.dart';
 import 'package:flutter/material.dart';
 
 class CheckOutPage extends StatefulWidget {
@@ -177,31 +176,28 @@ class _CheckOutPageState extends State<CheckOutPage> {
               width: 100,
               height: 100,
               child: Image.asset(
-                "assets/images/icons-png/Check.png",
+                "assets/images/icons-png/delivery.png",
                 fit: BoxFit.fill,
               ),
             ),
           ),
-          content: Center(
-            child: Row(
-              children: [
-                Image.asset("assets/images/icons-png/delivery.png",
-                    width: 60, height: 60),
-                const SizedBox(width: 15),
-                Text(
-                  message,
-                  style: const TextStyle(
-                    fontSize: 22,
-                    color: Colors.teal,
-                  ),
-                ),
-              ],
+          content: Container(
+            width: 250,
+            height: 60,
+            child: Text(
+              '-$message',
+              style: const TextStyle(
+                fontSize: 22,
+                color: Colors.teal,
+                overflow: TextOverflow.ellipsis,
+              ),
+              maxLines: 2,
             ),
           ),
           actions: <Widget>[
             TextButton(
               child: const Text(
-                'Quay lại giỏ hàng',
+                'Đã rõ',
                 style: TextStyle(
                   fontSize: 20,
                   color: Colors.teal,
@@ -212,23 +208,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const CartPage(),
-                  ),
-                );
-              },
-            ),
-            TextButton(
-              child: const Text(
-                'Xem đơn hàng',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.teal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const OrderPage(),
                   ),
                 );
               },

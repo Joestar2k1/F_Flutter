@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-
 String convertToVND(int price) {
   var current = price.toString().split('');
   var newPrice = '';

@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
@@ -19,6 +20,7 @@ class DetailsProductScreen extends StatefulWidget {
 
 class _DetailsProductScreenState extends State<DetailsProductScreen> {
   final _viewDetails = ProductDetailsBloc();
+  final _isLoading = LoadingBloc();
   @override
   void initState() {
     super.initState();
@@ -28,6 +30,7 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
   @override
   void dispose() {
     _viewDetails.dispose();
+    _isLoading.dispose();
     super.dispose();
   }
 
@@ -82,38 +85,63 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          SizedBox(
-            width: size.width * 0.5,
-            height: size.height * 0.08,
-            child: ElevatedButton(
-              style: ButtonStyle(
-                backgroundColor: MaterialStateProperty.all(
-                  buttonColor,
-                ),
-              ),
-              onPressed: () async {
-                await RepositoryCart.addToCartDetails(RepositoryProduct.getID);
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const CartPage(),
-                    ));
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
-                  Icon(Icons.card_travel),
-                  Text(
-                    "Thêm giỏ hàng",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white,
+          StreamBuilder<bool>(
+              initialData: false,
+              stream: _isLoading.loadingStream,
+              builder: (context, state) {
+                return SizedBox(
+                  width: size.width * 0.5,
+                  height: size.height * 0.08,
+                  child: ElevatedButton(
+                    style: ButtonStyle(
+                      backgroundColor: MaterialStateProperty.all(
+                        buttonColor,
+                      ),
                     ),
+                    onPressed: () async {
+                      _isLoading.loadingSink.add(true);
+
+                      var data = await RepositoryCart.addToCartDetails(
+                          RepositoryProduct.getID);
+                      if (data == 200) {
+                        _isLoading.loadingSink.add(false);
+                        Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const CartPage(),
+                            ));
+                      } else {}
+                    },
+                    child: (state.data)
+                        ? Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.car_repair_sharp),
+                              Text(
+                                "Đang xử lý ...",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          )
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [
+                              Icon(Icons.card_travel),
+                              Text(
+                                "Thêm giỏ hàng",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ],
+                          ),
                   ),
-                ],
-              ),
-            ),
-          ),
+                );
+              }),
         ],
       ),
     );

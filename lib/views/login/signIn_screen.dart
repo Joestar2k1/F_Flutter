@@ -128,6 +128,7 @@ class _SignInPageState extends State<SignInPage> {
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
+            border: OutlineInputBorder(),
             errorStyle: TextStyle(fontSize: 18),
             labelText: "Enter email",
             labelStyle: TextStyle(fontSize: 20),
@@ -146,15 +147,15 @@ class _SignInPageState extends State<SignInPage> {
   Widget _passwordLogin() => Padding(
         padding: const EdgeInsets.only(top: 10, bottom: 20),
         child: TextFormField(
-          autofocus: false,
           controller: passwordController,
           obscureText: false,
           style: const TextStyle(fontSize: 20),
           keyboardType: TextInputType.emailAddress,
           decoration: const InputDecoration(
-            focusedBorder: InputBorder.none,
-            errorStyle: TextStyle(fontSize: 25),
+            border: OutlineInputBorder(),
+            errorStyle: TextStyle(fontSize: 20),
             labelText: "Enter password",
+            hintText: "*********",
             labelStyle: TextStyle(fontSize: 20),
           ),
           validator: (value) {
@@ -183,15 +184,16 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
 
-  Widget _forgotAndSignUp() => Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Widget _forgotAndSignUp() => Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Row(
             children: [
+              const SizedBox(width: 60),
               const Text(
                 "Chưa có tài khoản?",
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 18,
                 ),
               ),
               TextButton(
@@ -223,7 +225,7 @@ class _SignInPageState extends State<SignInPage> {
             child: const Text(
               "Quên mật khẩu ?",
               style: TextStyle(
-                fontSize: 16,
+                fontSize: 18,
                 color: Colors.teal,
               ),
             ),

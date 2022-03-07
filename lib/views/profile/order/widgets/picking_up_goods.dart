@@ -96,14 +96,6 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "#${snapshot.data[index].id}",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Color(0xFFF34848),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 Row(
                   children: [
                     SizedBox(
@@ -114,39 +106,16 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
                     const SizedBox(
                       width: 40,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Đơn hàng trái cây",
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Color(0xFF717171),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        _button(size),
-                      ],
-                    ),
+                    _contentCardRight(snapshot, index, size),
                   ],
-                ),
-                Text(
-                  "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Color(0xFF717171),
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
               ],
             ),
           ),
         ),
       );
-  Widget _button(size) => SizedBox(
+
+  Widget _button({icon, text, id}) => SizedBox(
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
@@ -154,15 +123,15 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
             ),
           ),
           onPressed: () {
-            checkOut();
+            checkOut(id);
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.cancel),
+            children: [
+              icon,
               Text(
-                "Hủy đơn hàng",
-                style: TextStyle(
+                text,
+                style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                 ),
@@ -171,20 +140,50 @@ class _PickingUpGoodsState extends State<PickingUpGoods> {
           ),
         ),
       );
-  void checkOut() async {
+
+  Widget _contentCardRight(snapshot, index, size) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
+          style: const TextStyle(
+            fontSize: 20,
+            color: Color(0xFF717171),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _button(
+            icon: const Icon(Icons.cancel_presentation),
+            text: 'Hủy đơn hàng',
+            id: snapshot.data[index].id),
+      ],
+    );
+  }
+
+  void checkOut(id) async {
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()
-      ..showSnackBar(const SnackBar(
+      ..showSnackBar(SnackBar(
         elevation: 10,
         backgroundColor: Colors.teal,
-        content: Text(
-          'Bạn không thể hủy đơn!',
+        content: const Text(
+          'Bạn muốn hủy đơn hàng?',
           style: TextStyle(
             fontSize: 22,
           ),
         ),
-        duration: Duration(seconds: 6),
-        // SnackBarAction
+        duration: const Duration(seconds: 6),
+        action: SnackBarAction(
+          label: 'Ok',
+          onPressed: () async {
+            await RepositoryInvoice.cancelOrder(id);
+            _invoiceSuccess.eventSink.add(InvoiceEvent.fetchWaitingToAccept);
+          },
+        ), // SnackBarAction
       ));
   }
 }
