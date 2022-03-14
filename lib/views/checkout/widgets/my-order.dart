@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +7,7 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class MyOrder extends StatelessWidget {
   MyOrder({Key key, this.carts}) : super(key: key);
-  List<Product> carts;
+  List<Cart> carts;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;

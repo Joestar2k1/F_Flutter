@@ -1,8 +1,13 @@
+import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
+import 'package:fluter_19pmd/models/favorites_model.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/repository/favorites_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/catetogory/cate_bloc.dart';
+import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
+import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
@@ -15,7 +20,7 @@ class AllPage extends StatefulWidget {
 
 class _AllPageState extends State<AllPage> {
   final cateBloc = CategoryBloc();
-
+  final _favoriteBloc = ProfileBloc();
   @override
   void initState() {
     cateBloc.eventSink.add(CategoryEvent.fetchAll);
@@ -25,58 +30,62 @@ class _AllPageState extends State<AllPage> {
   @override
   void dispose() {
     cateBloc.dispose();
+    _favoriteBloc.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
     return Column(
       children: [
         Expanded(
           child: StreamBuilder<List<Product>>(
+              initialData: null,
               stream: cateBloc.categoryStream,
-              initialData: [],
               builder: (context, snapshot) {
-                if (snapshot.hasError) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Text(
-                        snapshot.error,
-                        style: const TextStyle(fontSize: 20),
-                      ),
-                    ],
-                  );
-                } else if (snapshot.hasData == false) {
+                if (snapshot.data == null) {
                   return const Center(
                     child: CircularProgressIndicator(),
                   );
                 } else {
                   return GridView.builder(
-                      physics: const BouncingScrollPhysics(),
                       gridDelegate:
                           const SliverGridDelegateWithFixedCrossAxisCount(
                         crossAxisCount: 2,
-                        childAspectRatio: 0.8,
+                        childAspectRatio: 0.7,
                       ),
                       itemCount: snapshot.data.length,
                       itemBuilder: (context, index) {
-                        return Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Container(
-                            height: size.height * 0.37,
-                            width: size.width * 0.45,
-                            decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: const BorderRadius.all(
-                                  Radius.circular(30),
+                        return InkWell(
+                          onTap: () {
+                            RepositoryProduct.getID = snapshot.data[index].id;
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => DetailsProductScreen(
+                                  products: snapshot.data[index],
                                 ),
-                                border: Border.all(
-                                  width: 1.5,
-                                  color: Colors.teal,
-                                )),
-                            child: _itemProduct(snapshot, index, context, size),
+                              ),
+                            );
+                          },
+                          child: Card(
+                            elevation: 5,
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Center(
+                                    child: SizedBox(
+                                      height: 150,
+                                      child: Image.network(
+                                          snapshot.data[index].image),
+                                    ),
+                                  ),
+                                  _contentCard(snapshot, index, context),
+                                ],
+                              ),
+                            ),
                           ),
                         );
                       });
@@ -87,100 +96,95 @@ class _AllPageState extends State<AllPage> {
     );
   }
 
-  Stack _itemProduct(AsyncSnapshot<List<Product>> snapshot, int index,
-      BuildContext context, Size size) {
-    return Stack(
+  Widget _contentCard(
+      AsyncSnapshot<List<Product>> snapshot, int index, BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        InkWell(
-          onTap: () {
-            RepositoryProduct.getID = snapshot.data[index].id;
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                builder: (context) => const DetailsProductScreen(),
-              ),
-            );
-          },
-          child: Column(
+        Text(
+          snapshot.data[index].name,
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        const SizedBox(height: 10),
+        RichText(
+          text: TextSpan(
             children: [
-              SizedBox(
-                width: size.width,
-                height: size.height * 0.21,
-                child: Hero(
-                  tag: snapshot.data[index].id,
-                  child: Image.asset(
-                      "assets/images/products/${snapshot.data[index].image}"),
+              TextSpan(
+                text: "${convertToVND(snapshot.data[index].price)}đ",
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Colors.grey.shade500,
                 ),
               ),
-              Text(
-                snapshot.data[index].name,
-                style: const TextStyle(
-                  fontSize: 25,
-                  color: Color(0xFF717171),
-                  fontWeight: FontWeight.bold,
+              TextSpan(
+                text: "\\",
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Colors.grey.shade500,
                 ),
               ),
-              const SizedBox(height: 10),
-              RichText(
-                text: TextSpan(
-                  children: [
-                    TextSpan(
-                      text: "${convertToVND(snapshot.data[index].price)}đ",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF717171),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const TextSpan(
-                      text: " \\ ",
-                      style: TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF717171),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    TextSpan(
-                      text: " ${snapshot.data[index].unit}",
-                      style: const TextStyle(
-                        fontSize: 18,
-                        color: Color(0xFF717171),
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+              TextSpan(
+                text: " ${snapshot.data[index].unit}",
+                style: TextStyle(
+                  fontSize: 19,
+                  color: Colors.grey.shade500,
                 ),
               ),
             ],
           ),
         ),
-        Align(
-          alignment: Alignment.bottomRight,
-          child: Container(
-            width: 40,
-            height: 40,
-            decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(1),
-              borderRadius: const BorderRadius.all(
-                Radius.circular(30),
-              ),
-            ),
-            child: Center(
-              child: InkWell(
-                onTap: () {
-                  RepositoryCart.addToCart(snapshot.data[index].id);
+        const SizedBox(height: 10),
+        Row(
+          children: [
+            SizedBox(
+              height: 40,
+              width: 130,
+              child: ElevatedButton(
+                style: ButtonStyle(
+                  backgroundColor: MaterialStateProperty.all(buttonColor),
+                ),
+                onPressed: () async {
+                  var message =
+                      await RepositoryCart.addToCart(snapshot.data[index].id);
+                  if (message == null) {
+                  } else {
+                    showDialog(
+                        context: context,
+                        builder: (context) {
+                          return AlertDiaLogCustom(
+                              title: "Thành công",
+                              content: "-Thêm sản phẩm vào giỏ hàng.",
+                              gif: "assets/gif/success.gif",
+                              textButton: "Okay");
+                        });
+                  }
                 },
-                child: const Text(
-                  "+",
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 25,
-                  ),
+                child: const Icon(
+                  Icons.shopping_cart,
+                  color: Colors.white,
                 ),
               ),
             ),
-          ),
-        )
+            IconButton(
+              onPressed: () {
+                _favoriteBloc.eventSink.add(UserEvent.showFavorite);
+              },
+              icon: snapshot.data[index].checkFavorite
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                    )
+                  : const Icon(
+                      Icons.favorite_border,
+                      color: Colors.teal,
+                    ),
+            )
+          ],
+        ),
       ],
     );
   }

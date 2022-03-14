@@ -4,26 +4,15 @@
 
 import 'dart:convert';
 
-List<Product> productFromJson(String str) {
-  return List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
-}
+import 'package:fluter_19pmd/models/reviews_models.dart';
+
+List<Product> productFromJson(String str) =>
+    List<Product>.from(json.decode(str).map((x) => Product.fromJson(x)));
 
 String productToJson(List<Product> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Product {
-  String id;
-  String name;
-  int price;
-  int stock;
-  String type;
-  String unit;
-  String description;
-  String image;
-  int status;
-  int quantity;
-  dynamic createdAt;
-  dynamic updatedAt;
   Product({
     this.id,
     this.name,
@@ -34,10 +23,25 @@ class Product {
     this.description,
     this.image,
     this.status,
-    this.quantity,
     this.createdAt,
     this.updatedAt,
+    this.checkFavorite,
+    this.reviews,
   });
+
+  String id;
+  String name;
+  int price;
+  int stock;
+  String type;
+  String unit;
+  String description;
+  String image;
+  int status;
+  dynamic createdAt;
+  dynamic updatedAt;
+  bool checkFavorite;
+  List<Review> reviews;
 
   factory Product.fromJson(Map<String, dynamic> json) => Product(
         id: json["id"],
@@ -46,12 +50,14 @@ class Product {
         stock: json["stock"],
         type: json["type"],
         unit: json["unit"],
-        quantity: json["quantity"],
         description: json["description"],
         image: json["image"],
         status: json["status"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
+        checkFavorite: json["checkFavorite"],
+        reviews:
+            List<Review>.from(json["reviews"].map((x) => Review.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
@@ -61,12 +67,13 @@ class Product {
         "stock": stock,
         "type": type,
         "unit": unit,
-        "quantity": quantity,
         "description": description,
         "image": image,
         "status": status,
         "created_at": createdAt,
         "updated_at": updatedAt,
+        "checkFavorite": checkFavorite,
+        "reviews": List<dynamic>.from(reviews.map((x) => x.toJson())),
       };
   @override
   String toString() {

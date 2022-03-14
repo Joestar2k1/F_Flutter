@@ -1,10 +1,9 @@
-import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class AppBarDetails extends StatelessWidget {
-  const AppBarDetails({Key key}) : super(key: key);
-
+  const AppBarDetails({Key key, this.checkFavorite}) : super(key: key);
+  final bool checkFavorite;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -14,20 +13,28 @@ class AppBarDetails extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const HomePage(),
-                ),
-              );
+              Navigator.pop(context);
             },
             child: SvgPicture.asset(
               "assets/icons/arrow_back.svg",
-              color: Colors.white,
+              color: Colors.black,
               height: 40,
               width: 40,
             ),
           ),
+          InkWell(
+              onTap: () {},
+              child: (checkFavorite)
+                  ? const Icon(
+                      Icons.favorite,
+                      color: Colors.red,
+                      size: 40,
+                    )
+                  : const Icon(
+                      Icons.favorite_border_rounded,
+                      color: Colors.black,
+                      size: 40,
+                    )),
         ],
       ),
     );

@@ -1,16 +1,24 @@
+// To parse this JSON data, do
+//
+//     final invoices = invoicesFromJson(jsonString);
+
 import 'dart:convert';
 
-import 'package:fluter_19pmd/models/product_models.dart';
+Invoices invoiceFromJson(String str) => Invoices.fromJson(json.decode(str));
 
-List<Invoices> invoiceFromJson(String str) =>
+String invoiceToJson(Invoices data) => json.encode(data.toJson());
+
+List<Invoices> invoicesFromJson(String str) =>
     List<Invoices>.from(json.decode(str).map((x) => Invoices.fromJson(x)));
 
-String invoiceToJson(List<Invoices> data) =>
+String invoicesToJson(List<Invoices> data) =>
     json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class Invoices {
   Invoices({
     this.id,
+    this.userId,
+    this.employeeId,
     this.shippingName,
     this.shippingAddress,
     this.shippingPhone,
@@ -24,8 +32,10 @@ class Invoices {
   });
 
   String id;
+  String userId;
+  dynamic employeeId;
   String shippingName;
-  String shippingAddress;
+  dynamic shippingAddress;
   String shippingPhone;
   int total;
   DateTime dateCreated;
@@ -33,10 +43,12 @@ class Invoices {
   int status;
   dynamic createdAt;
   dynamic updatedAt;
-  List<Product> products;
+  List<Cart> products;
 
   factory Invoices.fromJson(Map<String, dynamic> json) => Invoices(
         id: json["id"],
+        userId: json["userID"],
+        employeeId: json["employeeID"],
         shippingName: json["shippingName"],
         shippingAddress: json["shippingAddress"],
         shippingPhone: json["shippingPhone"],
@@ -46,12 +58,14 @@ class Invoices {
         status: json["status"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        products: List<Product>.from(
-            json["products"].map((x) => Product.fromJson(x))),
+        products:
+            List<Cart>.from(json["products"].map((x) => Cart.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "userID": userId,
+        "employeeID": employeeId,
         "shippingName": shippingName,
         "shippingAddress": shippingAddress,
         "shippingPhone": shippingPhone,
@@ -63,8 +77,64 @@ class Invoices {
         "updated_at": updatedAt,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
       };
-  @override
-  String toString() {
-    return toJson().toString();
-  }
+}
+
+class Cart {
+  Cart({
+    this.id,
+    this.name,
+    this.price,
+    this.stock,
+    this.type,
+    this.unit,
+    this.description,
+    this.image,
+    this.status,
+    this.createdAt,
+    this.updatedAt,
+    this.quantity,
+  });
+
+  String id;
+  String name;
+  int price;
+  int stock;
+  String type;
+  String unit;
+  String description;
+  String image;
+  int status;
+  dynamic createdAt;
+  dynamic updatedAt;
+  int quantity;
+
+  factory Cart.fromJson(Map<String, dynamic> json) => Cart(
+        id: json["id"],
+        name: json["name"],
+        price: json["price"],
+        stock: json["stock"],
+        type: json["type"],
+        unit: json["unit"],
+        description: json["description"],
+        image: json["image"],
+        status: json["status"],
+        createdAt: json["created_at"],
+        updatedAt: json["updated_at"],
+        quantity: json["quantity"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "id": id,
+        "name": name,
+        "price": price,
+        "stock": stock,
+        "type": type,
+        "unit": unit,
+        "description": description,
+        "image": image,
+        "status": status,
+        "created_at": createdAt,
+        "updated_at": updatedAt,
+        "quantity": quantity,
+      };
 }

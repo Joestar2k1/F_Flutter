@@ -50,20 +50,17 @@ class RepositoryUser {
     }
   }
 
-  static Future<void> logout(context) async {
+  static Future<dynamic> logout(context) async {
     var client = http.Client();
     var response =
         await client.get(Uri.parse('http://10.0.2.2:8000/api/users/logout'));
     if (response.statusCode == 200) {
       await Future.delayed(const Duration(seconds: 2));
       info = User();
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => const SignInPage(),
-        ),
-      );
-    } else {}
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
   }
 
   static Future<dynamic> updateAccount(String username, String fullName,
@@ -91,9 +88,8 @@ class RepositoryUser {
           }));
     }
     if (response.statusCode == 200) {
-      print(json.decode(response.body));
       info = userFromJson(response.body);
-      return "Chỉnh sửa thành công";
+      return "Đã chỉnh sửa thông tin";
     } else if (response.statusCode == 201) {
       return "Email đã tồn tại";
     } else {

@@ -25,7 +25,7 @@ class _BodyState extends State<Body> {
       'isCheck': false,
     },
     {
-      'text': "Rau salad",
+      'text': "Rau Củ",
       'isCheck': false,
     },
   ]);

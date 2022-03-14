@@ -33,7 +33,7 @@ class CategoryBloc {
           _categorySink.addError('get All don\'t completed');
         }
       } else if (event == CategoryEvent.fetchFruit) {
-        var products = await RepositoryProduct.getFruitProduct();
+        var products = await RepositoryProduct.getFruit();
         try {
           if (products != null) {
             _categorySink.add(products);
@@ -44,7 +44,7 @@ class CategoryBloc {
           _categorySink.addError('get fruit don\'t completed1');
         }
       } else if (event == CategoryEvent.fetchMeet) {
-        var products = await RepositoryProduct.getMeetProduct();
+        var products = await RepositoryProduct.getMeat();
         try {
           if (products != null) {
             _categorySink.add(products);
@@ -55,7 +55,7 @@ class CategoryBloc {
           _categorySink.addError('get meet don\'t completed1');
         }
       } else if (event == CategoryEvent.fetchDrink) {
-        var products = await RepositoryProduct.getDrinkProduct();
+        var products = await RepositoryProduct.getDrink();
         try {
           if (products != null) {
             _categorySink.add(products);
@@ -66,7 +66,7 @@ class CategoryBloc {
           _categorySink.addError('get drink don\'t completed1');
         }
       } else if (event == CategoryEvent.fetchVegetable) {
-        var products = await RepositoryProduct.getVegetableProduct();
+        var products = await RepositoryProduct.getVegetable();
         try {
           if (products != null) {
             _categorySink.add(products);

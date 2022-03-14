@@ -73,9 +73,8 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
         });
   }
 
-  Widget itemCart(size, index, snapshot, context) => InkWell(
+  Widget itemCart(size, index, snapshot, results) => InkWell(
         onTap: () {
-          // showAlertDialog(context);
           RepositoryInvoice.getInvoiceID = snapshot.data[index].id;
           Navigator.push(
             context,
@@ -96,14 +95,6 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  "#${snapshot.data[index].id}",
-                  style: const TextStyle(
-                    fontSize: 20,
-                    color: Color(0xFFF34848),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
                 Row(
                   children: [
                     SizedBox(
@@ -114,39 +105,39 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
                     const SizedBox(
                       width: 40,
                     ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          "Đơn hàng trái cây",
-                          style: TextStyle(
-                            fontSize: 24,
-                            color: Color(0xFF717171),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        _button(size, snapshot.data[index].id),
-                      ],
-                    ),
+                    _contentCardRight(snapshot, index, size, results),
                   ],
-                ),
-                Text(
-                  "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
-                  style: const TextStyle(
-                    fontSize: 24,
-                    color: Color(0xFF717171),
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
               ],
             ),
           ),
         ),
       );
-  Widget _button(size, id) => SizedBox(
+
+  Widget _contentCardRight(snapshot, index, size, results) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
+          style: const TextStyle(
+            fontSize: 20,
+            color: Color(0xFF717171),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        const SizedBox(
+          height: 10,
+        ),
+        _button(
+            icon: const Icon(Icons.cancel_presentation),
+            text: 'Hủy đơn hàng',
+            id: snapshot.data[index].id),
+      ],
+    );
+  }
+
+  Widget _button({icon, text, id}) => SizedBox(
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
@@ -158,11 +149,11 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
           },
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
-            children: const [
-              Icon(Icons.cancel),
+            children: [
+              icon,
               Text(
-                "Hủy đơn hàng",
-                style: TextStyle(
+                text,
+                style: const TextStyle(
                   fontSize: 20,
                   color: Colors.white,
                 ),
@@ -171,6 +162,7 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
           ),
         ),
       );
+
   void checkOut(id) async {
     ScaffoldMessenger.of(context)
       ..removeCurrentSnackBar()

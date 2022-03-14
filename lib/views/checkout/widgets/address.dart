@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/user_models.dart';
+import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/checkout/address_change.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
@@ -77,21 +78,32 @@ class _AddressInPaymentState extends State<AddressInPayment> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Container(
-                              margin: const EdgeInsets.only(top: 15),
-                              width: size.width * 0.6,
-                              height: 50,
-                              child: Text(
-                                snapshot.data[0].name,
-                                style: TextStyle(
-                                  fontSize: 23,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey.shade900,
-                                  overflow: TextOverflow.ellipsis,
-                                ),
-                                maxLines: 2,
-                              ),
-                            ),
+                            StreamBuilder<String>(
+                                initialData: snapshot.data[0].name,
+                                stream: _changeBLoc.chooseStream,
+                                builder: (context, address) {
+                                  if (address.data == null) {
+                                    return const Center(
+                                        child: CircularProgressIndicator(
+                                      color: Colors.green,
+                                    ));
+                                  }
+                                  return Container(
+                                    margin: const EdgeInsets.only(top: 15),
+                                    width: size.width * 0.6,
+                                    height: 50,
+                                    child: Text(
+                                      address.data,
+                                      style: TextStyle(
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.grey.shade900,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                      maxLines: 2,
+                                    ),
+                                  );
+                                }),
                             TextButton(
                               onPressed: () {
                                 (state.data)
@@ -100,9 +112,9 @@ class _AddressInPaymentState extends State<AddressInPayment> {
                                     : _changeBLoc.eventSink
                                         .add(ChangeEvent.open);
                               },
-                              child: const Text(
-                                "Thay đổi",
-                                style: TextStyle(
+                              child: Text(
+                                (state.data) ? "Đóng" : "Thay đổi",
+                                style: const TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
                                   color: buttonColor,
@@ -112,7 +124,7 @@ class _AddressInPaymentState extends State<AddressInPayment> {
                           ],
                         ),
                         (state.data)
-                            ? Container(
+                            ? SizedBox(
                                 height: RepositoryUser.getHeightAddress(),
                                 child: ListView.separated(
                                     separatorBuilder: (context, index) =>
@@ -132,7 +144,14 @@ class _AddressInPaymentState extends State<AddressInPayment> {
                                           ),
                                           IconButton(
                                             iconSize: 30,
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              _changeBLoc.chooseSink.add(
+                                                  snapshot.data[index].name);
+                                              RepositoryInvoice.getAddress =
+                                                  snapshot.data[index].name;
+                                              _changeBLoc.eventSink
+                                                  .add(ChangeEvent.close);
+                                            },
                                             icon: const Icon(
                                               Icons.add,
                                               color: Colors.green,

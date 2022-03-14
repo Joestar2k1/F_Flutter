@@ -2,5 +2,6 @@ enum CartEvent {
   delete,
   addToCart,
   fetchCart,
-  fetchQuantityCart,
+  increment,
+  decrement,
 }

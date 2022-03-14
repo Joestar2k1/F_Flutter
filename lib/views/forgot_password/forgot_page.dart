@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
@@ -30,7 +31,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: Scaffold(body: _form(size)),
+      child: Scaffold(backgroundColor: Colors.white, body: _form(size)),
     );
   }
 
@@ -51,9 +52,12 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(
-                          height: size.height * 0.2,
-                        ),
+                        Center(
+                            child: Image.network(
+                          'https://www.freeiconspng.com/uploads/forgot-password-icon-8.jpg',
+                          width: 250,
+                          height: 250,
+                        )),
                         InkWell(
                           onTap: () {
                             Navigator.pop(context);
@@ -62,17 +66,17 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                               const Icon(Icons.arrow_back, color: Colors.teal),
                         ),
                         SizedBox(
-                          height: size.height * 0.07,
+                          height: size.height * 0.05,
                         ),
-                        const Text(
+                        Text(
                           "Nhập Email mà bạn đã đăng ký",
                           style: TextStyle(
-                            fontSize: 20,
-                            color: textColor,
+                            fontSize: 22,
+                            color: Colors.grey.shade600,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        _emailLogin(),
+                        _email(),
                         const SizedBox(height: 20),
                         _buttonLogin(context, emailController.text),
                         (state.data)
@@ -99,7 +103,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         ),
       );
-  Widget _emailLogin() => Padding(
+  Widget _email() => Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 10),
         child: TextFormField(
           controller: emailController,
@@ -107,8 +111,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
+            border: OutlineInputBorder(),
             errorStyle: TextStyle(fontSize: 18),
-            labelText: "Enter email",
+            labelText: "Nhập email",
             labelStyle: TextStyle(fontSize: 20),
           ),
           validator: (value) {
@@ -152,39 +157,64 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
     String username = 'iloverussian2311@gmail.com';
     String password = '23112001aZ';
     var data = await RepositoryUser.forgotPassword(email);
-    // ignore: deprecated_member_use
-    final smtpServer = gmail(username, password);
-    final message = Message()
-      ..from = Address(username, 'BeHealthy C9')
-      ..recipients.add(email)
-      ..ccRecipients.addAll([email, email])
-      ..bccRecipients.add(Address(email))
-      ..subject = 'Bạn đã quên mật khẩu 😀 ${DateTime.now()}'
-      ..html =
-          "<h1>Xin chào</h1>\n<p>Mật khẩu mới của tài khoản $email là $data</p>\n<p>Chúc bạn một ngày tốt lành</p>";
 
-    try {
-      final sendReport = await send(message, smtpServer);
-      showToast("Thay đổi thành công, kiểm tra email",
-          gravity: Toast.BOTTOM, duration: 2);
-    } on MailerException catch (e) {
-      for (var p in e.problems) {}
+    if (data == "Thất bại") {
+      _isLoading.loadingSink.add(false);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDiaLogCustom(
+                title: "Thất bại",
+                content: "-Email của bạn chưa được đăng ký trong hệ thống!.",
+                gif: "assets/gif/fail.gif",
+                textButton: "Okay");
+          });
+    } else {
+      // ignore: deprecated_member_use
+      final smtpServer = gmail(username, password);
+      final message = Message()
+        ..from = Address(username, 'BeHealthy C9')
+        ..recipients.add(email)
+        ..ccRecipients.addAll([email, email])
+        ..bccRecipients.add(Address(email))
+        ..subject = 'Bạn đã quên mật khẩu 😀 ${DateTime.now()}'
+        ..html =
+            "<h1>Xin chào</h1>\n<p>Mật khẩu mới của tài khoản $email là $data</p>\n<p>Chúc bạn một ngày tốt lành</p>";
+
+      try {
+        final sendReport = await send(message, smtpServer);
+
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDiaLogCustom(
+                  title: "Thành công",
+                  content: "-Bạn hãy kiểm tra hòm thư Email của mình.",
+                  gif: "assets/gif/success.gif",
+                  textButton: "Okay");
+            });
+        _isLoading.loadingSink.add(false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignInPage(),
+          ),
+        );
+      } on MailerException catch (e) {
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDiaLogCustom(
+                  title: "Thất bại",
+                  content: "-Email không phản h!.",
+                  gif: "assets/gif/fail.gif",
+                  textButton: "Okay");
+            });
+      }
+
+      var connection = PersistentConnection(smtpServer);
+      await connection.send(message);
+      await connection.close();
     }
-
-    var connection = PersistentConnection(smtpServer);
-    await connection.send(message);
-    await connection.close();
-    _isLoading.loadingSink.add(false);
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const SignInPage(),
-      ),
-    );
-  }
-
-  showToast(String msg, {int duration, int gravity}) {
-    Toast.show(msg, context,
-        duration: duration, gravity: gravity, backgroundColor: Colors.teal);
   }
 }

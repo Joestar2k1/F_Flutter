@@ -1,4 +1,3 @@
-import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/counter_event.dart';
 import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/views/details_product/counter_bloc.dart';
@@ -29,138 +28,141 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const SizedBox(
-            height: 15,
-          ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Text(
-              "Thông tin sản phẩm",
-              style: TextStyle(
-                fontSize: 23,
-                fontFamily: "RobotoSlab",
-                color: Colors.orange.shade400,
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20.0),
-            child: SizedBox(
-              height: 120,
-              width: size.width,
-              child: Text(
-                widget.description,
-                maxLines: 5,
-                style: const TextStyle(
-                  fontSize: 20,
-                  letterSpacing: 1.5,
-                  fontFamily: "RobotoSlab",
-                  color: textColor,
-                  overflow: TextOverflow.ellipsis,
+    return StreamBuilder<int>(
+        initialData: 1,
+        stream: _counterBloc.counterStream,
+        builder: (context, value) {
+          _counterBloc.totalSink.add(value.data * widget.price);
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 20.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(
+                  height: 15,
                 ),
-              ),
-            ),
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Số lượng:",
-                style: TextStyle(fontSize: 22, color: Colors.teal),
-              ),
-              _counter(),
-            ],
-          ),
-          const SizedBox(height: 30),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              const Text(
-                "Tổng: ",
-                style: TextStyle(fontSize: 22, color: Colors.teal),
-              ),
-              StreamBuilder<int>(
-                  initialData: widget.price,
-                  stream: _counterBloc.totalStream,
-                  builder: (context, snapshot) {
-                    return Text(
-                      "${convertToVND(snapshot.data)}đ",
-                      style: const TextStyle(fontSize: 20),
-                    );
-                  }),
-            ],
-          )
-          // const BottomNav(),
-        ],
-      ),
-    );
-  }
-
-  Widget _counter() => StreamBuilder<int>(
-      initialData: 1,
-      stream: _counterBloc.counterStream,
-      builder: (context, snapshot) {
-        return SizedBox(
-          width: 120,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.teal.shade200,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(30),
-                  ),
-                ),
-                child: Center(
-                  child: IconButton(
-                    onPressed: () {
-                      _counterBloc.eventSink.add(CounterEvent.decrement);
-                    },
-                    icon: const Icon(
-                      Icons.remove,
-                      color: Colors.white,
+                const Align(
+                  alignment: Alignment.topCenter,
+                  child: Text(
+                    "Thông tin sản phẩm",
+                    style: TextStyle(
+                      fontSize: 23,
+                      fontFamily: "RobotoSlab",
+                      color: Colors.black87,
                     ),
                   ),
                 ),
-              ),
-              Text(
-                snapshot.data.toString(),
-                style: const TextStyle(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Container(
-                width: 40,
-                height: 40,
-                decoration: BoxDecoration(
-                  color: Colors.teal.shade200,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(30),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20.0),
+                  child: SizedBox(
+                    height: 120,
+                    width: size.width,
+                    child: Text(
+                      widget.description,
+                      maxLines: 5,
+                      style: TextStyle(
+                        fontSize: 20,
+                        letterSpacing: 1.5,
+                        color: Colors.grey.shade700,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                    ),
                   ),
                 ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Số lượng:",
+                      style:
+                          TextStyle(fontSize: 22, color: Colors.grey.shade600),
+                    ),
+                    _counter(value.data),
+                  ],
+                ),
+                const SizedBox(height: 30),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      "Tổng: ",
+                      style:
+                          TextStyle(fontSize: 22, color: Colors.grey.shade600),
+                    ),
+                    StreamBuilder<int>(
+                        initialData: widget.price,
+                        stream: _counterBloc.totalStream,
+                        builder: (context, snapshot) {
+                          return Text(
+                            "${convertToVND(snapshot.data)}đ",
+                            style: TextStyle(
+                                fontSize: 20, color: Colors.grey.shade600),
+                          );
+                        }),
+                  ],
+                )
+                // const BottomNav(),
+              ],
+            ),
+          );
+        });
+  }
+
+  Widget _counter(int value) => SizedBox(
+        width: 120,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.teal.shade200,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(30),
+                ),
+              ),
+              child: Center(
                 child: IconButton(
                   onPressed: () {
-                    if (snapshot.data < widget.stock) {
-                      _counterBloc.eventSink.add(CounterEvent.increment);
-                    }
+                    _counterBloc.eventSink.add(CounterEvent.decrement);
                   },
                   icon: const Icon(
-                    Icons.add,
+                    Icons.remove,
                     color: Colors.white,
                   ),
                 ),
               ),
-            ],
-          ),
-        );
-      });
+            ),
+            Text(
+              value.toString(),
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: Colors.teal.shade200,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(30),
+                ),
+              ),
+              child: IconButton(
+                onPressed: () {
+                  if (value < widget.stock) {
+                    _counterBloc.eventSink.add(CounterEvent.increment);
+                  }
+                },
+                icon: const Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
 }

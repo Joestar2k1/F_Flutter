@@ -61,7 +61,7 @@ class _HomePageState extends State<HomePage>
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        backgroundColor: Colors.grey.shade400,
+        backgroundColor: Colors.grey,
         appBar: (selectedIndex == 0)
             ? AppBar(
                 elevation: 0,
@@ -79,12 +79,12 @@ class _HomePageState extends State<HomePage>
               )
             : null,
         body: screens[selectedIndex],
-        bottomNavigationBar: builNavBar(),
+        bottomNavigationBar: buildNavBar(),
       ),
     );
   }
 
-  Widget builNavBar() {
+  Widget buildNavBar() {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 5),
       height: 80,

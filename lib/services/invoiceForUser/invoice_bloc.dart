@@ -1,6 +1,4 @@
 import 'dart:async';
-
-import 'package:fluter_19pmd/models/invoiceDetails_models.dart';
 import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
@@ -10,9 +8,9 @@ class InvoiceBloc {
   StreamSink<List<Invoices>> get _invoiceSink => _stateStreamController.sink;
   Stream<List<Invoices>> get invoiceStream => _stateStreamController.stream;
 
-  final _orderDetailsController = StreamController<InvoiceDetails>();
-  StreamSink<InvoiceDetails> get _detailsSink => _orderDetailsController.sink;
-  Stream<InvoiceDetails> get detailsStream => _orderDetailsController.stream;
+  final _orderDetailsController = StreamController<Invoices>();
+  StreamSink<Invoices> get _detailsSink => _orderDetailsController.sink;
+  Stream<Invoices> get detailsStream => _orderDetailsController.stream;
 
   final _eventStreamController = StreamController<InvoiceEvent>();
   StreamSink<InvoiceEvent> get eventSink => _eventStreamController.sink;

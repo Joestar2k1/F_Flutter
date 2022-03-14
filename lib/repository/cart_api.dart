@@ -1,7 +1,4 @@
-import 'dart:convert';
-
 import 'package:fluter_19pmd/models/invoices_models.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 
 import 'package:http/http.dart' as http;
@@ -10,23 +7,28 @@ class RepositoryCart {
   static String getID;
   static List<Invoices> cartClient = [];
   static int getQuantity;
-  static subTotalCart() => cartClient[0].products.fold(
-        0,
-        (previousValue, element) =>
-            previousValue + (element.price * element.quantity),
-      );
+  static subTotalCart() {
+    if (cartClient.isEmpty) {
+      return 0;
+    }
+    return cartClient[0].products.fold(
+          0,
+          (previousValue, element) =>
+              previousValue + (element.price * element.quantity),
+        );
+  }
 
-  static Future<List<Product>> getCart() async {
+  static Future<List<Cart>> getCart() async {
     var client = http.Client();
     List<Invoices> carts;
-    List<Product> listProduct;
+    List<Cart> listProduct;
     var response = await client.get(
       Uri.parse(
           'http://10.0.2.2:8000/api/invoices/getCart/${RepositoryUser.info.id}'),
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      carts = invoiceFromJson(jsonString);
+      carts = invoicesFromJson(jsonString);
       cartClient = carts;
       carts.forEach((element) {
         listProduct = element.products;
@@ -36,11 +38,9 @@ class RepositoryCart {
     return null;
   }
 
-  static Future<void> addToCartDetails(String productID) async {
+  static Future<dynamic> addToCartDetails(String productID) async {
     var client = http.Client();
-    var response;
-
-    response = await client.post(
+    var response = await client.post(
       Uri.parse(
         'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
       ),
@@ -52,7 +52,11 @@ class RepositoryCart {
       }),
     );
 
-    print(response.body);
+    if (response.statusCode == 200) {
+      return 200;
+    } else {
+      return 201;
+    }
   }
 
   static Future<dynamic> addToCart(String productID) async {
@@ -87,7 +91,7 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      cartClient = null;
+      cartClient = [];
       return "Xóa sản phẩm thành công";
     } else {
       return "Xóa sản phẩm thành công";
@@ -106,7 +110,6 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      print(json.encode(response.body));
     } else {
       throw Exception("update Cart lỗi");
     }
@@ -124,7 +127,6 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      print(response.body);
     } else {
       throw Exception("update Cart lỗi");
     }

@@ -3,8 +3,8 @@ import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:flutter/material.dart';
 
 class TotalPriceProduct extends StatelessWidget {
-  const TotalPriceProduct({Key key, this.quantity_pr}) : super(key: key);
-  final int quantity_pr;
+  const TotalPriceProduct({Key key, this.quantity}) : super(key: key);
+  final int quantity;
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -28,7 +28,7 @@ class TotalPriceProduct extends StatelessWidget {
                         ),
                       ),
                       TextSpan(
-                        text: '($quantity_pr)',
+                        text: '($quantity)',
                         style: TextStyle(
                           fontSize: 18,
                           color: Colors.grey.shade600,

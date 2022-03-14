@@ -1,14 +1,21 @@
 import 'dart:async';
 
+import 'package:fluter_19pmd/models/user_models.dart';
+
 enum ChangeEvent {
   open,
   close,
+  choose,
 }
 
 class AddressChange {
   final _stateStreamController = StreamController<bool>();
   StreamSink<bool> get _changeSink => _stateStreamController.sink;
   Stream<bool> get changeStream => _stateStreamController.stream;
+
+  final _addressController = StreamController<String>();
+  StreamSink<String> get chooseSink => _addressController.sink;
+  Stream<String> get chooseStream => _addressController.stream;
 
   final _eventStreamController = StreamController<ChangeEvent>();
   StreamSink<ChangeEvent> get eventSink => _eventStreamController.sink;
@@ -19,10 +26,13 @@ class AddressChange {
         _changeSink.add(true);
       } else if (event == ChangeEvent.close) {
         _changeSink.add(false);
+      } else if (event == ChangeEvent.choose) {
+        _changeSink.add(false);
       }
     });
   }
   void dispose() {
     _stateStreamController.close();
+    _addressController.close();
   }
 }

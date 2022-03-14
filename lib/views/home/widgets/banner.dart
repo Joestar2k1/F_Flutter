@@ -38,9 +38,6 @@ class BannerHome extends StatelessWidget {
         itemCount: banner.length,
         itemBuilder: (BuildContext context, int index) {
           return ClipRRect(
-            borderRadius: const BorderRadius.all(
-              Radius.circular(20),
-            ),
             child: Stack(
               children: <Widget>[
                 SizedBox(

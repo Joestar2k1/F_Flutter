@@ -52,9 +52,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: _form(size),
-          ),
+          body: _form(size),
         ),
       ),
     );
@@ -62,53 +60,73 @@ class _SignUpScreenState extends State<SignUpScreen> {
 
   Widget _form(size) => Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(
-                  height: size.height * 0.03,
-                ),
-                InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: const Icon(Icons.arrow_back, color: Colors.teal)),
-                const Text(
-                  "Xin chào bạn",
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              Center(
+                child: Container(
+                  width: double.infinity,
+                  height: double.infinity,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.teal.shade600, Colors.teal.shade200],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                 ),
-                const SizedBox(height: 20),
-                const Text(
-                  "Đây là trang đăng ký!",
-                  style: TextStyle(
-                    fontSize: 25,
-                    color: textColor,
-                    fontWeight: FontWeight.bold,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: SingleChildScrollView(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(
+                        height: size.height * 0.03,
+                      ),
+                      InkWell(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: const Icon(Icons.arrow_back,
+                              color: Colors.white)),
+                      const Text(
+                        "Xin chào bạn",
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const Text(
+                        "Đây là trang đăng ký!",
+                        style: TextStyle(
+                          fontSize: 25,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      _emailLogin(),
+                      const SizedBox(height: 10),
+                      _input("Enter họ tên", fullNameController),
+                      const SizedBox(height: 10),
+                      _input("Enter địa chỉ", addressController),
+                      const SizedBox(height: 10),
+                      _input("Enter số điện thoại", phoneController),
+                      const SizedBox(height: 10),
+                      _buttonGoOn(context, emailController, fullNameController,
+                          addressController, phoneController),
+                    ],
                   ),
                 ),
-                _emailLogin(),
-                const SizedBox(height: 10),
-                _input("Enter họ tên", fullNameController),
-                const SizedBox(height: 10),
-                _input("Enter địa chỉ", addressController),
-                const SizedBox(height: 10),
-                _input("Enter số điện thoại", phoneController),
-                const SizedBox(height: 10),
-                _buttonGoOn(context, emailController, fullNameController,
-                    addressController, phoneController),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       );
@@ -121,15 +139,30 @@ class _SignUpScreenState extends State<SignUpScreen> {
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
+            floatingLabelStyle: TextStyle(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 3.0)),
             errorStyle: TextStyle(fontSize: 18),
             labelText: "Enter email",
-            labelStyle: TextStyle(fontSize: 20),
+            labelStyle: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
           validator: (value) {
             if (value.isEmpty ||
                 !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                     .hasMatch(value)) {
-              return 'Enter a valid email!';
+              return 'Không hợp lệ, phải chứa @!';
             }
             return null;
           },
@@ -144,10 +177,24 @@ class _SignUpScreenState extends State<SignUpScreen> {
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: InputDecoration(
-            focusedBorder: InputBorder.none,
+            floatingLabelStyle: const TextStyle(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+            enabledBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            focusedBorder: const OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            border: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 3.0)),
             errorStyle: const TextStyle(fontSize: 18),
             labelText: text,
-            labelStyle: const TextStyle(fontSize: 20),
+            labelStyle: const TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {

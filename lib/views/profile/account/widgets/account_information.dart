@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/user_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
@@ -133,8 +134,18 @@ class _AccountInformationState extends State<AccountInformation> {
                                                         _email.text,
                                                         _password.text,
                                                         _phone.text);
-                                            _showMyDialog(
-                                                messageFormSever, context);
+                                            showDialog(
+                                                context: context,
+                                                builder: (context) {
+                                                  return AlertDiaLogCustom(
+                                                      title: "Thành công",
+                                                      content:
+                                                          "-$messageFormSever.",
+                                                      gif:
+                                                          "assets/gif/success.gif",
+                                                      textButton: "Okay");
+                                                });
+                                            ;
                                             _profileBloc.eventSink
                                                 .add(UserEvent.fetch);
                                             _openEdit.eventSink
@@ -196,7 +207,7 @@ class _AccountInformationState extends State<AccountInformation> {
               const SizedBox(
                 width: 20,
               ),
-              Container(
+              SizedBox(
                 width: 270,
                 height: 30,
                 child: Text(
