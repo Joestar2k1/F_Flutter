@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:fluter_19pmd/views/profile/account/account_page.dart';
@@ -28,9 +29,26 @@ class ItemProfile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: () async {
         if (profiles[index]['text'] == 'Đăng xuất') {
-          RepositoryUser.logout(context);
+          var code = await RepositoryUser.logout(context);
+          if (code == 200) {
+            await showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDiaLogCustom(
+                      title: "Thành công",
+                      content: "-Đã đăng xuất ra khỏi BE HEALTHY.",
+                      gif: "assets/gif/success.gif",
+                      textButton: "Okay");
+                });
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => pages[index],
+              ),
+            );
+          }
         } else {
           Navigator.push(
             context,

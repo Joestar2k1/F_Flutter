@@ -16,7 +16,7 @@ class UserReview extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _header(size),
-          (RepositoryProduct.getHeightForUserReview() == 0)
+          (RepositoryProduct.getHeightForUserReview(userReview.length) == 0)
               ? Column(
                   children: const [
                     SizedBox(height: 60),
@@ -31,8 +31,9 @@ class UserReview extends StatelessWidget {
                   ],
                 )
               : SizedBox(
-                  height:
-                      size.height * RepositoryProduct.getHeightForUserReview(),
+                  height: size.height *
+                      RepositoryProduct.getHeightForUserReview(
+                          userReview.length),
                   child: ListView.builder(
                       physics: const NeverScrollableScrollPhysics(),
                       itemCount: userReview.length,
@@ -51,6 +52,7 @@ class UserReview extends StatelessWidget {
                             orderDate.month.toString().padLeft(2, '0') +
                             '-' +
                             orderDate.day.toString().padLeft(2, '0');
+
                         return Padding(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 10.0, vertical: 10.0),

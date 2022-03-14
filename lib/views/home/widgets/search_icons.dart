@@ -1,10 +1,6 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/repository/cart_api.dart';
-import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
-import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
-import 'package:fluter_19pmd/views/home/loadQuantityCart.dart';
 import 'package:fluter_19pmd/views/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -111,16 +107,16 @@ class SearchWithIcons extends StatelessWidget {
             ),
           ),
           child: Row(
-            children: const [
+            children: [
               Icon(
                 Icons.search,
-                color: Colors.teal,
+                color: Colors.grey.shade600,
               ),
               Text(
                 "Tìm kiếm",
                 style: TextStyle(
                   fontSize: 22,
-                  color: textColor,
+                  color: Colors.grey.shade600,
                 ),
               )
             ],

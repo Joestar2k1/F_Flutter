@@ -15,7 +15,7 @@ class CounterDetailsBloc {
   Stream<CounterEvent> get eventStream => _eventStreamController.stream;
 
   final _stateTotalStreamController = StreamController<int>();
-  StreamSink<int> get _totalSink => _stateTotalStreamController.sink;
+  StreamSink<int> get totalSink => _stateTotalStreamController.sink;
   Stream<int> get totalStream => _stateTotalStreamController.stream;
   CounterDetailsBloc() {
     counter = 1;
@@ -30,9 +30,6 @@ class CounterDetailsBloc {
         counter++;
         RepositoryCart.getQuantity = counter;
       }
-      var product = await RepositoryProduct.viewDetails();
-
-      _totalSink.add(counter * product.price);
       counterSink.add(counter);
     });
   }

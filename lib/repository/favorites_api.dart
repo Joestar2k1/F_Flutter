@@ -8,7 +8,7 @@ class RepositoryFavorite {
   static getHeightItem(var length) {
     double dem = 0;
     for (var i = 1; i <= length; i++) {
-      dem += 40;
+      dem += 200;
     }
     return dem;
   }
@@ -17,6 +17,14 @@ class RepositoryFavorite {
     double dem = 0;
     for (var i = 1; i <= length; i++) {
       dem += 95;
+    }
+    return dem;
+  }
+
+  static getHeightForScreenHome(var length) {
+    double dem = 0;
+    for (var i = 1; i <= length; i++) {
+      dem += 50;
     }
     return dem;
   }
@@ -76,6 +84,27 @@ class RepositoryFavorite {
       ),
       body: ({
         'id': id,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  static Future<dynamic> addProduct(String productID, String favoriteID) async {
+    var client = http.Client();
+    var response;
+
+    response = await client.post(
+      Uri.parse(
+        'http://10.0.2.2:8000/api/favorites/Add-product',
+      ),
+      body: ({
+        'favoriteID': favoriteID,
+        'productID': productID,
       }),
     );
 

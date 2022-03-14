@@ -1,7 +1,7 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/counter_event.dart';
 import 'package:fluter_19pmd/function.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
@@ -9,8 +9,8 @@ import 'package:fluter_19pmd/views/cart/counter_cart_bloc/counter_bloc.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
-  const Body({Key key}) : super(key: key);
-
+  const Body({Key key, this.openDelete}) : super(key: key);
+  final bool openDelete;
   @override
   State<Body> createState() => _BodyState();
 }
@@ -36,7 +36,7 @@ class _BodyState extends State<Body> {
     Size size = MediaQuery.of(context).size;
     return Column(
       children: [
-        StreamBuilder<List<Product>>(
+        StreamBuilder<List<Cart>>(
             initialData: [],
             stream: _cartBloc.cartStream,
             builder: (context, snapshot) {
@@ -78,75 +78,80 @@ class _BodyState extends State<Body> {
           child: ListView.separated(
         itemCount: snapshot.data.length,
         itemBuilder: (BuildContext context, int index) {
-          return Container(
+          return Card(
             margin: const EdgeInsets.all(15.0),
-            height: 140,
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                  height: 50,
-                  width: 50,
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.all(
-                      Radius.circular(30),
-                    ),
-                  ),
-                  child: InkWell(
+            elevation: 5,
+            child: Padding(
+              padding: const EdgeInsets.all(10.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(seconds: 1),
+                    height: (widget.openDelete) ? 40 : 40,
+                    width: (widget.openDelete) ? 40 : 0,
+                    child: InkWell(
                       onTap: () async {
                         var message = await RepositoryCart.deleteProductCart(
                             snapshot.data[index].id);
                         if (message != null) {
-                          _showMyDialog(message, context);
+                          showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDiaLogCustom(
+                                    title: "Thành công",
+                                    content: "-Sản phẩm đã được xóa.",
+                                    gif: "assets/gif/success.gif",
+                                    textButton: "Okay");
+                              });
                         }
                         _cartBloc.eventSink.add(CartEvent.fetchCart);
                       },
-                      child: Image.asset("assets/images/icons-png/trash.png")),
-                ),
-                Container(
-                  width: 130,
-                  height: 130,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Colors.teal, Colors.teal.shade200],
-                      begin: Alignment.bottomLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                  ),
-                  child: Image.asset(
-                      "assets/images/products/${snapshot.data[index].image}"),
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      snapshot.data[index].name,
-                      style: const TextStyle(
-                        fontSize: 18,
-                        fontWeight: FontWeight.bold,
+                      child: Image.asset(
+                        "assets/images/icons-png/trash.png",
                       ),
                     ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _buildItemInfo(
-                        text: "Giá: ", number: snapshot.data[index].price),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _buildItemInfo(
-                        text: "Tồn kho: ", number: snapshot.data[index].stock),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    _counter(
-                        size: size,
-                        quantity: snapshot.data[index].quantity,
-                        productID: snapshot.data[index].id,
-                        stock: snapshot.data[index].stock),
-                  ],
-                ),
-              ],
+                  ),
+                  SizedBox(
+                    width: 130,
+                    height: 130,
+                    child: Image.network(snapshot.data[index].image),
+                  ),
+                  const SizedBox(width: 30),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        snapshot.data[index].name,
+                        style: TextStyle(
+                          fontSize: 20,
+                          color: Colors.grey.shade700,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _buildItemInfo(
+                          text: "Giá: ", number: snapshot.data[index].price),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _buildItemInfo(
+                          text: "Tồn kho: ",
+                          number: snapshot.data[index].stock),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      _counter(
+                          size: size,
+                          quantity: snapshot.data[index].quantity,
+                          productID: snapshot.data[index].id,
+                          stock: snapshot.data[index].stock),
+                    ],
+                  ),
+                ],
+              ),
             ),
           );
         },
@@ -162,16 +167,16 @@ class _BodyState extends State<Body> {
           children: [
             TextSpan(
               text: text,
-              style: const TextStyle(
-                fontSize: 18,
-                color: textColor,
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey.shade700,
                 fontWeight: FontWeight.bold,
               ),
             ),
             TextSpan(
               text: convertToVND(number),
               style: const TextStyle(
-                fontSize: 18,
+                fontSize: 20,
                 fontWeight: FontWeight.bold,
                 color: Colors.red,
               ),
@@ -238,49 +243,4 @@ class _BodyState extends State<Body> {
           ],
         ),
       );
-
-  Future<void> _showMyDialog(message, context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              child: Image.asset(
-                "assets/images/icons-png/Check.png",
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          content: Center(
-            child: Text(
-              message,
-              style: const TextStyle(
-                fontSize: 22,
-                color: Colors.teal,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Ok',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.teal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

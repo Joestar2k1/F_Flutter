@@ -1,3 +1,4 @@
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/favorites_model.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/favorites_api.dart';
@@ -52,7 +53,7 @@ class _BodyState extends State<Body> {
                     margin: const EdgeInsets.only(top: 5),
                     child: Column(
                       children: [
-                        Container(
+                        SizedBox(
                           height: RepositoryFavorite.getHeight(
                               snapshot.data.length),
                           child: ListView.separated(
@@ -73,6 +74,16 @@ class _BodyState extends State<Body> {
                                               .add(false)
                                           : _openFavorite.openFavoriteSink
                                               .add(true);
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => ItemFavorite(
+                                              products:
+                                                  snapshot.data[index].products,
+                                              title:
+                                                  snapshot.data[index].title),
+                                        ),
+                                      );
                                     },
                                     child: Row(
                                       mainAxisAlignment:
@@ -87,7 +98,7 @@ class _BodyState extends State<Body> {
                                                   widget.isDeleted ? 60.0 : 0.0,
                                               color: Colors.white,
                                               duration:
-                                                  const Duration(seconds: 2),
+                                                  const Duration(seconds: 1),
                                               curve: Curves.fastOutSlowIn,
                                               child: Center(
                                                 child: InkWell(
@@ -99,13 +110,36 @@ class _BodyState extends State<Body> {
                                                                     .data[index]
                                                                     .id);
                                                     if (data == 200) {
-                                                      showToast(
-                                                          "Xóa thành công");
+                                                      await showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDiaLogCustom(
+                                                                title:
+                                                                    "Thành công",
+                                                                content:
+                                                                    "-Đã xóa bộ yêu thích.",
+                                                                gif:
+                                                                    "assets/gif/success.gif",
+                                                                textButton:
+                                                                    "Okay");
+                                                          });
                                                       _favorites.eventSink.add(
                                                           UserEvent
                                                               .showFavorite);
                                                     } else {
-                                                      showToast("Xóa thất bại");
+                                                      await showDialog(
+                                                          context: context,
+                                                          builder: (context) {
+                                                            return AlertDiaLogCustom(
+                                                                title:
+                                                                    "Thất bại",
+                                                                content:
+                                                                    "-Xóa bộ yêu thích.",
+                                                                gif:
+                                                                    "assets/gif/fail.gif",
+                                                                textButton:
+                                                                    "Okay");
+                                                          });
                                                     }
                                                   },
                                                   child: Image.asset(
@@ -116,7 +150,7 @@ class _BodyState extends State<Body> {
                                                 ),
                                               ),
                                             ),
-                                            Container(
+                                            SizedBox(
                                               width: 250,
                                               height: 70,
                                               child: Column(

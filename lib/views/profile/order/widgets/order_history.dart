@@ -1,8 +1,10 @@
+import 'dart:async';
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/invoices_models.dart';
-import 'package:intl/intl.dart';
+import 'package:fluter_19pmd/models/product_models.dart';
+import 'package:fluter_19pmd/repository/review_api.dart';
 import 'package:fluter_19pmd/repository/invoice_api.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_bloc.dart';
 import 'package:fluter_19pmd/services/invoiceForUser/invoice_event.dart';
@@ -19,9 +21,17 @@ class OrderHistory extends StatefulWidget {
 class _OrderHistoryState extends State<OrderHistory> {
   final _invoiceSuccess = InvoiceBloc();
   final _isLoading = LoadingBloc();
+  final _commentController = TextEditingController();
+  final _stateStreamController = StreamController<int>();
+  StreamSink<int> get selectedSink => _stateStreamController.sink;
+  Stream<int> get selectedStream => _stateStreamController.stream;
+  final _productStreamController = StreamController<List<Product>>();
+  StreamSink<List<Product>> get productSink => _productStreamController.sink;
+  Stream<List<Product>> get productStream => _productStreamController.stream;
   @override
   void initState() {
     super.initState();
+
     _invoiceSuccess.eventSink.add(InvoiceEvent.fetchOrderHistory);
   }
 
@@ -30,6 +40,9 @@ class _OrderHistoryState extends State<OrderHistory> {
     super.dispose();
     _invoiceSuccess.dispose();
     _isLoading.dispose();
+    _stateStreamController.close();
+    _commentController.dispose();
+    _productStreamController.close();
   }
 
   @override
@@ -88,7 +101,7 @@ class _OrderHistoryState extends State<OrderHistory> {
         stream: _isLoading.loadingStream,
         builder: (context, state) {
           return AnimatedContainer(
-            height: state.data ? 400 : 0,
+            height: state.data ? 500 : 0,
             width: size.width,
             decoration: const BoxDecoration(
               boxShadow: [
@@ -102,101 +115,150 @@ class _OrderHistoryState extends State<OrderHistory> {
             ),
             duration: const Duration(seconds: 2),
             curve: Curves.fastOutSlowIn,
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(15.0),
-                        child: Text(
-                          'Nội dung đánh giá',
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.grey.shade600,
+            child: StreamBuilder<int>(
+                initialData: 6,
+                stream: selectedStream,
+                builder: (context, state2) {
+                  return StreamBuilder<List<Product>>(
+                      initialData: null,
+                      stream: productStream,
+                      builder: (context, snapshot) {
+                        if (snapshot.data == null) {
+                          return const Center(
+                              child: CircularProgressIndicator());
+                        }
+                        return SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: Text(
+                                      'Nội dung đánh giá',
+                                      style: TextStyle(
+                                        fontSize: 22,
+                                        color: Colors.grey.shade600,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 60),
+                                  Padding(
+                                    padding: const EdgeInsets.only(right: 10.0),
+                                    child: InkWell(
+                                      onTap: () {
+                                        _isLoading.loadingSink.add(false);
+                                        _commentController.text = "";
+                                      },
+                                      child: Icon(
+                                        Icons.close,
+                                        color: Colors.blue.shade400,
+                                      ),
+                                    ),
+                                  )
+                                ],
+                              ),
+                              // Container(
+                              //   margin: const EdgeInsets.only(left: 10),
+                              //   height: 50,
+                              //   child: ListView.separated(
+                              //       scrollDirection: Axis.horizontal,
+                              //       itemBuilder: (context, index) {
+                              //         return const Card(
+                              //           elevation: 10,
+                              //           child: Text(
+                              //             'Tất cả',
+                              //             style: TextStyle(fontSize: 20),
+                              //           ),
+                              //         );
+                              //       },
+                              //       separatorBuilder: (context, index) =>
+                              //           const SizedBox(width: 10),
+                              //       itemCount: snapshot.data.length),
+                              // ),
+                              Card(
+                                margin:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: TextFormField(
+                                  controller: _commentController,
+                                  minLines: 5,
+                                  maxLines: null,
+                                  keyboardType: TextInputType.text,
+                                  decoration: InputDecoration(
+                                      hintText: 'Viết gì đó ......',
+                                      border: const OutlineInputBorder(),
+                                      labelStyle: TextStyle(
+                                        color: Colors.grey.shade400,
+                                      )),
+                                  textAlign: TextAlign.start,
+                                  style: TextStyle(
+                                    color: Colors.grey.shade700,
+                                    fontSize: 22.0,
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                margin: const EdgeInsets.all(10.0),
+                                height: 60,
+                                width: size.width,
+                                child: ListView.separated(
+                                    scrollDirection: Axis.horizontal,
+                                    itemBuilder: (context, index) {
+                                      return _itemStar(index, state2);
+                                    },
+                                    separatorBuilder: (context, index) =>
+                                        const SizedBox(width: 10),
+                                    itemCount: 5),
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: _button(
+                                    text: 'Gửi',
+                                    icon: const Icon(Icons.send),
+                                    press: () async {
+                                      var data = await RepositoryReview.post(
+                                        starNumber: state2.data + 1,
+                                        content: _commentController.text,
+                                        productID: snapshot.data,
+                                      );
+                                      _isLoading.loadingSink.add(false);
+                                      if (data == 200) {
+                                        message();
+                                      }
+                                    }),
+                              ),
+                            ],
                           ),
-                        ),
-                      ),
-                      const SizedBox(width: 60),
-                      Padding(
-                        padding: const EdgeInsets.only(right: 10.0),
-                        child: InkWell(
-                          onTap: () {
-                            _isLoading.loadingSink.add(false);
-                          },
-                          child: Icon(
-                            Icons.close,
-                            color: Colors.blue.shade400,
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
-                  Card(
-                    margin: const EdgeInsets.symmetric(horizontal: 10),
-                    child: TextFormField(
-                      minLines: 5,
-                      maxLines: null,
-                      keyboardType: TextInputType.text,
-                      decoration: InputDecoration(
-                          hintText: 'Viết gì đó ......',
-                          border: const OutlineInputBorder(),
-                          labelStyle: TextStyle(
-                            color: Colors.grey.shade400,
-                          )),
-                      textAlign: TextAlign.start,
-                      style: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 22.0,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(10.0),
-                    height: 55,
-                    width: size.width,
-                    child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
-                          return _itemStar(index);
-                        },
-                        separatorBuilder: (context, index) =>
-                            const SizedBox(width: 10),
-                        itemCount: 5),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(10.0),
-                    child: _button(
-                      text: 'Gửi',
-                      icon: const Icon(Icons.send),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+                        );
+                      });
+                }),
           );
         });
   }
 
-  Container _itemStar(int index) {
-    return Container(
-      padding: const EdgeInsets.all(10.0),
-      width: 150,
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.all(Radius.circular(10)),
-        border: Border.all(color: Colors.grey.shade400),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            '${index + 1} sao',
-            style: const TextStyle(
-              fontSize: 20,
+  Widget _itemStar(int index, state) {
+    return InkWell(
+      onTap: () {
+        state.data == index ? selectedSink.add(6) : selectedSink.add(index);
+      },
+      child: Card(
+        color: (state.data == index) ? Colors.yellow : Colors.white,
+        shadowColor: Colors.grey.shade400,
+        elevation: 7,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(15.0),
+            child: Text(
+              '${index + 1} sao',
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.grey.shade700,
+              ),
             ),
           ),
-        ],
+        ),
       ),
     );
   }
@@ -245,6 +307,7 @@ class _OrderHistoryState extends State<OrderHistory> {
   Widget _contentCardRight(snapshot, index, size, results) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           "Tổng đơn : ${convertToVND(snapshot.data[index].total)}đ",
@@ -254,21 +317,25 @@ class _OrderHistoryState extends State<OrderHistory> {
             fontWeight: FontWeight.bold,
           ),
         ),
-        const SizedBox(
-          height: 10,
-        ),
         _button(
-            icon: const Icon(Icons.shopping_bag_outlined), text: 'Mua tiếp'),
+            icon: const Icon(
+              Icons.shopping_bag_outlined,
+              color: Colors.white,
+            ),
+            text: 'Mua tiếp'),
         (results.inDays >= 0 && results.inDays <= 2)
             ? InkWell(
                 onTap: () {
                   _isLoading.loadingSink.add(true);
+                  _commentController.text = "";
+                  // productSink.add(snapshot.data[index].products);
                 },
                 child: Text(
-                  "Hãy đánh giá",
+                  "Đánh giá",
                   style: TextStyle(
                     fontSize: 20,
                     color: Colors.blueAccent.shade400,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               )
@@ -283,14 +350,14 @@ class _OrderHistoryState extends State<OrderHistory> {
     );
   }
 
-  Widget _button({icon, text}) => SizedBox(
+  Widget _button({icon, text, press}) => SizedBox(
         child: ElevatedButton(
           style: ButtonStyle(
             backgroundColor: MaterialStateProperty.all(
               buttonColor,
             ),
           ),
-          onPressed: () {},
+          onPressed: press,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -306,4 +373,22 @@ class _OrderHistoryState extends State<OrderHistory> {
           ),
         ),
       );
+
+  void message() async {
+    ScaffoldMessenger.of(context)
+      ..removeCurrentSnackBar()
+      ..showSnackBar(const SnackBar(
+        elevation: 10,
+        backgroundColor: Colors.teal,
+        content: Text(
+          'Bình luận thành công',
+          style: TextStyle(
+            fontSize: 22,
+            color: Colors.white,
+          ),
+        ),
+        duration: Duration(seconds: 3),
+        // SnackBarAction
+      ));
+  }
 }

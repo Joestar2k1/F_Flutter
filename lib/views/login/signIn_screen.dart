@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/views/forgot_password/forgot_page.dart';
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
@@ -18,18 +20,23 @@ class _SignInPageState extends State<SignInPage> {
   final _isLoading = LoadingBloc();
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
+  final _stateStreamController = StreamController<bool>();
+  StreamSink<bool> get chooseSink => _stateStreamController.sink;
+  Stream<bool> get chooseStream => _stateStreamController.stream;
   @override
   void dispose() {
     super.dispose();
     emailController.dispose();
     passwordController.dispose();
     _isLoading.dispose();
+    _stateStreamController.close();
   }
 
   _submit(BuildContext context, String email, String password) async {
     _isLoading.loadingSink.add(true);
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
+      _isLoading.loadingSink.add(false);
       return;
     }
     _formKey.currentState.save();
@@ -44,7 +51,16 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
     } else {
-      _showMyDialog("Lỗi, kiểm tra lại tài khoản", context);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDiaLogCustom(
+                title: "Thất bại",
+                content: "-Hãy kiểm tra lại tài khoản.",
+                gif: "assets/gif/fail.gif",
+                textButton: "Okay");
+          });
+      _isLoading.loadingSink.add(false);
     }
   }
 
@@ -56,9 +72,7 @@ class _SignInPageState extends State<SignInPage> {
       home: SafeArea(
         child: Scaffold(
           backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: _form(size),
-          ),
+          body: _form(size),
         ),
       ),
     );
@@ -66,72 +80,114 @@ class _SignInPageState extends State<SignInPage> {
 
   Widget _form(size) => Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: StreamBuilder<bool>(
-                initialData: false,
-                stream: _isLoading.loadingStream,
-                builder: (context, state) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.2,
-                      ),
-                      const Text(
-                        "Xin chào bạn",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: StreamBuilder<bool>(
+              initialData: false,
+              stream: _isLoading.loadingStream,
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.teal.shade600,
+                              Colors.teal.shade100
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Welcome to Be Healthy!",
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.all(20.0),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Center(
+                              child: CircleAvatar(
+                                backgroundColor: Colors.white,
+                                radius: 70,
+                                child: Image.asset(
+                                  "assets/images/Logo.png",
+                                  fit: BoxFit.cover,
+                                ),
+                              ),
+                            ),
+                            const Center(
+                              child: Text(
+                                "BE HEALTHY",
+                                style: TextStyle(
+                                  fontSize: 22,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            _emailLogin(),
+                            _passwordLogin(),
+                            const SizedBox(height: 30),
+                            (state.data)
+                                ? const Center(
+                                    child: CircleAvatar(
+                                      backgroundColor: Colors.white,
+                                      radius: 30,
+                                      backgroundImage:
+                                          AssetImage("assets/gif/loading.gif"),
+                                    ),
+                                  )
+                                : _buttonLogin(context, emailController.text,
+                                    passwordController.text),
+                            const SizedBox(height: 20),
+                            _forgotAndSignUp(),
+                          ],
                         ),
                       ),
-                      _emailLogin(),
-                      const SizedBox(height: 20),
-                      _passwordLogin(),
-                      const SizedBox(height: 30),
-                      (state.data)
-                          ? const Center(
-                              child: CircularProgressIndicator(
-                              color: Colors.red,
-                            ))
-                          : _buttonLogin(context, emailController.text,
-                              passwordController.text),
-                      const SizedBox(height: 20),
-                      _forgotAndSignUp(),
-                    ],
-                  );
-                }),
-          ),
+                    ),
+                  ],
+                );
+              }),
         ),
       );
 
   Widget _emailLogin() => Padding(
         padding: const EdgeInsets.only(top: 20, bottom: 10),
         child: TextFormField(
+          style: const TextStyle(
+            fontSize: 20,
+            color: Colors.white,
+          ),
           controller: emailController,
-          style: const TextStyle(fontSize: 20),
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: const InputDecoration(
-            border: OutlineInputBorder(),
+            floatingLabelStyle: TextStyle(
+              fontSize: 22,
+              color: Colors.white,
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Colors.white, width: 3.0),
+            ),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 3.0)),
             errorStyle: TextStyle(fontSize: 18),
             labelText: "Enter email",
-            labelStyle: TextStyle(fontSize: 20),
+            labelStyle: TextStyle(
+              fontSize: 20,
+              color: Colors.white,
+            ),
           ),
           validator: (value) {
             if (value.isEmpty ||
@@ -144,28 +200,53 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
 
-  Widget _passwordLogin() => Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
-        child: TextFormField(
-          controller: passwordController,
-          obscureText: false,
-          style: const TextStyle(fontSize: 20),
-          keyboardType: TextInputType.emailAddress,
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            errorStyle: TextStyle(fontSize: 20),
-            labelText: "Enter password",
-            hintText: "*********",
-            labelStyle: TextStyle(fontSize: 20),
+  Widget _passwordLogin() => StreamBuilder<bool>(
+      initialData: true,
+      stream: chooseStream,
+      builder: (context, value) {
+        return Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 5),
+          child: TextFormField(
+            controller: passwordController,
+            obscureText: value.data,
+            style: const TextStyle(fontSize: 20),
+            keyboardType: TextInputType.emailAddress,
+            decoration: InputDecoration(
+              suffixStyle: const TextStyle(color: Colors.white),
+              suffixIcon: InkWell(
+                onTap: () {
+                  chooseSink.add(!value.data);
+                },
+                child: (value.data)
+                    ? const Icon(Icons.visibility)
+                    : const Icon(Icons.visibility_off),
+              ),
+              floatingLabelStyle: const TextStyle(
+                fontSize: 22,
+                color: Colors.white,
+              ),
+              enabledBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+              ),
+              focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.white, width: 2.0),
+              ),
+              errorStyle: const TextStyle(fontSize: 18),
+              labelStyle: const TextStyle(
+                fontSize: 20,
+                color: Colors.white,
+              ),
+              labelText: "Enter password",
+            ),
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Please enter some text';
+              }
+              return null;
+            },
           ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Please enter some text';
-            }
-            return null;
-          },
-        ),
-      );
+        );
+      });
 
   Widget _buttonLogin(BuildContext context, String email, String password) =>
       Center(
@@ -179,103 +260,60 @@ class _SignInPageState extends State<SignInPage> {
             onPressed: () {
               _submit(context, email, password);
             },
-            child: const Text('Đăng nhập', style: TextStyle(fontSize: 18)),
+            child: const Text('Đăng nhập', style: TextStyle(fontSize: 20)),
           ),
         ),
       );
 
-  Widget _forgotAndSignUp() => Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            children: [
-              const SizedBox(width: 60),
-              const Text(
-                "Chưa có tài khoản?",
-                style: TextStyle(
-                  fontSize: 18,
-                ),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SignUpScreen(),
-                      ));
-                },
-                child: const Text(
-                  "Đăng ký",
+  Widget _forgotAndSignUp() => Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const Text(
+                  "Chưa có tài khoản?",
                   style: TextStyle(
-                    fontSize: 18,
-                    color: Colors.teal,
+                    fontSize: 20,
+                    color: Colors.white,
                   ),
                 ),
-              ),
-            ],
-          ),
-          TextButton(
-            onPressed: () {
-              Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const ForgotPasswordPage(),
-                  ));
-            },
-            child: const Text(
-              "Quên mật khẩu ?",
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.teal,
-              ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const SignUpScreen(),
+                        ));
+                  },
+                  child: const Text(
+                    "Đăng ký",
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: Colors.blueAccent,
+                    ),
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
-      );
-
-  Future<void> _showMyDialog(message, context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: Center(
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.asset(
-                "assets/images/icons-png/error.png",
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          content: Center(
-            child: Text(
-              message,
-              style: const TextStyle(
-                fontSize: 22,
-                color: Colors.teal,
-              ),
-            ),
-          ),
-          actions: <Widget>[
             TextButton(
+              onPressed: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const ForgotPasswordPage(),
+                    ));
+              },
               child: const Text(
-                'Thử lại',
+                "Quên mật khẩu ?",
                 style: TextStyle(
                   fontSize: 20,
-                  color: Colors.teal,
+                  color: Colors.blueAccent,
                 ),
               ),
-              onPressed: () {
-                _isLoading.loadingSink.add(false);
-                Navigator.of(context).pop();
-              },
             ),
           ],
-        );
-      },
-    );
-  }
+        ),
+      );
 }

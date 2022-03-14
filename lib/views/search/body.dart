@@ -27,7 +27,6 @@ class Body extends StatelessWidget {
         ],
       );
     } else {
-      Future.delayed(const Duration(seconds: 2));
       return ListView.separated(
         separatorBuilder: (context, index) => const SizedBox(height: 10),
         itemCount: products.length,
@@ -42,21 +41,14 @@ class Body extends StatelessWidget {
                 ),
               );
             },
-            child: Container(
-              width: size.width,
-              height: size.height * 0.25,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(10),
-                ),
-              ),
+            child: Card(
+              elevation: 2,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Image.asset(
-                    "assets/images/products/${products[index].image}",
+                  Image.network(
+                    products[index].image,
                     width: 150,
                     height: 150,
                   ),

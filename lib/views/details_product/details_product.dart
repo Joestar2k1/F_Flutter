@@ -1,10 +1,9 @@
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
-import 'package:fluter_19pmd/services/home/details_bloc.dart';
-import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/body.dart';
 
@@ -12,24 +11,17 @@ import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class DetailsProductScreen extends StatefulWidget {
-  const DetailsProductScreen({Key key}) : super(key: key);
-
+  const DetailsProductScreen({Key key, this.products}) : super(key: key);
+  final Product products;
   @override
   State<DetailsProductScreen> createState() => _DetailsProductScreenState();
 }
 
 class _DetailsProductScreenState extends State<DetailsProductScreen> {
-  final _viewDetails = ProductDetailsBloc();
   final _isLoading = LoadingBloc();
-  @override
-  void initState() {
-    super.initState();
-    _viewDetails.eventSink.add(EventProduct.viewDetails);
-  }
 
   @override
   void dispose() {
-    _viewDetails.dispose();
     _isLoading.dispose();
     super.dispose();
   }
@@ -37,31 +29,26 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: StreamBuilder<ProductDetails>(
-          initialData: null,
-          stream: _viewDetails.detailsStream,
-          builder: (context, snapshot) {
-            if (snapshot.data == null) {
-              return Scaffold(
-                body: Column(
-                  children: [
-                    SizedBox(height: size.height * 0.45),
-                    const Center(
-                      child: CircularProgressIndicator(
-                        color: Colors.teal,
-                      ),
-                    ),
-                  ],
-                ),
-              );
-            }
 
-            return Scaffold(
-              body: Body(details: snapshot.data),
+    return SafeArea(
+      child: (widget.products == null)
+          ? Scaffold(
+              body: Column(
+                children: [
+                  SizedBox(height: size.height * 0.45),
+                  const Center(
+                    child: CircularProgressIndicator(
+                      color: Colors.teal,
+                    ),
+                  ),
+                ],
+              ),
+            )
+          : Scaffold(
+              backgroundColor: Colors.white,
+              body: Body(details: widget.products),
               bottomNavigationBar: _buildBottomNav(size, context),
-            );
-          }),
+            ),
     );
   }
 

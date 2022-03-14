@@ -16,7 +16,7 @@ class _CategoryPageState extends State<CategoryPage> {
       child: DefaultTabController(
         length: 5,
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.grey.shade100,
           appBar: AppBar(
             bottom: buildTabbar(),
             elevation: 0,

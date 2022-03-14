@@ -9,6 +9,7 @@ enum UserEvent {
   fetch,
   fetchAddress,
   showFavorite,
+  offFavorite,
 }
 
 class ProfileBloc {
@@ -42,6 +43,8 @@ class ProfileBloc {
       } else if (event == UserEvent.showFavorite) {
         var favorites = await RepositoryFavorite.showFavorite();
         _userFavoriteSink.add(favorites);
+      } else if (event == UserEvent.offFavorite) {
+        _userFavoriteSink.add(null);
       }
     });
   }

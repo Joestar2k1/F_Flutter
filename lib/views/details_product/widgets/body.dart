@@ -1,5 +1,5 @@
 import 'package:fluter_19pmd/function.dart';
-import 'package:fluter_19pmd/models/reviews_models.dart';
+import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/app_bar.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/description_counter.dart';
 import 'package:fluter_19pmd/views/details_product/widgets/user_review.dart';
@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 // ignore: must_be_immutable
 class Body extends StatelessWidget {
   const Body({Key key, this.details}) : super(key: key);
-  final ProductDetails details;
+  final Product details;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -17,16 +17,9 @@ class Body extends StatelessWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          Container(
+          SizedBox(
             height: size.height * 0.4,
             width: size.width,
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.teal, Colors.teal.shade200],
-                begin: Alignment.bottomLeft,
-                end: Alignment.bottomRight,
-              ),
-            ),
             child: Stack(
               children: [
                 Row(
@@ -39,33 +32,34 @@ class Body extends StatelessWidget {
                         children: [
                           Text(
                             details.name,
-                            style: const TextStyle(
+                            style: TextStyle(
                                 fontSize: 30,
                                 fontFamily: "RobotoSlab",
-                                color: Colors.white),
+                                color: Colors.grey.shade800),
                           ),
                           const SizedBox(
                             height: 30,
                           ),
                           Text(
                             '${convertToVND(details.price)}đ/${details.unit}',
-                            style: const TextStyle(
-                              fontSize: 20,
-                              fontFamily: "RobotoSlab",
-                              color: Colors.white,
-                            ),
+                            style: TextStyle(
+                                fontSize: 20,
+                                fontFamily: "RobotoSlab",
+                                color: Colors.grey.shade800),
                           )
                         ],
                       ),
                     ),
                     Expanded(
-                        child: Image.asset(
-                      "assets/images/products/${details.image}",
+                        child: Image.network(
+                      details.image,
                       fit: BoxFit.cover,
                     )),
                   ],
                 ),
-                const AppBarDetails(),
+                AppBarDetails(
+                  checkFavorite: details.checkFavorite,
+                ),
               ],
             ),
           ),

@@ -6,6 +6,7 @@ import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 
 class CheckOutPage extends StatefulWidget {
   const CheckOutPage({Key key}) : super(key: key);
@@ -34,11 +35,12 @@ class _CheckOutPageState extends State<CheckOutPage> {
           ),
           leading: IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const HomePage(),
-                    ));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => const HomePage(),
+                //     ));
+                Navigator.pop(context);
               },
               icon: const Icon(Icons.arrow_back)),
           title: const Center(
@@ -138,7 +140,16 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       RepositoryInvoice.getContext = context;
                       var message = await RepositoryInvoice.payment();
                       if (message != null) {
-                        _showMyDialog(message, context);
+                        showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDiaLogCustom(
+                                  title: "Thành công",
+                                  content:
+                                      "-Đã đặt hàng, hãy kiểm tra đơn hàng.",
+                                  gif: "assets/gif/success.gif",
+                                  textButton: "Okay");
+                            });
                       }
                     },
                     child: Row(
@@ -161,60 +172,6 @@ class _CheckOutPageState extends State<CheckOutPage> {
           ),
         ],
       ),
-    );
-  }
-
-  Future<void> _showMyDialog(message, context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: Center(
-            child: Container(
-              width: 100,
-              height: 100,
-              child: Image.asset(
-                "assets/images/icons-png/delivery.png",
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          content: Container(
-            width: 250,
-            height: 60,
-            child: Text(
-              '-$message',
-              style: const TextStyle(
-                fontSize: 22,
-                color: Colors.teal,
-                overflow: TextOverflow.ellipsis,
-              ),
-              maxLines: 2,
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Đã rõ',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.teal,
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const CartPage(),
-                  ),
-                );
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 }

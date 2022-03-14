@@ -1,9 +1,11 @@
 import 'dart:ui';
 
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
+import 'package:fluter_19pmd/views/register/signup_screen.dart';
 import 'package:flutter/material.dart';
 
 class PageCompleteSignUp extends StatefulWidget {
@@ -49,7 +51,15 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
       var dataFromServer = await RepositoryUser.register(
           username, fullName, email, password, phone, address);
       if (dataFromServer == 200) {
-        _showMyDialog("Đăng ký thành công", context);
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDiaLogCustom(
+                  title: "Thành công",
+                  content: "-Đã đăng ký tài khoản BEHEALTHY.",
+                  gif: "assets/gif/success.gif",
+                  textButton: "Okay");
+            });
         _isLoading.loadingSink.add(false);
         Navigator.push(
           context,
@@ -58,10 +68,34 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
           ),
         );
       } else {
-        _showMyDialog("Đăng ký thất bại", context);
+        showDialog(
+            context: context,
+            builder: (context) {
+              return AlertDiaLogCustom(
+                  title: "Thất bại",
+                  content: "-Xảy ra lỗi, hãy thử lại.",
+                  gif: "assets/gif/404.gif",
+                  textButton: "Okay");
+            });
+        _isLoading.loadingSink.add(false);
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const SignUpScreen(),
+          ),
+        );
       }
     } else {
-      _showMyDialog("Mật khẩu không trùng khớp", context);
+      _isLoading.loadingSink.add(false);
+      showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDiaLogCustom(
+                title: "Thất bại",
+                content: "-Mật khẩu không trùng khớp, vui lòng nhập lại!.",
+                gif: "assets/gif/warning.gif",
+                textButton: "Okay");
+          });
     }
   }
 
@@ -83,77 +117,110 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
 
   Widget _form(size, context) => Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: StreamBuilder<bool>(
-                initialData: false,
-                stream: _isLoading.loadingStream,
-                builder: (context, state) {
-                  return Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.05,
-                      ),
-                      const Text(
-                        "Xin chào bạn",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: StreamBuilder<bool>(
+              initialData: false,
+              stream: _isLoading.loadingStream,
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    Center(
+                      child: Container(
+                        width: double.infinity,
+                        height: double.infinity,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              Colors.teal.shade600,
+                              Colors.teal.shade200
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Đây là trang đăng ký!",
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: textColor,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      _input("Enter tên hiện thị", usernameController),
-                      const SizedBox(height: 10),
-                      _input("Enter mật khẩu", passwordController),
-                      const SizedBox(height: 10),
-                      _input("Enter Nhập lại mật khẩu", confirmController),
-                      (state.data)
-                          ? Center(
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: const [
-                                  Text(
-                                    'Đang xử lý...',
-                                    style: TextStyle(
-                                      fontSize: 20,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                    ),
+                    SingleChildScrollView(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(
+                            height: size.height * 0.05,
+                          ),
+                          InkWell(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const SignInPage(),
                                   ),
-                                  CircularProgressIndicator(
-                                      color: Colors.green),
-                                ],
-                              ),
-                            )
-                          : _buttonGoOn(
-                              context,
-                              widget.email,
-                              widget.fullName,
-                              widget.address,
-                              widget.phone,
-                              usernameController.text,
-                              passwordController.text,
-                              confirmController.text,
+                                );
+                              },
+                              child: const Icon(Icons.arrow_back,
+                                  color: Colors.white)),
+                          const Text(
+                            "Xin chào bạn",
+                            style: TextStyle(
+                              fontSize: 20,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
                             ),
-                    ],
-                  );
-                }),
-          ),
+                          ),
+                          const SizedBox(height: 20),
+                          const Text(
+                            "Đây là trang đăng ký!",
+                            style: TextStyle(
+                              fontSize: 25,
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          _input("Enter tên hiện thị", usernameController),
+                          const SizedBox(height: 10),
+                          _input("Enter mật khẩu", passwordController),
+                          const SizedBox(height: 10),
+                          _input("Enter Nhập lại mật khẩu", confirmController),
+                          (state.data)
+                              ? Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: const [
+                                      Text(
+                                        'Đang xử lý',
+                                        style: TextStyle(
+                                          fontSize: 20,
+                                          color: Colors.green,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      CircleAvatar(
+                                        radius: 30,
+                                        backgroundImage: AssetImage(
+                                            "assets/gif/loading.gif"),
+                                      )
+                                    ],
+                                  ),
+                                )
+                              : _buttonGoOn(
+                                  context,
+                                  widget.email,
+                                  widget.fullName,
+                                  widget.address,
+                                  widget.phone,
+                                  usernameController.text,
+                                  passwordController.text,
+                                  confirmController.text,
+                                ),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              }),
         ),
       );
 
@@ -166,7 +233,7 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
           keyboardType: TextInputType.emailAddress,
           onFieldSubmitted: (value) {},
           decoration: InputDecoration(
-            focusedBorder: InputBorder.none,
+            border: const OutlineInputBorder(),
             errorStyle: const TextStyle(fontSize: 18),
             labelText: text,
             labelStyle: const TextStyle(fontSize: 20),
@@ -196,51 +263,4 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
           ),
         ),
       );
-  Future<void> _showMyDialog(message, context) async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          title: Center(
-            child: SizedBox(
-              width: 100,
-              height: 100,
-              child: Image.asset(
-                "assets/images/icons-png/error.png",
-                fit: BoxFit.fill,
-              ),
-            ),
-          ),
-          content: Center(
-            child: Text(
-              message,
-              style: const TextStyle(
-                fontSize: 22,
-                color: Colors.teal,
-              ),
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text(
-                'Thử lại',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.teal,
-                ),
-              ),
-              onPressed: () {
-                (message.contains('thành công'))
-                    ? _isLoading.loadingSink.add(false)
-                    : _isLoading.loadingSink.add(false);
-                Navigator.pop(context, true);
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
 }

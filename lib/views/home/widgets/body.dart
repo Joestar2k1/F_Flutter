@@ -34,49 +34,44 @@ class _BodyState extends State<Body> {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return SafeArea(
-      child: GestureDetector(
-        onTap: () {
-          FocusScope.of(context).unfocus();
-        },
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                BannerHome(),
-                const SizedBox(height: 30),
-                // Categories(),
-                // const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Bán chạy",
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Color(0xFF717171),
-                      fontWeight: FontWeight.bold,
-                    ),
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
+        body: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              BannerHome(),
+              const SizedBox(height: 30),
+              // Categories(),
+              // const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "Bán chạy",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color(0xFF717171),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
-                loadBestSeller(size: size),
-                const SizedBox(height: 20),
-                const Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20),
-                  child: Text(
-                    "Sản phẩm",
-                    style: TextStyle(
-                      fontSize: 30,
-                      color: Color(0xFF717171),
-                      fontWeight: FontWeight.bold,
-                    ),
+              ),
+              const SizedBox(height: 20),
+              loadBestSeller(size: size),
+              const SizedBox(height: 20),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                child: Text(
+                  "Sản phẩm",
+                  style: TextStyle(
+                    fontSize: 30,
+                    color: Color(0xFF717171),
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 20),
-                const ProductsHome(),
-              ],
-            ),
+              ),
+              const SizedBox(height: 20),
+              const ProductsHome(),
+            ],
           ),
         ),
       ),
@@ -119,9 +114,9 @@ class _BodyState extends State<Body> {
                         children: [
                           Text(
                             snapshot.data[index].type,
-                            style: const TextStyle(
+                            style: TextStyle(
                               fontSize: 20,
-                              color: Color(0xFFF34848),
+                              color: Colors.grey.shade600,
                               fontWeight: FontWeight.bold,
                             ),
                           ),
@@ -142,8 +137,7 @@ class _BodyState extends State<Body> {
                           SizedBox(
                             height: 130,
                             width: 130,
-                            child: Image.asset(
-                                'assets/images/products/${snapshot.data[index].image}'),
+                            child: Image.network(snapshot.data[index].image),
                           ),
                           const SizedBox(
                             width: 50,
@@ -153,40 +147,41 @@ class _BodyState extends State<Body> {
                             children: [
                               Text(
                                 snapshot.data[index].name,
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 26,
-                                  color: Color(0xFF717171),
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade500,
                                 ),
                               ),
                               Text(
                                 "${convertToVND(snapshot.data[index].price)}đ",
-                                style: const TextStyle(
+                                style: TextStyle(
                                   fontSize: 20,
-                                  color: Color(0xFF717171),
-                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey.shade500,
                                 ),
                               ),
-                              ElevatedButton(
-                                style: ButtonStyle(
-                                  backgroundColor:
-                                      MaterialStateProperty.all(buttonColor),
-                                ),
-                                onPressed: () {
-                                  RepositoryProduct.getID =
-                                      snapshot.data[index].id;
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) =>
-                                          const DetailsProductScreen(),
+                              SizedBox(
+                                width: 130,
+                                child: ElevatedButton(
+                                  style: ButtonStyle(
+                                    backgroundColor:
+                                        MaterialStateProperty.all(buttonColor),
+                                  ),
+                                  onPressed: () {
+                                    RepositoryProduct.getID =
+                                        snapshot.data[index].id;
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            const DetailsProductScreen(),
+                                      ),
+                                    );
+                                  },
+                                  child: const Text(
+                                    'Xem ngay',
+                                    style: TextStyle(
+                                      fontSize: 20,
                                     ),
-                                  );
-                                },
-                                child: const Text(
-                                  'Xem ngay',
-                                  style: TextStyle(
-                                    fontSize: 16,
                                   ),
                                 ),
                               ),

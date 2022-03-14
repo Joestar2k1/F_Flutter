@@ -17,7 +17,6 @@ class Favorites {
     this.id,
     this.userId,
     this.title,
-    this.productId,
     this.createdAt,
     this.updatedAt,
     this.products,
@@ -26,7 +25,6 @@ class Favorites {
   String id;
   String userId;
   String title;
-  String productId;
   dynamic createdAt;
   dynamic updatedAt;
   List<Product> products;
@@ -35,21 +33,23 @@ class Favorites {
         id: json["id"],
         userId: json["userID"],
         title: json["title"],
-        productId: json["productID"],
         createdAt: json["created_at"],
         updatedAt: json["updated_at"],
-        products: List<Product>.from(
-            json["products"].map((x) => Product.fromJson(x))),
+        products: json["products"] == null
+            ? null
+            : List<Product>.from(
+                json["products"].map((x) => Product.fromJson(x))),
       );
 
   Map<String, dynamic> toJson() => {
         "id": id,
         "userID": userId,
         "title": title,
-        "productID": productId,
         "created_at": createdAt,
         "updated_at": updatedAt,
-        "products": List<dynamic>.from(products.map((x) => x.toJson())),
+        "products": products == null
+            ? null
+            : List<dynamic>.from(products.map((x) => x.toJson())),
       };
   @override
   String toString() {

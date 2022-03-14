@@ -1,5 +1,4 @@
 import 'package:fluter_19pmd/models/invoices_models.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 
 import 'package:http/http.dart' as http;
@@ -9,7 +8,7 @@ class RepositoryCart {
   static List<Invoices> cartClient = [];
   static int getQuantity;
   static subTotalCart() {
-    if (cartClient == []) {
+    if (cartClient.isEmpty) {
       return 0;
     }
     return cartClient[0].products.fold(
@@ -19,17 +18,17 @@ class RepositoryCart {
         );
   }
 
-  static Future<List<Product>> getCart() async {
+  static Future<List<Cart>> getCart() async {
     var client = http.Client();
     List<Invoices> carts;
-    List<Product> listProduct;
+    List<Cart> listProduct;
     var response = await client.get(
       Uri.parse(
           'http://10.0.2.2:8000/api/invoices/getCart/${RepositoryUser.info.id}'),
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      carts = invoiceFromJson(jsonString);
+      carts = invoicesFromJson(jsonString);
       cartClient = carts;
       carts.forEach((element) {
         listProduct = element.products;
@@ -41,9 +40,7 @@ class RepositoryCart {
 
   static Future<dynamic> addToCartDetails(String productID) async {
     var client = http.Client();
-    var response;
-
-    response = await client.post(
+    var response = await client.post(
       Uri.parse(
         'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
       ),
@@ -94,7 +91,7 @@ class RepositoryCart {
       }),
     );
     if (response.statusCode == 200) {
-      cartClient = null;
+      cartClient = [];
       return "Xóa sản phẩm thành công";
     } else {
       return "Xóa sản phẩm thành công";

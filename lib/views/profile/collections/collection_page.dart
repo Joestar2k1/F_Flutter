@@ -1,5 +1,4 @@
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
-import 'package:fluter_19pmd/models/favorites_model.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:fluter_19pmd/views/profile/collections/widgets/body.dart';
 import 'package:flutter/material.dart';
@@ -68,7 +67,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         ),
                       ),
                       title: const Text(
-                        "Bộ sưu tập",
+                        "Bộ yêu thích",
                         style: TextStyle(
                           fontSize: 24,
                           color: Colors.white,
@@ -99,7 +98,6 @@ class _CollectionPageState extends State<CollectionPage> {
                     body: GestureDetector(
                       onTap: () {
                         _isLoading.loadingSink.add(false);
-                        FocusScope.of(context).unfocus();
                       },
                       child: Body(
                         isCreated: state.data,
@@ -117,7 +115,7 @@ class _CollectionPageState extends State<CollectionPage> {
                         style: TextStyle(fontSize: 19),
                       ),
                       icon: const Icon(Icons.add),
-                      backgroundColor: Colors.pink,
+                      backgroundColor: Colors.teal,
                     ),
                   );
                 });

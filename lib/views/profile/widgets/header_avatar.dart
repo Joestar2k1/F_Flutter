@@ -33,17 +33,17 @@ class HeaderWithAvatar extends StatelessWidget {
             child: Column(
               children: <Widget>[
                 buildHeader(size, context),
-                builAvatar(size, user.avatar),
+                buildAvatar(size, user.avatar),
               ],
             ),
           ),
-          buildNameUser(size, user.fullName),
+          buildNameUser(size, user.username),
         ],
       ),
     );
   }
 
-  Stack builAvatar(Size size, String avatar) {
+  Stack buildAvatar(Size size, String avatar) {
     return Stack(
       children: [
         Container(

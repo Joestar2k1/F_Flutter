@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:fluter_19pmd/models/invoiceDetails_models.dart';
 import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
@@ -45,7 +44,7 @@ class RepositoryInvoice {
     if (response.statusCode == 200) {
       List<Invoices> invoices;
       var jsonString = response.body;
-      invoices = invoiceFromJson(jsonString);
+      invoices = invoicesFromJson(jsonString);
 
       return invoices;
     }
@@ -61,7 +60,7 @@ class RepositoryInvoice {
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      var invoices = invoiceFromJson(jsonString);
+      var invoices = invoicesFromJson(jsonString);
 
       return invoices;
     } else {
@@ -79,7 +78,7 @@ class RepositoryInvoice {
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      invoices = invoiceFromJson(jsonString);
+      invoices = invoicesFromJson(jsonString);
 
       return invoices;
     }
@@ -96,7 +95,7 @@ class RepositoryInvoice {
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
-      invoices = invoiceFromJson(jsonString);
+      invoices = invoicesFromJson(jsonString);
 
       return invoices;
     }
@@ -115,18 +114,17 @@ class RepositoryInvoice {
     return json.encode(response.body);
   }
 
-  static Future<InvoiceDetails> orderDetails() async {
+  static Future<Invoices> orderDetails() async {
     var client = http.Client();
 
     var response = await client.get(
       Uri.parse(
           'http://10.0.2.2:8000/api/invoices/order-details/$getInvoiceID'),
     );
-    var jsonData = response.body;
-    var invoice = invoicesFromJson(jsonData);
     if (response.statusCode == 200) {
       var jsonData = response.body;
-      var invoice = invoicesFromJson(jsonData);
+      var invoice = invoiceFromJson(jsonData);
+      print(invoice);
       return invoice;
     }
     return throw Exception("Lỗi");

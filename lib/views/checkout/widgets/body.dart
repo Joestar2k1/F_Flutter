@@ -1,10 +1,12 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/address.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/my-order.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/total_price_product.dart';
+import 'package:fluter_19pmd/views/checkout/widgets/vouchers.dart';
 import 'package:flutter/material.dart';
 
 class Body extends StatefulWidget {
@@ -31,7 +33,7 @@ class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
     // Size size = MediaQuery.of(context).size;
-    return StreamBuilder<List<Product>>(
+    return StreamBuilder<List<Cart>>(
         initialData: null,
         stream: _cartBloc.cartStream,
         builder: (context, snapshot) {
@@ -41,7 +43,8 @@ class _BodyState extends State<Body> {
                 children: [
                   const AddressInPayment(),
                   MyOrder(carts: snapshot.data),
-                  TotalPriceProduct(quantity_pr: snapshot.data.length),
+                  TotalPriceProduct(quantity: snapshot.data[0].quantity),
+                  const VoucherList(),
                 ],
               ),
             );
