@@ -48,7 +48,22 @@ class _BodyState extends State<Body> {
                   itemCount: snapshot.data.length,
                   itemBuilder: (context, index) => Card(
                     child: ExpansionTile(
-                      leading: AnimatedContainer(
+                      leading: Text(
+                        '${index + 1}.',
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      backgroundColor: Colors.white,
+                      title: Text(
+                        snapshot.data[index].title,
+                        style: TextStyle(
+                          fontSize: 22,
+                          color: Colors.grey.shade600,
+                        ),
+                      ),
+                      trailing: AnimatedContainer(
                         width: (widget.isDeleted) ? 30 : 0,
                         height: 30,
                         duration: const Duration(seconds: 1),
@@ -82,13 +97,6 @@ class _BodyState extends State<Body> {
                             width: 30,
                             height: 30,
                           ),
-                        ),
-                      ),
-                      backgroundColor: Colors.white,
-                      title: Text(
-                        snapshot.data[index].title,
-                        style: const TextStyle(
-                          fontSize: 22,
                         ),
                       ),
                       children: [

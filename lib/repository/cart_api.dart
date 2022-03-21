@@ -1,6 +1,5 @@
 import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
-
 import 'package:http/http.dart' as http;
 
 class RepositoryCart {
@@ -45,10 +44,11 @@ class RepositoryCart {
         'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
       ),
       body: ({
-        'productID': productID,
+        'productID': productID.toString(),
         'shippingName': RepositoryUser.info.fullName,
         'shippingPhone': RepositoryUser.info.phone,
         'quantity': getQuantity.toString(),
+        'dateCreated': DateTime.now().toString(),
       }),
     );
 
@@ -70,6 +70,7 @@ class RepositoryCart {
         'productID': productID.toString(),
         'shippingName': RepositoryUser.info.fullName,
         'shippingPhone': RepositoryUser.info.phone,
+        'dateCreated': DateTime.now().toString(),
       }),
     );
     if (response.statusCode == 200) {

@@ -74,7 +74,7 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
                             Container(
                               margin: const EdgeInsets.all(30.0),
                               width: 500,
-                              height: 280,
+                              height: 300,
                               padding: const EdgeInsets.all(20.0),
                               decoration: const BoxDecoration(
                                 color: Colors.white,
@@ -160,7 +160,11 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
             borderRadius: BorderRadius.all(Radius.circular(25)),
             borderSide: BorderSide(color: Colors.teal, width: 2.0),
           ),
-          errorStyle: const TextStyle(fontSize: 18),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 16),
           labelText: "Enter email",
           labelStyle: TextStyle(
             fontSize: 20,

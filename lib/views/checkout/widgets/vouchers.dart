@@ -10,7 +10,7 @@ class VoucherList extends StatefulWidget {
 class _VoucherListState extends State<VoucherList> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: 120,
       child: ListView.separated(
           scrollDirection: Axis.horizontal,

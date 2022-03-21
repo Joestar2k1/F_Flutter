@@ -7,6 +7,7 @@ class OrderDetails extends StatelessWidget {
   final Invoices invoices;
   @override
   Widget build(BuildContext context) {
+    print(invoices);
     return SafeArea(
       child: DefaultTabController(
         length: 5,

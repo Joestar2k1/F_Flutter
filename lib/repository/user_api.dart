@@ -28,16 +28,15 @@ class RepositoryUser {
   }
 
   static Future<dynamic> login(
-      BuildContext context, String email, String password) async {
+      TextEditingController email, TextEditingController password) async {
     var client = http.Client();
 
     var response =
         await client.post(Uri.parse('http://10.0.2.2:8000/api/users/login'),
             body: ({
-              'email': email,
-              'password': password,
+              'email': email.text,
+              'password': password.text,
             }));
-
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
       return 200;
