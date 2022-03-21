@@ -117,7 +117,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      "${convertToVND(RepositoryCart.subTotalCart())}đ",
+                      "${convertToVND(RepositoryCart.subTotalCart() + 20000)}đ",
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.grey.shade800,
@@ -150,16 +150,10 @@ class _CheckOutPageState extends State<CheckOutPage> {
                             context: context,
                             builder: (context) {
                               return AlertDiaLogCustom(
-                                  json: "assets/done.json",
-                                  text: "Đặt hàng thành công.",
-                                  navigator: () {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (context) => const HomePage(),
-                                      ),
-                                    );
-                                  });
+                                json: "assets/done.json",
+                                text: "Đặt hàng thành công.",
+                                navigator: "Go",
+                              );
                             });
                       }
                     },

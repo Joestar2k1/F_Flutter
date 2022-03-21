@@ -41,7 +41,7 @@ class _SignInPageState extends State<SignInPage> {
       return;
     }
     _formKey.currentState.save();
-    var check = await RepositoryUser.login(context, email, password);
+    var check = await RepositoryUser.login(email, password);
     if (check == 200) {
       _isLoading.loadingSink.add(false);
       Navigator.push(
@@ -112,35 +112,68 @@ class _SignInPageState extends State<SignInPage> {
                           Container(
                             margin: const EdgeInsets.all(30.0),
                             width: 500,
-                            height: 400,
-                            padding: const EdgeInsets.all(30.0),
+                            height: 420,
+                            padding: const EdgeInsets.all(20.0),
                             decoration: const BoxDecoration(
                               color: Colors.white,
                               borderRadius: BorderRadius.all(
                                 Radius.circular(20),
                               ),
                             ),
-                            child: Column(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _emailLogin(),
-                                const SizedBox(height: 20),
-                                _passwordLogin(),
-                                Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: Center(
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _emailLogin(),
+                                  const SizedBox(height: 20),
+                                  _passwordLogin(),
+                                  Padding(
+                                    padding: const EdgeInsets.all(10.0),
+                                    child: Center(
+                                      child: TextButton(
+                                        onPressed: () {
+                                          Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    const ForgotPasswordPage(),
+                                              ));
+                                        },
+                                        child: const Text(
+                                          "Quên mật khẩu ?",
+                                          style: TextStyle(
+                                            fontSize: 20,
+                                            color: Colors.blueAccent,
+                                          ),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  (state.data)
+                                      ? Center(
+                                          child: Lottie.asset(
+                                            "assets/loading.json",
+                                            width: 70,
+                                            height: 70,
+                                          ),
+                                        )
+                                      : _buttonLogin(
+                                          context,
+                                          emailController.text,
+                                          passwordController.text),
+                                  Center(
                                     child: TextButton(
                                       onPressed: () {
                                         Navigator.push(
                                             context,
                                             MaterialPageRoute(
                                               builder: (context) =>
-                                                  const ForgotPasswordPage(),
+                                                  const SignUpScreen(),
                                             ));
                                       },
                                       child: const Text(
-                                        "Quên mật khẩu ?",
+                                        "Đăng ký",
                                         style: TextStyle(
                                           fontSize: 20,
                                           color: Colors.blueAccent,
@@ -148,39 +181,8 @@ class _SignInPageState extends State<SignInPage> {
                                       ),
                                     ),
                                   ),
-                                ),
-                                (state.data)
-                                    ? Center(
-                                        child: Lottie.asset(
-                                          "assets/loading.json",
-                                          width: 70,
-                                          height: 70,
-                                        ),
-                                      )
-                                    : _buttonLogin(
-                                        context,
-                                        emailController.text,
-                                        passwordController.text),
-                                Center(
-                                  child: TextButton(
-                                    onPressed: () {
-                                      Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                const SignUpScreen(),
-                                          ));
-                                    },
-                                    child: const Text(
-                                      "Đăng ký",
-                                      style: TextStyle(
-                                        fontSize: 20,
-                                        color: Colors.blueAccent,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             ),
                           ),
                         ],
@@ -210,11 +212,19 @@ class _SignInPageState extends State<SignInPage> {
             borderRadius: BorderRadius.all(Radius.circular(25)),
             borderSide: BorderSide(color: Colors.teal, width: 2.0),
           ),
+          focusedErrorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
           focusedBorder: const OutlineInputBorder(
             borderRadius: BorderRadius.all(Radius.circular(25)),
             borderSide: BorderSide(color: Colors.teal, width: 2.0),
           ),
-          errorStyle: const TextStyle(fontSize: 18),
+          errorBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 16),
           labelText: "Enter email",
           labelStyle: TextStyle(
             fontSize: 20,
@@ -266,6 +276,10 @@ class _SignInPageState extends State<SignInPage> {
               fontSize: 22,
               color: Colors.grey.shade500,
             ),
+            errorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+              borderSide: BorderSide(color: Colors.teal, width: 2.0),
+            ),
             enabledBorder: const OutlineInputBorder(
               borderRadius: BorderRadius.all(Radius.circular(25)),
               borderSide: BorderSide(color: Colors.teal, width: 2.0),
@@ -274,7 +288,11 @@ class _SignInPageState extends State<SignInPage> {
               borderRadius: BorderRadius.all(Radius.circular(25)),
               borderSide: BorderSide(color: Colors.teal, width: 2.0),
             ),
-            errorStyle: const TextStyle(fontSize: 18),
+            focusedErrorBorder: const OutlineInputBorder(
+              borderRadius: BorderRadius.all(Radius.circular(25)),
+              borderSide: BorderSide(color: Colors.teal, width: 2.0),
+            ),
+            errorStyle: const TextStyle(fontSize: 16),
             labelStyle: TextStyle(
               fontSize: 20,
               color: Colors.grey.shade500,

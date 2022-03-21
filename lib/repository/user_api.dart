@@ -27,8 +27,7 @@ class RepositoryUser {
     }
   }
 
-  static Future<dynamic> login(
-      BuildContext context, String email, String password) async {
+  static Future<dynamic> login(String email, String password) async {
     var client = http.Client();
 
     var response =
@@ -37,7 +36,9 @@ class RepositoryUser {
               'email': email,
               'password': password,
             }));
-
+    print(email);
+    print(password);
+    print(response.statusCode);
     if (response.statusCode == 200) {
       info = userFromJson(response.body);
       return 200;

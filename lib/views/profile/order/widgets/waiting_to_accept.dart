@@ -15,12 +15,6 @@ class WaitingToAccept extends StatefulWidget {
 }
 
 class _WaitingToAcceptState extends State<WaitingToAccept> {
-  // List<String> resons = [
-  //   "Đổi ý, mua sản phẩm khác.",
-  //   "Đổi địa chỉ giao hàng.",
-  //   "Không đủ điều kiện kinh tế.",
-  //   "Thích thì hủy.",
-  // ];
   final _invoiceSuccess = InvoiceBloc();
   @override
   void initState() {
@@ -79,7 +73,9 @@ class _WaitingToAcceptState extends State<WaitingToAccept> {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (context) => const OrderDetails(),
+              builder: (context) => OrderDetails(
+                invoices: snapshot.data[index],
+              ),
             ),
           );
         },

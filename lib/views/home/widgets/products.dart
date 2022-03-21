@@ -179,7 +179,6 @@ class _ProductsHomeState extends State<ProductsHome> {
                         return AlertTextFieldCustom(
                           title: "Bộ yêu thích",
                           productID: snapshot.data[index].id,
-                          gif: "assets/gif/logo_behealthy.gif",
                         );
                       });
                   productBloc.eventSink.add(EventProduct.fetch);

@@ -1,6 +1,7 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/repository/favorites_api.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
+import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:fluter_19pmd/views/profile/collections/open_item_collection.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
@@ -160,9 +161,9 @@ String convertToVND(int price) {
 
 // ignore: must_be_immutable
 class AlertTextFieldCustom extends StatefulWidget {
-  const AlertTextFieldCustom({Key key, this.title, this.gif, this.productID})
+  const AlertTextFieldCustom({Key key, this.title, this.productID})
       : super(key: key);
-  final String title, gif;
+  final String title;
   final int productID;
 
   @override
@@ -195,7 +196,7 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
         borderRadius: BorderRadius.circular(20),
       ),
       elevation: 0,
-      backgroundColor: Colors.transparent,
+      backgroundColor: Colors.white,
       child: dialogContent(context),
     );
   }
@@ -206,29 +207,13 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
         children: [
           Stack(
             children: [
-              Container(
-                padding: const EdgeInsets.only(
-                  top: 100,
-                  bottom: 16,
-                  left: 16,
-                  right: 16,
-                ),
-                margin: const EdgeInsets.only(top: 16),
-                decoration: BoxDecoration(
-                    color: Colors.white,
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(16),
-                    boxShadow: const [
-                      BoxShadow(
-                          color: Colors.black,
-                          blurRadius: 10.0,
-                          offset: Offset(0.0, 10.0))
-                    ]),
-                child: StreamBuilder<bool>(
-                    initialData: false,
-                    stream: _eventFavorite.openFavoriteStream,
-                    builder: (context, state) {
-                      return Column(
+              StreamBuilder<bool>(
+                  initialData: false,
+                  stream: _eventFavorite.openFavoriteStream,
+                  builder: (context, state) {
+                    return Padding(
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
@@ -393,22 +378,9 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
                             ],
                           )
                         ],
-                      );
-                    }),
-              ),
-              Positioned(
-                top: 16,
-                left: 16,
-                right: 16,
-                child: SizedBox(
-                  height: 100,
-                  child: Image.asset(
-                    widget.gif,
-                    fit: BoxFit.fitHeight,
-                    scale: 10.0,
-                  ),
-                ),
-              ),
+                      ),
+                    );
+                  }),
             ],
           ),
         ],
@@ -466,7 +438,7 @@ class AlertDiaLogCustom extends StatefulWidget {
   AlertDiaLogCustom({Key key, this.json, this.text, this.navigator})
       : super(key: key);
   final String json, text;
-  Function navigator;
+  String navigator;
   @override
   State<AlertDiaLogCustom> createState() => _AlertDiaLogCustomState();
 }
@@ -482,7 +454,14 @@ class _AlertDiaLogCustomState extends State<AlertDiaLogCustom>
         AnimationController(vsync: this, duration: const Duration(seconds: 2));
     controller.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
-        (widget.navigator == null) ? Navigator.pop(context) : widget.navigator;
+        (widget.navigator == null)
+            ? Navigator.pop(context)
+            : Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => const HomePage(),
+                ),
+              );
 
         controller.reset();
       }
