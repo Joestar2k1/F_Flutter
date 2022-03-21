@@ -1,6 +1,4 @@
-import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/invoices_models.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/services/cart/cart_bloc.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/address.dart';
@@ -32,7 +30,6 @@ class _BodyState extends State<Body> {
 
   @override
   Widget build(BuildContext context) {
-    // Size size = MediaQuery.of(context).size;
     return StreamBuilder<List<Cart>>(
         initialData: null,
         stream: _cartBloc.cartStream,

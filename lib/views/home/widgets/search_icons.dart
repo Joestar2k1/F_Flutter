@@ -1,18 +1,14 @@
 import 'package:fluter_19pmd/constant.dart';
-import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
-import 'package:fluter_19pmd/views/filter/filter_screen.dart';
 import 'package:fluter_19pmd/views/search/search_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 class SearchWithIcons extends StatelessWidget {
-  const SearchWithIcons({
-    Key key,
-  }) : super(key: key);
-
+  const SearchWithIcons({Key key, this.context}) : super(key: key);
+  final BuildContext context;
   @override
-  Widget build(BuildContext context) {
+  Widget build(context) {
     Size size = MediaQuery.of(context).size;
     return SizedBox(
       width: size.width,
@@ -20,18 +16,13 @@ class SearchWithIcons extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           _buttonSearch(size, context),
-          buildIcon(
-            size: size,
-            img: "assets/icons/filter.svg",
-            press: () async {
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) => const FilterPage(),
-              //   ),
-              // );
-            },
-          ),
+          // buildIcon(
+          //   size: size,
+          //   img: "assets/icons/filter.svg",
+          //   press: () {
+          //     Scaffold.of(context).openDrawer();
+          //   },
+          // ),
           InkWell(
             onTap: () {
               Navigator.push(

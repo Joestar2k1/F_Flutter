@@ -33,7 +33,8 @@ class _SignInPageState extends State<SignInPage> {
     _stateStreamController.close();
   }
 
-  _submit(BuildContext context, String email, String password) async {
+  _submit(BuildContext context, TextEditingController email,
+      TextEditingController password) async {
     _isLoading.loadingSink.add(true);
     final isValid = _formKey.currentState.validate();
     if (!isValid) {
@@ -51,7 +52,7 @@ class _SignInPageState extends State<SignInPage> {
         ),
       );
     } else {
-      await showDialog(
+      showDialog(
           context: context,
           builder: (context) {
             return AlertDiaLogCustom(
@@ -155,13 +156,11 @@ class _SignInPageState extends State<SignInPage> {
                                           child: Lottie.asset(
                                             "assets/loading.json",
                                             width: 70,
-                                            height: 70,
+                                            height: 60,
                                           ),
                                         )
-                                      : _buttonLogin(
-                                          context,
-                                          emailController.text,
-                                          passwordController.text),
+                                      : _buttonLogin(context, emailController,
+                                          passwordController),
                                   Center(
                                     child: TextButton(
                                       onPressed: () {
@@ -308,9 +307,12 @@ class _SignInPageState extends State<SignInPage> {
         );
       });
 
-  Widget _buttonLogin(BuildContext context, String email, String password) =>
+  Widget _buttonLogin(BuildContext context, TextEditingController email,
+          TextEditingController password) =>
       InkWell(
-        onTap: () => _submit(context, email, password),
+        onTap: () {
+          _submit(context, email, password);
+        },
         child: Center(
           child: Container(
             decoration: const BoxDecoration(

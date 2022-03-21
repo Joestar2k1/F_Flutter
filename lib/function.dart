@@ -292,10 +292,11 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
                                                 )),
                                           ),
                                       separatorBuilder: (context, index) =>
-                                          const SizedBox(height: 10),
+                                          const SizedBox(height: 5),
                                       itemCount: snapshot.data.length),
                                 );
                               }),
+                          const SizedBox(height: 24.0),
                           (state.data) ? _input() : Container(),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.end,
