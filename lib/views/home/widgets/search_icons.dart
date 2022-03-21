@@ -1,4 +1,5 @@
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
 import 'package:fluter_19pmd/views/search/search_page.dart';
@@ -22,13 +23,13 @@ class SearchWithIcons extends StatelessWidget {
           buildIcon(
             size: size,
             img: "assets/icons/filter.svg",
-            press: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const FilterPage(),
-                ),
-              );
+            press: () async {
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(
+              //     builder: (context) => const FilterPage(),
+              //   ),
+              // );
             },
           ),
           InkWell(
@@ -51,11 +52,10 @@ class SearchWithIcons extends StatelessWidget {
                     color: Colors.white,
                     shape: BoxShape.circle,
                   ),
-                  child: Image.asset(
-                    "assets/images/icons-png/shopping_cart.png",
-                    fit: BoxFit.cover,
-                    width: 30,
-                    height: 30,
+                  child: const Icon(
+                    Icons.shopping_cart_rounded,
+                    size: 30,
+                    color: Colors.black,
                   ),
                 ),
                 // Positioned(

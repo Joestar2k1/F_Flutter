@@ -37,10 +37,9 @@ class ItemProfile extends StatelessWidget {
                 context: context,
                 builder: (context) {
                   return AlertDiaLogCustom(
-                      title: "Thành công",
-                      content: "-Đã đăng xuất ra khỏi BE HEALTHY.",
-                      gif: "assets/gif/success.gif",
-                      textButton: "Okay");
+                    json: "assets/done.json",
+                    text: "Đăng xuất thành công.",
+                  );
                 });
             Navigator.push(
               context,

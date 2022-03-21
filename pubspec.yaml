@@ -44,6 +44,7 @@ dependencies:
   mailer:
   toast:
   alert:
+  lottie:
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -74,7 +75,7 @@ flutter:
     - assets/images/silder/
     - assets/images/products/
     - assets/icons/
-    - assets/gif/
+    - assets/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware.

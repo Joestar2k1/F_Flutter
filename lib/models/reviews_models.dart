@@ -15,8 +15,8 @@ class Review {
   });
 
   int id;
-  String userId;
-  String productId;
+  int userId;
+  int productId;
   String image;
   String content;
   int quantity;

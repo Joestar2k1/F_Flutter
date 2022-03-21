@@ -28,8 +28,8 @@ class Vouchers {
 
   int id;
   String code;
-  String employeeId;
-  String productId;
+  int employeeId;
+  int productId;
   String name;
   int sale;
   DateTime startDate;

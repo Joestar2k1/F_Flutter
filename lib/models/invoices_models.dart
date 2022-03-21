@@ -32,7 +32,7 @@ class Invoices {
   });
 
   String id;
-  String userId;
+  int userId;
   dynamic employeeId;
   String shippingName;
   dynamic shippingAddress;
@@ -77,6 +77,10 @@ class Invoices {
         "updated_at": updatedAt,
         "products": List<dynamic>.from(products.map((x) => x.toJson())),
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }
 
 class Cart {
@@ -95,7 +99,7 @@ class Cart {
     this.quantity,
   });
 
-  String id;
+  int id;
   String name;
   int price;
   int stock;
@@ -137,4 +141,8 @@ class Cart {
         "updated_at": updatedAt,
         "quantity": quantity,
       };
+  @override
+  String toString() {
+    return toJson().toString();
+  }
 }

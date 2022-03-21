@@ -29,7 +29,7 @@ class Product {
     this.reviews,
   });
 
-  String id;
+  int id;
   String name;
   int price;
   int stock;

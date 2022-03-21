@@ -1,17 +1,20 @@
+import 'package:fluter_19pmd/models/invoices_models.dart';
 import 'package:fluter_19pmd/views/profile/order/details/widgets/body.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetails extends StatelessWidget {
-  const OrderDetails({Key key}) : super(key: key);
-
+  const OrderDetails({Key key, this.invoices}) : super(key: key);
+  final Invoices invoices;
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: DefaultTabController(
         length: 5,
         child: Scaffold(
-          body: const Body(),
-          backgroundColor: Colors.white,
+          body: Body(
+            invoice: invoices,
+          ),
+          backgroundColor: Colors.grey.shade100,
           appBar: AppBar(
             elevation: 0,
             backgroundColor: Colors.white,

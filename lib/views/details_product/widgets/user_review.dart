@@ -27,7 +27,6 @@ class UserReview extends StatelessWidget {
                         fontSize: 20,
                       ),
                     )),
-                    SizedBox(height: 60),
                   ],
                 )
               : SizedBox(
@@ -163,9 +162,7 @@ class UserReview extends StatelessWidget {
         ),
         const Text(
           "Đánh giá",
-          style: TextStyle(
-            fontSize: 24,
-          ),
+          style: TextStyle(fontSize: 24, color: Colors.teal),
         ),
         Container(
           width: size.width * 0.35,

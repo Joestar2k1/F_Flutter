@@ -99,10 +99,9 @@ class _BodyState extends State<Body> {
                               context: context,
                               builder: (context) {
                                 return AlertDiaLogCustom(
-                                    title: "Thành công",
-                                    content: "-Sản phẩm đã được xóa.",
-                                    gif: "assets/gif/success.gif",
-                                    textButton: "Okay");
+                                  json: "assets/done.json",
+                                  text: "Sản phẩm đã được xóa",
+                                );
                               });
                         }
                         _cartBloc.eventSink.add(CartEvent.fetchCart);
@@ -185,7 +184,7 @@ class _BodyState extends State<Body> {
         ),
       );
 
-  Widget _counter({Size size, int quantity, String productID, int stock}) =>
+  Widget _counter({Size size, int quantity, int productID, int stock}) =>
       SizedBox(
         width: 150,
         child: Row(

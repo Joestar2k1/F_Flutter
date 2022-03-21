@@ -19,7 +19,7 @@ class RepositoryProduct {
     double dem = 0;
     for (var i = 1; i <= products.length; i++) {
       if (i % 2 != 0) {
-        dem += 0.45;
+        dem += 0.40;
       }
     }
     return dem;
@@ -109,8 +109,7 @@ class RepositoryProduct {
     var client = http.Client();
     List<Product> newProduct;
     var response = await client.get(
-      Uri.parse(
-          'http://10.0.2.2:8000/api/products/getBestSeller/${RepositoryUser.info.id}'),
+      Uri.parse('http://10.0.2.2:8000/api/products/getBestSeller'),
     );
     if (response.statusCode == 200) {
       var jsonString = response.body;
@@ -124,9 +123,12 @@ class RepositoryProduct {
   static Future<List<Product>> resultSearch(String value) async {
     var client = http.Client();
     List<Product> newProduct;
-    var response = await client.get(
-      Uri.parse('http://10.0.2.2:8000/api/products/search-product/$value'),
-    );
+    var response = await client.post(
+        Uri.parse(
+            'http://10.0.2.2:8000/api/products/search-product/${RepositoryUser.info.id}'),
+        body: ({
+          'keyword': value,
+        }));
     if (response.statusCode == 200) {
       var jsonString = response.body;
       newProduct = productFromJson(jsonString);

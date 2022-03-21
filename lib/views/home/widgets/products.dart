@@ -1,6 +1,7 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
+import 'package:fluter_19pmd/repository/favorites_api.dart';
 import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/home/product_bloc.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
@@ -157,10 +158,9 @@ class _ProductsHomeState extends State<ProductsHome> {
                         context: context,
                         builder: (context) {
                           return AlertDiaLogCustom(
-                              title: "Thành công",
-                              content: "-Thêm sản phẩm vào giỏ hàng.",
-                              gif: "assets/gif/success.gif",
-                              textButton: "Okay");
+                            text: "-Thêm sản phẩm vào giỏ hàng.",
+                            json: "assets/done.json",
+                          );
                         });
                   }
                 },
@@ -171,9 +171,9 @@ class _ProductsHomeState extends State<ProductsHome> {
               ),
             ),
             IconButton(
-              onPressed: () {
+              onPressed: () async {
                 if (!snapshot.data[index].checkFavorite) {
-                  showDialog(
+                  await showDialog(
                       context: context,
                       builder: (context) {
                         return AlertTextFieldCustom(
@@ -182,6 +182,11 @@ class _ProductsHomeState extends State<ProductsHome> {
                           gif: "assets/gif/logo_behealthy.gif",
                         );
                       });
+                  productBloc.eventSink.add(EventProduct.fetch);
+                } else {
+                  await RepositoryFavorite.deleteProduct(
+                      snapshot.data[index].id);
+                  productBloc.eventSink.add(EventProduct.fetch);
                 }
               },
               icon: snapshot.data[index].checkFavorite

@@ -3,6 +3,7 @@ import 'package:fluter_19pmd/repository/favorites_api.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:fluter_19pmd/views/profile/collections/open_item_collection.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 import 'models/favorites_model.dart';
 
@@ -31,130 +32,138 @@ String convertToVND(int price) {
   return newPrice.toString();
 }
 
-// ignore: must_be_immutable
-class AlertDiaLogCustom extends StatelessWidget {
-  AlertDiaLogCustom(
-      {Key key,
-      this.title,
-      this.content,
-      this.gif,
-      this.textButton,
-      this.textButton1,
-      this.press})
-      : super(key: key);
-  final String title, content, gif;
-  String textButton;
-  String textButton1;
-  Function press;
-  @override
-  Widget build(BuildContext context) {
-    return Dialog(
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(20),
-      ),
-      elevation: 0,
-      backgroundColor: Colors.transparent,
-      child: dialogContent(context),
-    );
-  }
+// // ignore: must_be_immutable
+// class AlertDiaLogCustom extends StatelessWidget {
+//   AlertDiaLogCustom(
+//       {Key key,
+//       this.title,
+//       this.content,
+//       this.gif,
+//       this.textButton,
+//       this.textButton1,
+//       this.press})
+//       : super(key: key);
+//   final String title, content, gif;
+//   String textButton;
+//   String textButton1;
+//   Function press;
+//   @override
+//   Widget build(BuildContext context) {
+//     return Dialog(
+//       shape: RoundedRectangleBorder(
+//         borderRadius: BorderRadius.circular(20),
+//       ),
+//       elevation: 0,
+//       backgroundColor: Colors.transparent,
+//       child: dialogContent(context),
+//     );
+//   }
 
-  dialogContent(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          padding: const EdgeInsets.only(
-            top: 100,
-            bottom: 16,
-            left: 16,
-            right: 16,
-          ),
-          margin: const EdgeInsets.only(top: 16),
-          decoration: BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.rectangle,
-              borderRadius: BorderRadius.circular(16),
-              boxShadow: const [
-                BoxShadow(
-                    color: Colors.black,
-                    blurRadius: 10.0,
-                    offset: Offset(0.0, 10.0))
-              ]),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                title,
-                style: const TextStyle(
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.w700,
-                ),
-              ),
-              const SizedBox(height: 24.0),
-              Text(
-                content,
-                style: const TextStyle(
-                  fontSize: 20.0,
-                ),
-              ),
-              const SizedBox(height: 24.0),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  (textButton1 == null)
-                      ? Container()
-                      : ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(buttonColor),
-                          ),
-                          onPressed: press,
-                          child: Text(
-                            textButton1,
-                            style: const TextStyle(
-                              fontSize: 22.0,
-                            ),
-                          ),
-                        ),
-                  const SizedBox(width: 20.0),
-                  ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor: MaterialStateProperty.all(buttonColor),
-                    ),
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                    },
-                    child: Text(
-                      textButton,
-                      style: const TextStyle(
-                        fontSize: 22.0,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ),
-        Positioned(
-          top: 0,
-          left: 16,
-          right: 16,
-          child: CircleAvatar(
-            backgroundColor: Colors.white,
-            radius: 50,
-            backgroundImage: AssetImage(gif),
-          ),
-        ),
-      ],
-    );
-  }
-}
+//   dialogContent(BuildContext context) {
+//     return Stack(
+//       children: [
+//         Container(
+//           padding: const EdgeInsets.only(
+//             top: 100,
+//             bottom: 16,
+//             left: 16,
+//             right: 16,
+//           ),
+//           margin: const EdgeInsets.only(top: 16),
+//           decoration: BoxDecoration(
+//               color: Colors.white,
+//               shape: BoxShape.rectangle,
+//               borderRadius: BorderRadius.circular(16),
+//               boxShadow: const [
+//                 BoxShadow(
+//                     color: Colors.black,
+//                     blurRadius: 10.0,
+//                     offset: Offset(0.0, 10.0))
+//               ]),
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: [
+//               Text(
+//                 title,
+//                 style: const TextStyle(
+//                   fontSize: 24.0,
+//                   fontWeight: FontWeight.w700,
+//                 ),
+//               ),
+//               const SizedBox(height: 24.0),
+//               SizedBox(
+//                 height: 50,
+//                 width: double.infinity,
+//                 child: Text(
+//                   content,
+//                   style: TextStyle(
+//                     fontSize: 20.0,
+//                     color: Colors.grey.shade500,
+//                     overflow: TextOverflow.ellipsis,
+//                   ),
+//                   maxLines: 2,
+//                 ),
+//               ),
+//               const SizedBox(height: 24.0),
+//               Row(
+//                 mainAxisAlignment: MainAxisAlignment.end,
+//                 children: [
+//                   (textButton1 == null)
+//                       ? Container()
+//                       : ElevatedButton(
+//                           style: ButtonStyle(
+//                             backgroundColor:
+//                                 MaterialStateProperty.all(buttonColor),
+//                           ),
+//                           onPressed: press,
+//                           child: Text(
+//                             textButton1,
+//                             style: const TextStyle(
+//                               fontSize: 22.0,
+//                             ),
+//                           ),
+//                         ),
+//                   const SizedBox(width: 20.0),
+//                   ElevatedButton(
+//                     style: ButtonStyle(
+//                       backgroundColor: MaterialStateProperty.all(buttonColor),
+//                     ),
+//                     onPressed: () {
+//                       Navigator.of(context).pop();
+//                     },
+//                     child: Text(
+//                       textButton,
+//                       style: const TextStyle(
+//                         fontSize: 22.0,
+//                       ),
+//                     ),
+//                   ),
+//                 ],
+//               ),
+//             ],
+//           ),
+//         ),
+//         Positioned(
+//           top: 0,
+//           left: 16,
+//           right: 16,
+//           child: CircleAvatar(
+//             backgroundColor: Colors.white,
+//             radius: 50,
+//             backgroundImage: AssetImage(gif),
+//           ),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
 // ignore: must_be_immutable
 class AlertTextFieldCustom extends StatefulWidget {
   const AlertTextFieldCustom({Key key, this.title, this.gif, this.productID})
       : super(key: key);
-  final String title, gif, productID;
+  final String title, gif;
+  final int productID;
 
   @override
   State<AlertTextFieldCustom> createState() => _AlertTextFieldCustomState();
@@ -215,144 +224,177 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
                           blurRadius: 10.0,
                           offset: Offset(0.0, 10.0))
                     ]),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Text(
-                      widget.title,
-                      style: const TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.w700,
-                      ),
-                    ),
-                    const SizedBox(height: 24.0),
-                    StreamBuilder<List<Favorites>>(
-                        initialData: null,
-                        stream: _favorites.userFavoriteStream,
-                        builder: (context, snapshot) {
-                          if (snapshot.data == null) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          return SizedBox(
-                            width: 300,
-                            height: RepositoryFavorite.getHeightForScreenHome(
-                                snapshot.data.length),
-                            child: ListView.separated(
-                                physics: const NeverScrollableScrollPhysics(),
-                                itemBuilder: (context, index) => Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(
-                                          width: 200,
-                                          child: Text(
-                                            '-${snapshot.data[index].title}',
-                                            style: TextStyle(
-                                              fontSize: 20,
-                                              color: Colors.grey.shade600,
-                                              overflow: TextOverflow.ellipsis,
+                child: StreamBuilder<bool>(
+                    initialData: false,
+                    stream: _eventFavorite.openFavoriteStream,
+                    builder: (context, state) {
+                      return Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            widget.title,
+                            style: const TextStyle(
+                              fontSize: 24.0,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(height: 24.0),
+                          StreamBuilder<List<Favorites>>(
+                              initialData: null,
+                              stream: _favorites.userFavoriteStream,
+                              builder: (context, snapshot) {
+                                if (snapshot.data == null) {
+                                  return const Center(
+                                      child: CircularProgressIndicator());
+                                }
+                                return SizedBox(
+                                  width: 300,
+                                  height:
+                                      RepositoryFavorite.getHeightForScreenHome(
+                                          snapshot.data.length),
+                                  child: ListView.separated(
+                                      physics:
+                                          const NeverScrollableScrollPhysics(),
+                                      itemBuilder: (context, index) => ListTile(
+                                            leading: Text(
+                                              '${index + 1}.',
+                                              style: TextStyle(
+                                                  fontSize: 22,
+                                                  color: Colors.grey.shade600),
                                             ),
-                                            maxLines: 1,
+                                            title: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                      vertical: 10.0),
+                                              height: 50,
+                                              child: Text(
+                                                snapshot.data[index].title,
+                                                style: TextStyle(
+                                                  fontSize: 22,
+                                                  color: Colors.grey.shade600,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                ),
+                                                maxLines: 1,
+                                              ),
+                                            ),
+                                            trailing: IconButton(
+                                                onPressed: () async {
+                                                  var code =
+                                                      await RepositoryFavorite
+                                                          .addProduct(
+                                                    widget.productID,
+                                                    snapshot.data[index].id,
+                                                  );
+                                                  if (code == 200) {
+                                                    Navigator.of(context).pop();
+                                                    await showDialog(
+                                                        context: context,
+                                                        builder: (context) {
+                                                          return AlertDiaLogCustom(
+                                                            json:
+                                                                "assets/done.json",
+                                                            text:
+                                                                "Sản phẩm đã được thêm vào bộ yêu thích.",
+                                                          );
+                                                        });
+                                                  }
+                                                },
+                                                icon: const Icon(
+                                                  Icons.add,
+                                                  color: Colors.green,
+                                                  size: 30,
+                                                )),
                                           ),
+                                      separatorBuilder: (context, index) =>
+                                          const SizedBox(height: 10),
+                                      itemCount: snapshot.data.length),
+                                );
+                              }),
+                          (state.data) ? _input() : Container(),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.end,
+                            children: [
+                              (state.data)
+                                  ? ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                buttonColor),
+                                      ),
+                                      onPressed: () async {
+                                        var data =
+                                            await RepositoryFavorite.addTitle(
+                                                controller.text);
+                                        if (data == 200) {
+                                          await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDiaLogCustom(
+                                                  json: "assets/done.json",
+                                                  text: "Tạo mới thành công.",
+                                                );
+                                              });
+                                          _favorites.eventSink
+                                              .add(UserEvent.showFavorite);
+                                        } else {
+                                          await showDialog(
+                                              context: context,
+                                              builder: (context) {
+                                                return AlertDiaLogCustom(
+                                                  json: "assets/error.json",
+                                                  text: "Tạo mới thất bại.",
+                                                );
+                                              });
+                                        }
+                                        _eventFavorite.openFavoriteSink
+                                            .add(false);
+                                      },
+                                      child: const Text(
+                                        "Hoàn tất",
+                                        style: TextStyle(
+                                          fontSize: 22.0,
                                         ),
-                                        IconButton(
-                                            onPressed: () async {
-                                              var code =
-                                                  await RepositoryFavorite
-                                                      .addProduct(
-                                                widget.productID,
-                                                snapshot.data[index].id,
-                                              );
-                                              if (code == 200) {
-                                                Navigator.of(context).pop();
-                                                await showDialog(
-                                                    context: context,
-                                                    builder: (context) {
-                                                      return AlertDiaLogCustom(
-                                                          title: "Thành công",
-                                                          content:
-                                                              "-Đã thêm sản phẩm vào yêu thích.",
-                                                          gif:
-                                                              "assets/gif/success.gif",
-                                                          textButton: "Okay");
-                                                    });
-                                              }
-                                            },
-                                            icon: const Icon(
-                                              Icons.add,
-                                              color: Colors.green,
-                                              size: 30,
-                                            )),
-                                      ],
+                                      ),
+                                    )
+                                  : ElevatedButton(
+                                      style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                buttonColor),
+                                      ),
+                                      onPressed: () {
+                                        _eventFavorite.openFavoriteSink
+                                            .add(true);
+                                      },
+                                      child: const Text(
+                                        "Tạo mới",
+                                        style: TextStyle(
+                                          fontSize: 22.0,
+                                        ),
+                                      ),
                                     ),
-                                separatorBuilder: (context, index) =>
-                                    const SizedBox(height: 10),
-                                itemCount: snapshot.data.length),
-                          );
-                        }),
-                    StreamBuilder<bool>(
-                        initialData: false,
-                        stream: _eventFavorite.openFavoriteStream,
-                        builder: (context, state) {
-                          if (!state.data) {
-                            return Container();
-                          }
-                          return Padding(
-                            padding: const EdgeInsets.only(top: 10, bottom: 20),
-                            child: TextFormField(
-                              controller: controller,
-                              obscureText: false,
-                              style: const TextStyle(fontSize: 20),
-                              keyboardType: TextInputType.text,
-                              onFieldSubmitted: (value) {},
-                              decoration: const InputDecoration(
-                                border: OutlineInputBorder(),
-                                errorStyle: TextStyle(fontSize: 18),
-                                labelText: "Nhập ...",
-                                labelStyle: TextStyle(fontSize: 20),
+                              const SizedBox(width: 20.0),
+                              ElevatedButton(
+                                style: ButtonStyle(
+                                  backgroundColor:
+                                      MaterialStateProperty.all(buttonColor),
+                                ),
+                                onPressed: () {
+                                  Navigator.of(context).pop();
+                                },
+                                child: const Text(
+                                  "Hủy",
+                                  style: TextStyle(
+                                    fontSize: 22.0,
+                                  ),
+                                ),
                               ),
-                            ),
-                          );
-                        }),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.end,
-                      children: [
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(buttonColor),
-                          ),
-                          onPressed: () {
-                            _eventFavorite.openFavoriteSink.add(true);
-                          },
-                          child: const Text(
-                            "Tạo mới",
-                            style: TextStyle(
-                              fontSize: 22.0,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 20.0),
-                        ElevatedButton(
-                          style: ButtonStyle(
-                            backgroundColor:
-                                MaterialStateProperty.all(buttonColor),
-                          ),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                          },
-                          child: const Text(
-                            "Hủy",
-                            style: TextStyle(
-                              fontSize: 22.0,
-                            ),
-                          ),
-                        ),
-                      ],
-                    )
-                  ],
-                ),
+                            ],
+                          )
+                        ],
+                      );
+                    }),
               ),
               Positioned(
                 top: 16,
@@ -371,6 +413,119 @@ class _AlertTextFieldCustomState extends State<AlertTextFieldCustom> {
           ),
         ],
       ),
+    );
+  }
+
+  Widget _input() {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: TextFormField(
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey.shade500,
+        ),
+        controller: controller,
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {},
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.collections),
+          floatingLabelStyle: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 18),
+          labelText: "Tên",
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        validator: (value) {
+          if (value.isEmpty ||
+              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  .hasMatch(value)) {
+            return 'Enter a valid email!';
+          }
+          return null;
+        },
+      ),
+    );
+  }
+}
+
+// ignore: must_be_immutable
+class AlertDiaLogCustom extends StatefulWidget {
+  AlertDiaLogCustom({Key key, this.json, this.text, this.navigator})
+      : super(key: key);
+  final String json, text;
+  Function navigator;
+  @override
+  State<AlertDiaLogCustom> createState() => _AlertDiaLogCustomState();
+}
+
+class _AlertDiaLogCustomState extends State<AlertDiaLogCustom>
+    with SingleTickerProviderStateMixin {
+  AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: const Duration(seconds: 2));
+    controller.addStatusListener((status) {
+      if (status == AnimationStatus.completed) {
+        (widget.navigator == null) ? Navigator.pop(context) : widget.navigator;
+
+        controller.reset();
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    controller.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20),
+      ),
+      elevation: 0,
+      backgroundColor: Colors.white,
+      child: dialogContent(context),
+    );
+  }
+
+  dialogContent(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Lottie.asset(widget.json, controller: controller, repeat: false,
+            onLoaded: (p0) {
+          controller.duration = p0.duration;
+          controller.forward();
+        }, fit: BoxFit.cover),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10.0),
+          child: Text(widget.text,
+              style: TextStyle(fontSize: 22, color: Colors.grey.shade600)),
+        ),
+        const SizedBox(
+          height: 50,
+        ),
+      ],
     );
   }
 }

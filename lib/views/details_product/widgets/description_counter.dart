@@ -38,17 +38,16 @@ class _DescriptionWidthCounterState extends State<DescriptionWidthCounter> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const SizedBox(
-                  height: 15,
-                ),
+                // const SizedBox(
+                //   height: 15,
+                // ),
                 const Align(
                   alignment: Alignment.topCenter,
                   child: Text(
                     "Thông tin sản phẩm",
                     style: TextStyle(
                       fontSize: 23,
-                      fontFamily: "RobotoSlab",
-                      color: Colors.black87,
+                      color: Colors.teal,
                     ),
                   ),
                 ),

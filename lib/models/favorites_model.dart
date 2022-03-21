@@ -22,8 +22,8 @@ class Favorites {
     this.products,
   });
 
-  String id;
-  String userId;
+  int id;
+  int userId;
   String title;
   dynamic createdAt;
   dynamic updatedAt;

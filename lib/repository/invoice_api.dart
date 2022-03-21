@@ -6,7 +6,6 @@ import 'package:http/http.dart' as http;
 
 class RepositoryInvoice {
   static var getInvoiceID;
-  static var getContext;
   static String getAddress;
   static double heightMyOrder() {
     double dem = 0;
@@ -18,19 +17,21 @@ class RepositoryInvoice {
 
   static Future<dynamic> payment() async {
     var client = http.Client();
+
     var response = await client.put(
       Uri.parse(
           'http://10.0.2.2:8000/api/invoices/payment/${RepositoryCart.cartClient[0].id}'),
       body: ({
         'address': getAddress,
-        'total': RepositoryCart.subTotalCart().toString(),
+        'total': (RepositoryCart.subTotalCart() + 20000).toString(),
       }),
     );
+    print(response.statusCode);
     if (response.statusCode == 200) {
       RepositoryCart.cartClient = [];
-      return "Đặt hàng thành công";
+      return response.statusCode;
     } else {
-      return "Đặt hàng thất bại";
+      return response.statusCode;
     }
   }
 

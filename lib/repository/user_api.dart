@@ -1,7 +1,5 @@
 import 'dart:convert';
-
 import 'package:fluter_19pmd/models/user_models.dart';
-import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -100,6 +98,12 @@ class RepositoryUser {
   static Future register(String username, String fullName, String email,
       String password, String phone, String address) async {
     var client = http.Client();
+    print(username);
+    print(fullName);
+    print(email);
+    print(password);
+    print(phone);
+    print(address);
     var response =
         await client.post(Uri.parse('http://10.0.2.2:8000/api/users/register'),
             body: ({

@@ -138,12 +138,9 @@ class _AccountInformationState extends State<AccountInformation> {
                                                 context: context,
                                                 builder: (context) {
                                                   return AlertDiaLogCustom(
-                                                      title: "Thành công",
-                                                      content:
-                                                          "-$messageFormSever.",
-                                                      gif:
-                                                          "assets/gif/success.gif",
-                                                      textButton: "Okay");
+                                                    text: "$messageFormSever.",
+                                                    json: "assets/done.json",
+                                                  );
                                                 });
                                             ;
                                             _profileBloc.eventSink

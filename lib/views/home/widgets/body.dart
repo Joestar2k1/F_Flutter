@@ -173,7 +173,9 @@ class _BodyState extends State<Body> {
                                       context,
                                       MaterialPageRoute(
                                         builder: (context) =>
-                                            const DetailsProductScreen(),
+                                            DetailsProductScreen(
+                                          products: snapshot.data[index],
+                                        ),
                                       ),
                                     );
                                   },

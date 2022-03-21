@@ -79,51 +79,70 @@ class _SignUpScreenState extends State<SignUpScreen> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.all(20.0),
-                child: SingleChildScrollView(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      SizedBox(
-                        height: size.height * 0.03,
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    const SizedBox(height: 70),
+                    const Text(
+                      "Đăng ký",
+                      style: TextStyle(
+                        fontSize: 30,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
                       ),
-                      InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child: const Icon(Icons.arrow_back,
-                              color: Colors.white)),
-                      const Text(
-                        "Xin chào bạn",
-                        style: TextStyle(
-                          fontSize: 20,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    Container(
+                      margin: const EdgeInsets.all(30.0),
+                      width: 500,
+                      height: 500,
+                      padding: const EdgeInsets.all(20.0),
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(20),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Đây là trang đăng ký!",
-                        style: TextStyle(
-                          fontSize: 25,
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                        ),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _emailLogin(),
+                          const SizedBox(height: 20),
+                          _input(const Icon(Icons.account_box), "Enter họ tên",
+                              fullNameController),
+                          const SizedBox(height: 20),
+                          _input(const Icon(Icons.location_city),
+                              "Enter địa chỉ", addressController),
+                          const SizedBox(height: 20),
+                          _input(const Icon(Icons.phone_android),
+                              "Enter số điện thoại", phoneController),
+                          const SizedBox(height: 20),
+                          _buttonGoOn(
+                              context,
+                              emailController,
+                              fullNameController,
+                              addressController,
+                              phoneController),
+                          const SizedBox(height: 20),
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Center(
+                              child: Text(
+                                "Quay lại",
+                                style: TextStyle(
+                                  fontSize: 20,
+                                  color: Colors.grey.shade600,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      _emailLogin(),
-                      const SizedBox(height: 10),
-                      _input("Enter họ tên", fullNameController),
-                      const SizedBox(height: 10),
-                      _input("Enter địa chỉ", addressController),
-                      const SizedBox(height: 10),
-                      _input("Enter số điện thoại", phoneController),
-                      const SizedBox(height: 10),
-                      _buttonGoOn(context, emailController, fullNameController,
-                          addressController, phoneController),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -131,78 +150,81 @@ class _SignUpScreenState extends State<SignUpScreen> {
         ),
       );
 
-  Widget _emailLogin() => Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
-        child: TextFormField(
-          controller: emailController,
-          style: const TextStyle(fontSize: 20),
-          keyboardType: TextInputType.emailAddress,
-          onFieldSubmitted: (value) {},
-          decoration: const InputDecoration(
-            floatingLabelStyle: TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 3.0),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 3.0),
-            ),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 3.0)),
-            errorStyle: TextStyle(fontSize: 18),
-            labelText: "Enter email",
-            labelStyle: TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          ),
-          validator: (value) {
-            if (value.isEmpty ||
-                !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value)) {
-              return 'Không hợp lệ, phải chứa @!';
-            }
-            return null;
-          },
+  Widget _emailLogin() => TextFormField(
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey.shade500,
         ),
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {},
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.email_outlined),
+          floatingLabelStyle: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 18),
+          labelText: "Enter email",
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        validator: (value) {
+          if (value.isEmpty ||
+              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  .hasMatch(value)) {
+            return 'Enter a valid email!';
+          }
+          return null;
+        },
       );
-  Widget _input(text, controller) => Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
-        child: TextFormField(
-          controller: controller,
-          obscureText: false,
-          style: const TextStyle(fontSize: 20),
-          keyboardType: TextInputType.emailAddress,
-          onFieldSubmitted: (value) {},
-          decoration: InputDecoration(
-            floatingLabelStyle: const TextStyle(
-              fontSize: 22,
-              color: Colors.white,
-            ),
-            enabledBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 3.0),
-            ),
-            focusedBorder: const OutlineInputBorder(
-              borderSide: BorderSide(color: Colors.white, width: 3.0),
-            ),
-            border: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.white, width: 3.0)),
-            errorStyle: const TextStyle(fontSize: 18),
-            labelText: text,
-            labelStyle: const TextStyle(
-              fontSize: 20,
-              color: Colors.white,
-            ),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Không được bỏ trống';
-            }
-            return null;
-          },
+
+  Widget _input(icon, text, controller) => TextFormField(
+        controller: controller,
+        obscureText: false,
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey.shade500,
         ),
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {},
+        decoration: InputDecoration(
+          prefixIcon: icon,
+          floatingLabelStyle: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 18),
+          labelText: text,
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Không được bỏ trống';
+          }
+          return null;
+        },
       );
 
   Widget _buttonGoOn(context, email, fullName, address, phone) => Center(

@@ -1,5 +1,6 @@
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/constant.dart';
+import 'package:fluter_19pmd/function.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/models/reviews_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
@@ -46,7 +47,100 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
             )
           : Scaffold(
               backgroundColor: Colors.white,
-              body: Body(details: widget.products),
+              body: NestedScrollView(
+                  floatHeaderSlivers: true,
+                  headerSliverBuilder: (context, innerBoxIsScroll) => [
+                        SliverAppBar(
+                          backgroundColor: Colors.white,
+                          elevation: 2,
+                          leading: InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Icon(
+                              Icons.arrow_back_ios_new,
+                              color: Colors.black,
+                              size: 24,
+                            ),
+                          ),
+                          title: Text(
+                            'Sản phẩm',
+                            style: TextStyle(
+                                fontSize: 22, color: Colors.grey.shade600),
+                          ),
+                          actions: [
+                            (widget.products.checkFavorite)
+                                ? const Padding(
+                                    padding: EdgeInsets.all(15.0),
+                                    child: Icon(
+                                      Icons.favorite,
+                                      color: Colors.red,
+                                      size: 24,
+                                    ),
+                                  )
+                                : Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: InkWell(
+                                      onTap: () {},
+                                      child: const Icon(
+                                        Icons.favorite_outline,
+                                        color: Colors.red,
+                                        size: 24,
+                                      ),
+                                    ),
+                                  ),
+                          ],
+                          snap: true,
+                          floating: true,
+                          pinned: true,
+                          expandedHeight: 280,
+                          flexibleSpace: FlexibleSpaceBar(
+                            background: Stack(
+                              children: [
+                                Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Padding(
+                                      padding: const EdgeInsets.only(
+                                          top: 130, left: 20),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            widget.products.name,
+                                            style: TextStyle(
+                                                fontSize: 30,
+                                                fontFamily: "RobotoSlab",
+                                                color: Colors.grey.shade800),
+                                          ),
+                                          const SizedBox(
+                                            height: 30,
+                                          ),
+                                          Text(
+                                            '${convertToVND(widget.products.price)}đ/${widget.products.unit}',
+                                            style: TextStyle(
+                                                fontSize: 20,
+                                                fontFamily: "RobotoSlab",
+                                                color: Colors.grey.shade800),
+                                          )
+                                        ],
+                                      ),
+                                    ),
+                                    Expanded(
+                                        child: Image.network(
+                                      widget.products.image,
+                                      fit: BoxFit.cover,
+                                    )),
+                                  ],
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                  body: Body(details: widget.products)),
               bottomNavigationBar: _buildBottomNav(size, context),
             ),
     );

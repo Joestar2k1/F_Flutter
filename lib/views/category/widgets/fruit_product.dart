@@ -59,8 +59,9 @@ class _FruitPageState extends State<FruitPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const DetailsProductScreen(),
+                                builder: (context) => DetailsProductScreen(
+                                  products: snapshot.data[index],
+                                ),
                               ),
                             );
                           },

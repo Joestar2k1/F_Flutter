@@ -60,8 +60,9 @@ class _MeetPageState extends State<MeetPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const DetailsProductScreen(),
+                                builder: (context) => DetailsProductScreen(
+                                  products: snapshot.data[index],
+                                ),
                               ),
                             );
                           },
