@@ -6,7 +6,6 @@ import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/checkout/widgets/body.dart';
 import 'package:fluter_19pmd/views/home/home_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class CheckOutPage extends StatefulWidget {
   const CheckOutPage({Key key}) : super(key: key);
@@ -118,7 +117,7 @@ class _CheckOutPageState extends State<CheckOutPage> {
                     ),
                     const SizedBox(height: 15),
                     Text(
-                      "${convertToVND(RepositoryCart.subTotalCart() + 20000)}đ",
+                      "${convertToVND(RepositoryCart.subTotalCart())}đ",
                       style: TextStyle(
                         fontSize: 22,
                         color: Colors.grey.shade800,
@@ -137,18 +136,30 @@ class _CheckOutPageState extends State<CheckOutPage> {
                       ),
                     ),
                     onPressed: () async {
-                      RepositoryInvoice.getContext = context;
-                      var message = await RepositoryInvoice.payment();
-                      if (message != null) {
-                        showDialog(
+                      var code = await RepositoryInvoice.payment();
+                      if (code == 200) {
+                        await showDialog(
                             context: context,
                             builder: (context) {
                               return AlertDiaLogCustom(
-                                  title: "Thành công",
-                                  content:
-                                      "-Đã đặt hàng, hãy kiểm tra đơn hàng.",
-                                  gif: "assets/gif/success.gif",
-                                  textButton: "Okay");
+                                json: "assets/delivery.json",
+                                text: "Xin vui lòng đợi trong giây lát.",
+                              );
+                            });
+                        await showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDiaLogCustom(
+                                  json: "assets/done.json",
+                                  text: "Đặt hàng thành công.",
+                                  navigator: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => const HomePage(),
+                                      ),
+                                    );
+                                  });
                             });
                       }
                     },

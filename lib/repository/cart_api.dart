@@ -4,7 +4,7 @@ import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryCart {
-  static String getID;
+  static int getID;
   static List<Invoices> cartClient = [];
   static int getQuantity;
   static subTotalCart() {
@@ -38,7 +38,7 @@ class RepositoryCart {
     return null;
   }
 
-  static Future<dynamic> addToCartDetails(String productID) async {
+  static Future<dynamic> addToCartDetails(var productID) async {
     var client = http.Client();
     var response = await client.post(
       Uri.parse(
@@ -59,16 +59,15 @@ class RepositoryCart {
     }
   }
 
-  static Future<dynamic> addToCart(String productID) async {
+  static Future<dynamic> addToCart(var productID) async {
     var client = http.Client();
-    var response;
 
-    response = await client.post(
+    var response = await client.post(
       Uri.parse(
         'http://10.0.2.2:8000/api/invoices/AddToCart/${RepositoryUser.info.id}',
       ),
       body: ({
-        'productID': productID,
+        'productID': productID.toString(),
         'shippingName': RepositoryUser.info.fullName,
         'shippingPhone': RepositoryUser.info.phone,
       }),
@@ -76,18 +75,18 @@ class RepositoryCart {
     if (response.statusCode == 200) {
       return "Thêm thành công";
     } else {
-      return "Thêm thất bại";
+      return null;
     }
   }
 
-  static Future<dynamic> deleteProductCart(String productID) async {
+  static Future<dynamic> deleteProductCart(var productID) async {
     var client = http.Client();
     var response = await client.delete(
       Uri.parse(
         'http://10.0.2.2:8000/api/invoices/DeleteProductCart/${RepositoryUser.info.id}',
       ),
       body: ({
-        'productID': productID,
+        'productID': productID.toString(),
       }),
     );
     if (response.statusCode == 200) {
@@ -105,7 +104,7 @@ class RepositoryCart {
         'http://10.0.2.2:8000/api/invoices/UpdateQuantityDecrement/${RepositoryUser.info.id}',
       ),
       body: ({
-        'productID': getID,
+        'productID': getID.toString(),
         'invoiceID': cartClient[0].id,
       }),
     );
@@ -122,7 +121,7 @@ class RepositoryCart {
         'http://10.0.2.2:8000/api/invoices/UpdateQuantityIncrement/${RepositoryUser.info.id}',
       ),
       body: ({
-        'productID': getID,
+        'productID': getID.toString(),
         'invoiceID': cartClient[0].id,
       }),
     );

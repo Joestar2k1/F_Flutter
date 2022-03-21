@@ -4,6 +4,7 @@ import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:mailer/smtp_server/gmail.dart';
 import 'package:toast/toast.dart';
 import 'package:mailer/mailer.dart';
@@ -37,94 +38,143 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
 
   Widget _form(size) => Form(
         key: _formKey,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: GestureDetector(
-            onTap: () {
-              FocusScope.of(context).unfocus();
-            },
-            child: StreamBuilder<bool>(
-                initialData: false,
-                stream: _isLoading.loadingStream,
-                builder: (context, state) {
-                  return SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Center(
-                            child: Image.network(
-                          'https://www.freeiconspng.com/uploads/forgot-password-icon-8.jpg',
-                          width: 250,
-                          height: 250,
-                        )),
-                        InkWell(
-                          onTap: () {
-                            Navigator.pop(context);
-                          },
-                          child:
-                              const Icon(Icons.arrow_back, color: Colors.teal),
-                        ),
-                        SizedBox(
-                          height: size.height * 0.05,
-                        ),
-                        Text(
-                          "Nhập Email mà bạn đã đăng ký",
-                          style: TextStyle(
-                            fontSize: 22,
-                            color: Colors.grey.shade600,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        _email(),
-                        const SizedBox(height: 20),
-                        _buttonLogin(context, emailController.text),
-                        (state.data)
-                            ? Column(
+        child: GestureDetector(
+          onTap: () {
+            FocusScope.of(context).unfocus();
+          },
+          child: Stack(
+            children: [
+              Container(
+                width: double.infinity,
+                height: double.infinity,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Colors.teal.shade600, Colors.teal.shade200],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+              ),
+              Center(
+                child: StreamBuilder<bool>(
+                    initialData: false,
+                    stream: _isLoading.loadingStream,
+                    builder: (context, state) {
+                      return SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Quên mật khẩu",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Container(
+                              margin: const EdgeInsets.all(30.0),
+                              width: 500,
+                              height: 280,
+                              padding: const EdgeInsets.all(20.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(height: 20),
-                                  Row(
-                                    children: const [
-                                      Text(
-                                        "Đang gửi vui lòng chờ trong giây lát..",
+                                  Text(
+                                    "Nhập Email mà bạn đã đăng ký",
+                                    style: TextStyle(
+                                      fontSize: 22,
+                                      color: Colors.grey.shade600,
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 20.0),
+                                    child: _emailLogin(),
+                                  ),
+                                  (!state.data)
+                                      ? _buttonLogin(
+                                          context, emailController.text)
+                                      : Center(
+                                          child: Lottie.asset(
+                                              "assets/loading.json",
+                                              width: 100,
+                                              height: 50),
+                                        ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        "Quay lại",
                                         style: TextStyle(
-                                            color: Colors.teal, fontSize: 20),
+                                          fontSize: 20,
+                                          color: Colors.grey.shade600,
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                      CircularProgressIndicator(),
-                                    ],
+                                    ),
                                   ),
                                 ],
-                              )
-                            : Container(),
-                      ],
-                    ),
-                  );
-                }),
+                              ),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+              ),
+            ],
           ),
         ),
       );
-  Widget _email() => Padding(
-        padding: const EdgeInsets.only(top: 20, bottom: 10),
-        child: TextFormField(
-          controller: emailController,
-          style: const TextStyle(fontSize: 20),
-          keyboardType: TextInputType.emailAddress,
-          onFieldSubmitted: (value) {},
-          decoration: const InputDecoration(
-            border: OutlineInputBorder(),
-            errorStyle: TextStyle(fontSize: 18),
-            labelText: "Nhập email",
-            labelStyle: TextStyle(fontSize: 20),
-          ),
-          validator: (value) {
-            if (value.isEmpty ||
-                !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                    .hasMatch(value)) {
-              return 'Enter a valid email!';
-            }
-            return null;
-          },
+
+  Widget _emailLogin() => TextFormField(
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey.shade500,
         ),
+        controller: emailController,
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {},
+        decoration: InputDecoration(
+          prefixIcon: const Icon(Icons.email_outlined),
+          floatingLabelStyle: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 18),
+          labelText: "Enter email",
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        validator: (value) {
+          if (value.isEmpty ||
+              !RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                  .hasMatch(value)) {
+            return 'Enter a valid email!';
+          }
+          return null;
+        },
       );
 
   Widget _buttonLogin(BuildContext context, String email) => Center(
@@ -164,10 +214,9 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           context: context,
           builder: (context) {
             return AlertDiaLogCustom(
-                title: "Thất bại",
-                content: "-Email của bạn chưa được đăng ký trong hệ thống!.",
-                gif: "assets/gif/fail.gif",
-                textButton: "Okay");
+              json: "assets/error.json",
+              text: "Email của bạn chưa có trong hệ thống.",
+            );
           });
     } else {
       // ignore: deprecated_member_use
@@ -184,14 +233,13 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
       try {
         final sendReport = await send(message, smtpServer);
 
-        showDialog(
+        await showDialog(
             context: context,
             builder: (context) {
               return AlertDiaLogCustom(
-                  title: "Thành công",
-                  content: "-Bạn hãy kiểm tra hòm thư Email của mình.",
-                  gif: "assets/gif/success.gif",
-                  textButton: "Okay");
+                json: "assets/done.json",
+                text: "Kiểm tra hòm thư email của bạn.",
+              );
             });
         _isLoading.loadingSink.add(false);
         Navigator.push(
@@ -201,20 +249,19 @@ class _ForgotPasswordPageState extends State<ForgotPasswordPage> {
           ),
         );
       } on MailerException catch (e) {
-        showDialog(
+        await showDialog(
             context: context,
             builder: (context) {
               return AlertDiaLogCustom(
-                  title: "Thất bại",
-                  content: "-Email không phản h!.",
-                  gif: "assets/gif/fail.gif",
-                  textButton: "Okay");
+                json: "assets/error.json",
+                text: "Email không phản hồi.",
+              );
             });
-      }
 
-      var connection = PersistentConnection(smtpServer);
-      await connection.send(message);
-      await connection.close();
+        var connection = PersistentConnection(smtpServer);
+        await connection.send(message);
+        await connection.close();
+      }
     }
   }
 }

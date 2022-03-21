@@ -78,7 +78,11 @@ class _CartPageState extends State<CartPage> {
                       style: ButtonStyle(
                         backgroundColor: MaterialStateProperty.all(buttonColor),
                       ),
-                      onPressed: () {},
+                      onPressed: () {
+                        (state.data)
+                            ? _deleteBloc.loadingSink.add(false)
+                            : _deleteBloc.loadingSink.add(true);
+                      },
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
@@ -127,11 +131,9 @@ class _CartPageState extends State<CartPage> {
                               context: context,
                               builder: (context) {
                                 return AlertDiaLogCustom(
-                                    title: "Cảnh báo",
-                                    content:
-                                        "-Giỏ hàng bạn trống, không thể tới trang thanh toán.",
-                                    gif: "assets/gif/warning.gif",
-                                    textButton: "Okay");
+                                  json: "assets/error.json",
+                                  text: "Hãy thêm sản phẩm vào giỏ hàng.",
+                                );
                               });
                         }
                       },

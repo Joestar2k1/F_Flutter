@@ -60,8 +60,9 @@ class _DrinkPageState extends State<DrinkPage> {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (context) =>
-                                    const DetailsProductScreen(),
+                                builder: (context) => DetailsProductScreen(
+                                  products: snapshot.data[index],
+                                ),
                               ),
                             );
                           },

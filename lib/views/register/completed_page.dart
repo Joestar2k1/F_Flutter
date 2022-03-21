@@ -7,6 +7,7 @@ import 'package:fluter_19pmd/bloc/loading_bloc.dart';
 import 'package:fluter_19pmd/views/login/signIn_screen.dart';
 import 'package:fluter_19pmd/views/register/signup_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 
 class PageCompleteSignUp extends StatefulWidget {
   const PageCompleteSignUp(
@@ -51,14 +52,13 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
       var dataFromServer = await RepositoryUser.register(
           username, fullName, email, password, phone, address);
       if (dataFromServer == 200) {
-        showDialog(
+        await showDialog(
             context: context,
             builder: (context) {
               return AlertDiaLogCustom(
-                  title: "Thành công",
-                  content: "-Đã đăng ký tài khoản BEHEALTHY.",
-                  gif: "assets/gif/success.gif",
-                  textButton: "Okay");
+                json: "assets/done.json",
+                text: "Đăng ký tài khoản thành công.",
+              );
             });
         _isLoading.loadingSink.add(false);
         Navigator.push(
@@ -68,14 +68,13 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
           ),
         );
       } else {
-        showDialog(
+        await showDialog(
             context: context,
             builder: (context) {
               return AlertDiaLogCustom(
-                  title: "Thất bại",
-                  content: "-Xảy ra lỗi, hãy thử lại.",
-                  gif: "assets/gif/404.gif",
-                  textButton: "Okay");
+                json: "assets/error.json",
+                text: "Đăng ký thất bại.",
+              );
             });
         _isLoading.loadingSink.add(false);
         Navigator.push(
@@ -91,10 +90,9 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
           context: context,
           builder: (context) {
             return AlertDiaLogCustom(
-                title: "Thất bại",
-                content: "-Mật khẩu không trùng khớp, vui lòng nhập lại!.",
-                gif: "assets/gif/warning.gif",
-                textButton: "Okay");
+              json: "assets/error.json",
+              text: "Mật khẩu không trùng khớp.",
+            );
           });
     }
   }
@@ -102,15 +100,10 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: SafeArea(
-        child: Scaffold(
-          backgroundColor: Colors.white,
-          body: SingleChildScrollView(
-            child: _form(size, context),
-          ),
-        ),
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        body: _form(size, context),
       ),
     );
   }
@@ -143,79 +136,86 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
                         ),
                       ),
                     ),
-                    SingleChildScrollView(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(
-                            height: size.height * 0.05,
-                          ),
-                          InkWell(
-                              onTap: () {
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (context) => const SignInPage(),
-                                  ),
-                                );
-                              },
-                              child: const Icon(Icons.arrow_back,
-                                  color: Colors.white)),
-                          const Text(
-                            "Xin chào bạn",
-                            style: TextStyle(
-                              fontSize: 20,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
+                    Center(
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            const Text(
+                              "Đăng ký",
+                              style: TextStyle(
+                                fontSize: 30,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 20),
-                          const Text(
-                            "Đây là trang đăng ký!",
-                            style: TextStyle(
-                              fontSize: 25,
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          _input("Enter tên hiện thị", usernameController),
-                          const SizedBox(height: 10),
-                          _input("Enter mật khẩu", passwordController),
-                          const SizedBox(height: 10),
-                          _input("Enter Nhập lại mật khẩu", confirmController),
-                          (state.data)
-                              ? Center(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: const [
-                                      Text(
-                                        'Đang xử lý',
+                            Container(
+                              margin: const EdgeInsets.all(30.0),
+                              width: 500,
+                              height: 400,
+                              padding: const EdgeInsets.all(20.0),
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(20),
+                                ),
+                              ),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  _input(const Icon(Icons.person_add_alt_sharp),
+                                      "Nhập tên hiện thị", usernameController),
+                                  const SizedBox(height: 20),
+                                  _input(const Icon(Icons.lock),
+                                      "Nhập mật khẩu", passwordController),
+                                  const SizedBox(height: 20),
+                                  _input(const Icon(Icons.lock),
+                                      "Nhập lại mật khẩu", confirmController),
+                                  (state.data)
+                                      ? Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15.0),
+                                          child: Center(
+                                            child: Lottie.asset(
+                                                "assets/loading.json",
+                                                width: 100,
+                                                height: 50),
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              vertical: 15.0),
+                                          child: _buttonGoOn(
+                                            context,
+                                            widget.email,
+                                            widget.fullName,
+                                            widget.address,
+                                            widget.phone,
+                                            usernameController.text,
+                                            passwordController.text,
+                                            confirmController.text,
+                                          ),
+                                        ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Center(
+                                      child: Text(
+                                        "Quay lại",
                                         style: TextStyle(
                                           fontSize: 20,
-                                          color: Colors.green,
+                                          color: Colors.grey.shade600,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      CircleAvatar(
-                                        radius: 30,
-                                        backgroundImage: AssetImage(
-                                            "assets/gif/loading.gif"),
-                                      )
-                                    ],
+                                    ),
                                   ),
-                                )
-                              : _buttonGoOn(
-                                  context,
-                                  widget.email,
-                                  widget.fullName,
-                                  widget.address,
-                                  widget.phone,
-                                  usernameController.text,
-                                  passwordController.text,
-                                  confirmController.text,
-                                ),
-                        ],
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -224,27 +224,42 @@ class _PageCompleteSignUpState extends State<PageCompleteSignUp> {
         ),
       );
 
-  Widget _input(text, controller) => Padding(
-        padding: const EdgeInsets.only(top: 10, bottom: 20),
-        child: TextFormField(
-          controller: controller,
-          obscureText: false,
-          style: const TextStyle(fontSize: 20),
-          keyboardType: TextInputType.emailAddress,
-          onFieldSubmitted: (value) {},
-          decoration: InputDecoration(
-            border: const OutlineInputBorder(),
-            errorStyle: const TextStyle(fontSize: 18),
-            labelText: text,
-            labelStyle: const TextStyle(fontSize: 20),
-          ),
-          validator: (value) {
-            if (value == null || value.isEmpty) {
-              return 'Không được bỏ trống';
-            }
-            return null;
-          },
+  Widget _input(icon, text, controller) => TextFormField(
+        controller: controller,
+        obscureText: false,
+        style: TextStyle(
+          fontSize: 20,
+          color: Colors.grey.shade500,
         ),
+        keyboardType: TextInputType.emailAddress,
+        onFieldSubmitted: (value) {},
+        decoration: InputDecoration(
+          prefixIcon: icon,
+          floatingLabelStyle: TextStyle(
+            fontSize: 22,
+            color: Colors.grey.shade500,
+          ),
+          enabledBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          focusedBorder: const OutlineInputBorder(
+            borderRadius: BorderRadius.all(Radius.circular(25)),
+            borderSide: BorderSide(color: Colors.teal, width: 2.0),
+          ),
+          errorStyle: const TextStyle(fontSize: 18),
+          labelText: text,
+          labelStyle: TextStyle(
+            fontSize: 20,
+            color: Colors.grey.shade500,
+          ),
+        ),
+        validator: (value) {
+          if (value == null || value.isEmpty) {
+            return 'Không được bỏ trống';
+          }
+          return null;
+        },
       );
 
   Widget _buttonGoOn(context, email, fullName, address, phone, username,

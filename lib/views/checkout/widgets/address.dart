@@ -82,6 +82,7 @@ class _AddressInPaymentState extends State<AddressInPayment> {
                                 initialData: snapshot.data[0].name,
                                 stream: _changeBLoc.chooseStream,
                                 builder: (context, address) {
+                                  RepositoryInvoice.getAddress = address.data;
                                   if (address.data == null) {
                                     return const Center(
                                         child: CircularProgressIndicator(

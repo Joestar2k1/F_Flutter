@@ -5,6 +5,10 @@ import 'package:fluter_19pmd/repository/cart_api.dart';
 import '../../../counter_event.dart';
 
 class CounterBloc {
+  final _stateStreamController = StreamController<int>();
+  StreamSink<int> get counterSink => _stateStreamController.sink;
+  Stream<int> get counterStream => _stateStreamController.stream;
+
   final _eventStreamController = StreamController<CounterEvent>();
   StreamSink<CounterEvent> get eventSink => _eventStreamController.sink;
   Stream<CounterEvent> get _eventStream => _eventStreamController.stream;
@@ -18,6 +22,6 @@ class CounterBloc {
     });
   }
   void dispose() {
-    _eventStreamController.close();
+    _stateStreamController.close();
   }
 }

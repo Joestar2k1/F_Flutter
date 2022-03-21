@@ -18,7 +18,7 @@ class _CategoryPageState extends State<CategoryPage> {
         child: Scaffold(
           backgroundColor: Colors.grey.shade100,
           appBar: AppBar(
-            bottom: buildTabbar(),
+            bottom: buildTab(),
             elevation: 0,
             backgroundColor: Colors.white,
             flexibleSpace: Container(
@@ -58,7 +58,7 @@ class _CategoryPageState extends State<CategoryPage> {
           VegetablePage(),
         ],
       );
-  Widget buildTabbar() => const TabBar(
+  Widget buildTab() => const TabBar(
         indicatorColor: Colors.white,
         indicatorWeight: 3,
         isScrollable: true,

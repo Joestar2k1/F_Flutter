@@ -25,7 +25,7 @@ class User {
     this.address,
   });
 
-  String id;
+  int id;
   String username;
   String fullName;
   String email;

@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:fluter_19pmd/models/favorites_model.dart';
 import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:http/http.dart' as http;
@@ -16,7 +14,7 @@ class RepositoryFavorite {
   static getHeight(var length) {
     double dem = 0;
     for (var i = 1; i <= length; i++) {
-      dem += 95;
+      dem += 65;
     }
     return dem;
   }
@@ -55,14 +53,12 @@ class RepositoryFavorite {
 
   static Future<dynamic> addTitle(String title) async {
     var client = http.Client();
-    var response;
-
-    response = await client.post(
+    var response = await client.post(
       Uri.parse(
         'http://10.0.2.2:8000/api/favorites/AddFavoriteTitle/${RepositoryUser.info.id}',
       ),
       body: ({
-        'userID': RepositoryUser.info.id,
+        'userID': RepositoryUser.info.id.toString(),
         'title': title,
       }),
     );
@@ -74,16 +70,14 @@ class RepositoryFavorite {
     }
   }
 
-  static Future<dynamic> deleteFavorite(String id) async {
+  static Future<dynamic> deleteFavorite(int id) async {
     var client = http.Client();
-    var response;
-
-    response = await client.delete(
+    var response = await client.delete(
       Uri.parse(
         'http://10.0.2.2:8000/api/favorites/DeleteFavoriteTitle',
       ),
       body: ({
-        'id': id,
+        'id': id.toString(),
       }),
     );
 
@@ -94,19 +88,46 @@ class RepositoryFavorite {
     }
   }
 
-  static Future<dynamic> addProduct(String productID, String favoriteID) async {
+  static Future<dynamic> addProduct(int productID, int favoriteID) async {
     var client = http.Client();
-    var response;
-
-    response = await client.post(
+    var response = await client.post(
       Uri.parse(
         'http://10.0.2.2:8000/api/favorites/Add-product',
       ),
       body: ({
-        'favoriteID': favoriteID,
-        'productID': productID,
+        'favoriteID': favoriteID.toString(),
+        'productID': productID.toString(),
       }),
     );
+
+    if (response.statusCode == 200) {
+      return response.statusCode;
+    } else {
+      return response.statusCode;
+    }
+  }
+
+  static Future<dynamic> deleteProduct(var productID, {var favoriteID}) async {
+    var client = http.Client();
+
+    var response = (favoriteID == null)
+        ? await client.post(
+            Uri.parse(
+              'http://10.0.2.2:8000/api/favorites/delete-product',
+            ),
+            body: ({
+              'productID': productID.toString(),
+            }),
+          )
+        : await client.post(
+            Uri.parse(
+              'http://10.0.2.2:8000/api/favorites/delete-product',
+            ),
+            body: ({
+              'favoriteID': favoriteID.toString(),
+              'productID': productID.toString(),
+            }),
+          );
 
     if (response.statusCode == 200) {
       return response.statusCode;

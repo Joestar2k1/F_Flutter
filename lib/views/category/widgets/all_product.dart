@@ -156,10 +156,9 @@ class _AllPageState extends State<AllPage> {
                         context: context,
                         builder: (context) {
                           return AlertDiaLogCustom(
-                              title: "Thành công",
-                              content: "-Thêm sản phẩm vào giỏ hàng.",
-                              gif: "assets/gif/success.gif",
-                              textButton: "Okay");
+                            json: "assets/done.json",
+                            text: "Thêm sản phẩm thành công.",
+                          );
                         });
                   }
                 },
