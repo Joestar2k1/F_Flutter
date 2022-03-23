@@ -141,12 +141,13 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                         ),
                       ],
                   body: Body(details: widget.products)),
-              bottomNavigationBar: _buildBottomNav(size, context),
+              bottomNavigationBar:
+                  _buildBottomNav(size, context, widget.products.id),
             ),
     );
   }
 
-  Widget _buildBottomNav(size, context) {
+  Widget _buildBottomNav(size, context, id) {
     return Container(
       height: 80,
       decoration: const BoxDecoration(
@@ -182,8 +183,7 @@ class _DetailsProductScreenState extends State<DetailsProductScreen> {
                     onPressed: () async {
                       _isLoading.loadingSink.add(true);
 
-                      var data = await RepositoryCart.addToCartDetails(
-                          RepositoryProduct.getID);
+                      var data = await RepositoryCart.addToCartDetails(id);
                       if (data == 200) {
                         _isLoading.loadingSink.add(false);
                         Navigator.push(

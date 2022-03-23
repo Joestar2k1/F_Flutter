@@ -56,7 +56,6 @@ class _MeetPageState extends State<MeetPage> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            RepositoryProduct.getID = snapshot.data[index].id;
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -3,9 +3,9 @@ import 'package:fluter_19pmd/models/user_models.dart';
 import 'package:flutter/material.dart';
 
 class HeaderWithAvatar extends StatelessWidget {
-  const HeaderWithAvatar({Key key, this.user}) : super(key: key);
+  const HeaderWithAvatar({Key key, this.user, this.username}) : super(key: key);
   final User user;
-
+  final String username;
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
@@ -37,7 +37,7 @@ class HeaderWithAvatar extends StatelessWidget {
               ],
             ),
           ),
-          buildNameUser(size, user.username),
+          buildNameUser(size, username),
         ],
       ),
     );

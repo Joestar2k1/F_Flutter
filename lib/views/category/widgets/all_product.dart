@@ -1,13 +1,10 @@
 import 'package:fluter_19pmd/constant.dart';
 import 'package:fluter_19pmd/function.dart';
-import 'package:fluter_19pmd/models/favorites_model.dart';
 import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/repository/favorites_api.dart';
-import 'package:fluter_19pmd/repository/products_api.dart';
 import 'package:fluter_19pmd/services/catetogory/cate_bloc.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
-import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/details_product/details_product.dart';
 import 'package:flutter/material.dart';
 
@@ -58,7 +55,6 @@ class _AllPageState extends State<AllPage> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            RepositoryProduct.getID = snapshot.data[index].id;
                             Navigator.push(
                               context,
                               MaterialPageRoute(
@@ -169,8 +165,22 @@ class _AllPageState extends State<AllPage> {
               ),
             ),
             IconButton(
-              onPressed: () {
-                _favoriteBloc.eventSink.add(UserEvent.showFavorite);
+              onPressed: () async {
+                if (!snapshot.data[index].checkFavorite) {
+                  await showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertTextFieldCustom(
+                          title: "Bộ yêu thích",
+                          productID: snapshot.data[index].id,
+                        );
+                      });
+                  cateBloc.eventSink.add(CategoryEvent.fetchAll);
+                } else {
+                  await RepositoryFavorite.deleteProduct(
+                      snapshot.data[index].id);
+                  cateBloc.eventSink.add(CategoryEvent.fetchAll);
+                }
               },
               icon: snapshot.data[index].checkFavorite
                   ? const Icon(

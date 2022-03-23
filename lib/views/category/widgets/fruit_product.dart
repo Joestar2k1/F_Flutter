@@ -55,7 +55,6 @@ class _FruitPageState extends State<FruitPage> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            RepositoryProduct.getID = snapshot.data[index].id;
                             Navigator.push(
                               context,
                               MaterialPageRoute(

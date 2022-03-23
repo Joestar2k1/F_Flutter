@@ -167,8 +167,6 @@ class _BodyState extends State<Body> {
                                         MaterialStateProperty.all(buttonColor),
                                   ),
                                   onPressed: () {
-                                    RepositoryProduct.getID =
-                                        snapshot.data[index].id;
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(

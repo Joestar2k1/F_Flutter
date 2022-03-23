@@ -3,7 +3,6 @@ import 'package:fluter_19pmd/views/cart/cart_screen.dart';
 import 'package:fluter_19pmd/views/category/category_page.dart';
 import 'package:fluter_19pmd/views/filter/filter_screen.dart';
 import 'package:fluter_19pmd/views/home/widgets/body.dart';
-import 'package:fluter_19pmd/views/home/widgets/search_icons.dart';
 import 'package:fluter_19pmd/views/notification/notification_page.dart';
 import 'package:fluter_19pmd/views/profile/profile_page.dart';
 import 'package:fluter_19pmd/views/search/search_page.dart';
@@ -67,91 +66,93 @@ class _HomePageState extends State<HomePage>
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: Scaffold(
-        endDrawer: FilterPage(),
+        endDrawer: const FilterPage(),
         backgroundColor: Colors.grey,
-        appBar: AppBar(
-          elevation: 0,
-          backgroundColor: Colors.teal.shade700,
-          actions: [
-            Builder(builder: (context) {
-              return SizedBox(
-                width: size.width,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    _buttonSearch(size, context),
-                    buildIcon(
-                      size: size,
-                      img: "assets/icons/filter.svg",
-                      press: () {
-                        Scaffold.of(context).openEndDrawer();
-                      },
-                    ),
-                    InkWell(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => const CartPage(),
-                          ),
-                        );
-                      },
-                      borderRadius: BorderRadius.circular(50),
-                      child: Stack(
+        appBar: (selectedIndex != 0)
+            ? null
+            : AppBar(
+                elevation: 0,
+                backgroundColor: Colors.teal.shade700,
+                actions: [
+                  Builder(builder: (context) {
+                    return SizedBox(
+                      width: size.width,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
-                          Container(
-                            padding: const EdgeInsets.all(10),
-                            width: size.width * 0.12,
-                            height: size.height * 0.08,
-                            decoration: const BoxDecoration(
-                              color: Colors.white,
-                              shape: BoxShape.circle,
-                            ),
-                            child: const Icon(
-                              Icons.shopping_cart_rounded,
-                              size: 30,
-                              color: Colors.black,
+                          _buttonSearch(size, context),
+                          buildIcon(
+                            size: size,
+                            img: "assets/icons/filter.svg",
+                            press: () {
+                              Scaffold.of(context).openEndDrawer();
+                            },
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => const CartPage(),
+                                ),
+                              );
+                            },
+                            borderRadius: BorderRadius.circular(50),
+                            child: Stack(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(10),
+                                  width: size.width * 0.12,
+                                  height: size.height * 0.08,
+                                  decoration: const BoxDecoration(
+                                    color: Colors.white,
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: const Icon(
+                                    Icons.shopping_cart_rounded,
+                                    size: 30,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                                // Positioned(
+                                //   top: 5,
+                                //   right: -0,
+                                //   child: Container(
+                                //     width: 20,
+                                //     height: 20,
+                                //     decoration: const BoxDecoration(
+                                //       color: Colors.red,
+                                //       shape: BoxShape.circle,
+                                //     ),
+                                //     child: Center(
+                                //         child: Text(
+                                //       snapshot.data.toString(),
+                                //       style: const TextStyle(
+                                //         fontSize: 15,
+                                //         color: Colors.white,
+                                //         fontWeight: FontWeight.bold,
+                                //       ),
+                                //     )),
+                                //   ),
+                                // ),
+                              ],
                             ),
                           ),
-                          // Positioned(
-                          //   top: 5,
-                          //   right: -0,
-                          //   child: Container(
-                          //     width: 20,
-                          //     height: 20,
-                          //     decoration: const BoxDecoration(
-                          //       color: Colors.red,
-                          //       shape: BoxShape.circle,
-                          //     ),
-                          //     child: Center(
-                          //         child: Text(
-                          //       snapshot.data.toString(),
-                          //       style: const TextStyle(
-                          //         fontSize: 15,
-                          //         color: Colors.white,
-                          //         fontWeight: FontWeight.bold,
-                          //       ),
-                          //     )),
-                          //   ),
-                          // ),
                         ],
                       ),
+                    );
+                  }),
+                ],
+                flexibleSpace: Container(
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [Colors.teal, Colors.teal.shade200],
+                      begin: Alignment.bottomLeft,
+                      end: Alignment.bottomRight,
                     ),
-                  ],
+                  ),
                 ),
-              );
-            }),
-          ],
-          flexibleSpace: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [Colors.teal, Colors.teal.shade200],
-                begin: Alignment.bottomLeft,
-                end: Alignment.bottomRight,
               ),
-            ),
-          ),
-        ),
         body: screens[selectedIndex],
         bottomNavigationBar: buildNavBar(),
       ),

@@ -56,7 +56,6 @@ class _VegetablePageState extends State<VegetablePage> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            RepositoryProduct.getID = snapshot.data[index].id;
                             Navigator.push(
                               context,
                               MaterialPageRoute(

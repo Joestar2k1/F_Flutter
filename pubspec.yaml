@@ -42,9 +42,9 @@ dependencies:
   flutter_bloc:
   bloc:
   mailer:
-  toast:
   alert:
   lottie:
+  dropdown_button2:
 dev_dependencies:
   flutter_test:
     sdk: flutter

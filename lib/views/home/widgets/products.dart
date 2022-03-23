@@ -61,7 +61,6 @@ class _ProductsHomeState extends State<ProductsHome> {
                       itemBuilder: (context, index) {
                         return InkWell(
                           onTap: () {
-                            RepositoryProduct.getID = snapshot.data[index].id;
                             Navigator.push(
                               context,
                               MaterialPageRoute(

@@ -4,7 +4,6 @@ import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:http/http.dart' as http;
 
 class RepositoryProduct {
-  static var getID;
   static List<Product> products = [];
   static List<Review> reviews = [];
   static double getHeightForUserReview(var length) {

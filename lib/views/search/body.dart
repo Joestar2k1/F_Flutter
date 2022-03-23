@@ -33,11 +33,12 @@ class Body extends StatelessWidget {
         itemBuilder: (context, index) {
           return InkWell(
             onTap: () {
-              RepositoryProduct.getID = products[index].id;
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => const DetailsProductScreen(),
+                  builder: (context) => DetailsProductScreen(
+                    products: products[index],
+                  ),
                 ),
               );
             },

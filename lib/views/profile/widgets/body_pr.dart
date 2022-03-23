@@ -1,12 +1,15 @@
+import 'dart:async';
+
 import 'package:fluter_19pmd/models/user_models.dart';
+import 'package:fluter_19pmd/repository/user_api.dart';
 import 'package:fluter_19pmd/services/profile/profile_bloc.dart';
 import 'package:fluter_19pmd/views/profile/widgets/header_avatar.dart';
 import 'package:fluter_19pmd/views/profile/widgets/item_profile.dart';
 import 'package:flutter/material.dart';
 
 class BodyProfile extends StatefulWidget {
-  const BodyProfile({Key key}) : super(key: key);
-
+  const BodyProfile({Key key, this.username}) : super(key: key);
+  final String username;
   @override
   State<BodyProfile> createState() => _BodyProfileState();
 }
@@ -23,6 +26,7 @@ class _BodyProfileState extends State<BodyProfile> {
   }
 
   final _profileBloc = ProfileBloc();
+
   @override
   void initState() {
     super.initState();
@@ -32,6 +36,7 @@ class _BodyProfileState extends State<BodyProfile> {
   @override
   void dispose() {
     super.dispose();
+
     _profileBloc.dispose();
   }
 
@@ -46,6 +51,7 @@ class _BodyProfileState extends State<BodyProfile> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
+
     return StreamBuilder<User>(
         initialData: null,
         stream: _profileBloc.userOnlineStream,
@@ -60,6 +66,7 @@ class _BodyProfileState extends State<BodyProfile> {
               ],
             );
           }
+
           return SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,6 +75,7 @@ class _BodyProfileState extends State<BodyProfile> {
                   height: size.height / 3,
                   width: size.width,
                   child: HeaderWithAvatar(
+                    username: widget.username,
                     user: snapshot.data,
                   ),
                 ),

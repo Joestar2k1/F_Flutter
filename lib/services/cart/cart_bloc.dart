@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:fluter_19pmd/models/invoices_models.dart';
-import 'package:fluter_19pmd/models/product_models.dart';
 import 'package:fluter_19pmd/repository/cart_api.dart';
 import 'package:fluter_19pmd/services/cart/cart_event.dart';
 
